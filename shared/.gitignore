@@ -1,0 +1,4 @@
+build/
+shared.egg-info/
+*.pyc
+migrations/

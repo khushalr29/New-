@@ -1,0 +1,431 @@
+openapi: 3.0.0
+info:
+  title: HRMS Auth & User Service
+  description: Comprehensive API documentation for the Human Resource Management System.
+  version: "1.0.0"
+
+servers:
+  - url: /api/v1/auth
+    description: Primary Auth Module Gateway
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: "Indicates if the operation was successful"
+          example: true
+        message:
+          type: string
+          description: "Summary message of the operation"
+          example: "Operation successful"
+        data:
+          type: object
+          nullable: true
+          description: "Payload returned by the API"
+
+    UserDetail:
+      type: object
+      properties:
+        id: {type: integer, example: 123}
+        full_name: {type: string, example: "John Doe"}
+        email: {type: string, example: "john.doe@telepathy.com"}
+        phone_number: {type: string, example: "+1234567890"}
+        is_enabled: {type: boolean, example: true}
+        company_id: {type: integer, example: 1}
+
+    RoleDetail:
+      type: object
+      properties:
+        id: {type: integer, example: 52}
+        name: {type: string, example: "HR Manager"}
+        is_enabled: {type: boolean, example: true}
+
+paths:
+  /creates:
+    post:
+      summary: Create New User
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UserDetail'}
+      responses:
+        201: {description: Created}
+
+  /updates/{id}:
+    put:
+      summary: Update User
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/UserDetail'}
+      responses:
+        200: {description: Updated}
+
+  /details/{id}:
+    get:
+      summary: Get User Profile
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /profiles:
+    get:
+      summary: Get Current User Profile
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /lists:
+    get:
+      summary: List All Users
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /deletes:
+    delete:
+      summary: Bulk Delete Users
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /status/{id}:
+    patch:
+      summary: Change User Status
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /enabled-users:
+    get:
+      summary: List Enabled Users
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /set-mpins:
+    patch:
+      summary: Set User MPIN
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /check-mpins:
+    post:
+      summary: Verify User MPIN
+      tags: [Users]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /logins:
+    post:
+      summary: User Authentication
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, company_id, host]
+              properties:
+                email: {type: string, example: "admin@telepathy.com"}
+                password: {type: string, example: "secret123"}
+                company_id: {type: integer, example: 1}
+                host: {type: string, example: "telepathy.com"}
+      responses:
+        200:
+          description: Login Successful
+
+  /impersonation-logins:
+    post:
+      summary: SSO Impersonation
+      tags: [Auth]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /refreshtokens:
+    post:
+      summary: Refresh JWT
+      tags: [Auth]
+      responses:
+        200: {description: Success}
+
+  /logouts:
+    post:
+      summary: User Logout
+      tags: [Auth]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /send-reset-password-emails:
+    post:
+      summary: Request Password Reset
+      tags: [Auth]
+      responses:
+        200: {description: Success}
+
+  /setpassword/{uid}/{token}:
+    post:
+      summary: Verify & Set Password
+      tags: [Auth]
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema: {type: string}
+        - name: token
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        200: {description: Success}
+
+  /check-domains:
+    get:
+      summary: Verify Domain
+      tags: [Auth]
+      parameters:
+        - name: domain
+          in: query
+          required: true
+          schema: {type: string}
+      responses:
+        200: {description: Success}
+
+  /verify-passwords:
+    post:
+      summary: Verify Password
+      tags: [Auth]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /all-permissions:
+    get:
+      summary: List Permissions
+      tags: [Permissions]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /get-permissions/{id}:
+    get:
+      summary: Get Permission Detail
+      tags: [Permissions]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /manage-permissions/{id}:
+    post:
+      summary: Update User Permissions
+      tags: [Permissions]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /permissions/{id}:
+    get:
+      summary: Get User Permission List
+      tags: [Permissions]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /groups-create:
+    post:
+      summary: Create Role
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      responses:
+        201: {description: Created}
+
+  /groups-list:
+    get:
+      summary: List Roles
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /groups-detail/{id}:
+    get:
+      summary: Get Role Detail
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /groups-delete:
+    delete:
+      summary: Delete Role
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /groups-permissions-update/{id}:
+    post:
+      summary: Map Permissions to Role
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /manage-groups/{id}:
+    post:
+      summary: Assign Role to User
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /groups-status-update/{id}:
+    patch:
+      summary: Toggle Role Status
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+
+  /enabled-groups-list:
+    get:
+      summary: List Enabled Roles
+      tags: [Roles]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /enums:
+    get:
+      summary: Global Enums
+      tags: [System]
+      responses:
+        200: {description: Success}
+
+  /session-user-types:
+    get:
+      summary: Session Metadata
+      tags: [System]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
+
+  /recent-actions:
+    get:
+      summary: Admin Audit Log
+      tags: [System]
+      security: 
+        - BearerAuth: []
+      responses:
+        200: {description: Success}
