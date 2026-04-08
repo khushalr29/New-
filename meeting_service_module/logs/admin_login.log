@@ -1,0 +1,18 @@
+[2026-04-08 10:05:49,227] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/admin/login/?next=/admin/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n\n<html lang=\"en-us\" dir=\"ltr\">\n<head>\n<title>Log in | Django site admin</title>\n<link rel=\"stylesheet\" href=\"/static/admin/css/base.css\">\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/dark_mode.css\">\n  <script src=\"/static/admin/js/theme.js\"></script>\n\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/nav_sidebar.css\">\n  <script src=\"/static/admin/js/nav_sidebar.js\" defer></script>\n\n<link rel=\"stylesheet\" href=\"/static/admin/css/login.css\">\n\n\n\n\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"/static/admin/css/responsive.css\">\n    \n\n<meta name=\"robots\" content=\"NONE,NOARCHIVE\">\n</head>\n\n<body class=\" login\"\n  data-admin-utc-offset=\"19800\">\n<a href=\"#content-start\" class=\"skip-to-content-link\">Skip to main content</a>\n<!-- Container -->\n<div id=\"container\">\n\n    \n    <!-- Header -->\n    \n      <header id=\"header\">\n        <div id=\"branding\">\n        \n<div id=\"site-name\"><a href=\"/admin/\">Django administration</a></div>\n\n  \n<button class=\"theme-toggle\">\n  <span class=\"visually-hidden theme-label-when-auto\">Toggle theme (current theme: auto)</span>\n  <span class=\"visually-hidden theme-label-when-light\">Toggle theme (current theme: light)</span>\n  <span class=\"visually-hidden theme-label-when-dark\">Toggle theme (current theme: dark)</span>\n  <svg aria-hidden=\"true\" class=\"theme-icon-when-auto\">\n    <use xlink:href=\"#icon-auto\" />\n  </svg>\n  <svg aria-hidden=\"true\" class=\"theme-icon-when-dark\">\n    <use xlink:href=\"#icon-moon\" />\n  </svg>\n  <svg aria-hidden=\"true\" class=\"theme-icon-when-light\">\n    <use xlink:href=\"#icon-sun\" />\n  </svg>\n</button>\n\n\n\n        </div>\n        \n        \n      </header>\n    \n    <!-- END Header -->\n    \n    \n\n    <div class=\"main\" id=\"main\">\n      \n        \n      \n      <main id=\"content-start\" class=\"content\" tabindex=\"-1\">\n        \n          \n        \n        <!-- Content -->\n        <div id=\"content\" class=\"colM\">\n          \n          \n          \n          \n\n\n\n\n...[truncated]"
+}
+[2026-04-08 10:05:58,221] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "POST",
+  "path": "/admin/login/?next=/admin/",
+  "status": 302,
+  "response_body": ""
+}

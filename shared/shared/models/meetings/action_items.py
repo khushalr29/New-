@@ -21,4 +21,4 @@ class ActionItem(models.Model):
         ordering = ['due_date']
 
     def __str__(self):
-        return f"{self.description} - {self.status}"
+        return f"{self.action_item_title} - {self.due_date}"

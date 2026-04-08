@@ -1,0 +1,27 @@
+[2026-04-08 10:05:49,198] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/admin/",
+  "status": 302,
+  "response_body": ""
+}
+[2026-04-08 10:05:58,263] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/admin/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n\n<html lang=\"en-us\" dir=\"ltr\">\n<head>\n<title>Site administration | Django site admin</title>\n<link rel=\"stylesheet\" href=\"/static/admin/css/base.css\">\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/dark_mode.css\">\n  <script src=\"/static/admin/js/theme.js\"></script>\n\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/nav_sidebar.css\">\n  <script src=\"/static/admin/js/nav_sidebar.js\" defer></script>\n\n<link rel=\"stylesheet\" href=\"/static/admin/css/dashboard.css\">\n\n\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"/static/admin/css/responsive.css\">\n    \n\n<meta name=\"robots\" content=\"NONE,NOARCHIVE\">\n</head>\n\n<body class=\" dashboard\"\n  data-admin-utc-offset=\"19800\">\n<a href=\"#content-start\" class=\"skip-to-content-link\">Skip to main content</a>\n<!-- Container -->\n<div id=\"container\">\n\n    \n    <!-- Header -->\n    \n      <header id=\"header\">\n        <div id=\"branding\">\n        \n<div id=\"site-name\"><a href=\"/admin/\">Django administration</a></div>\n\n\n        </div>\n        \n        \n        <div id=\"user-tools\">\n            \n                Welcome,\n                <strong>yashkumaryk066@gmail.com</strong>.\n            \n            \n                \n                    <a href=\"/\">View site</a> /\n                \n                \n                    \n                    \n                \n                \n                <a href=\"/admin/password_change/\">Change password</a> /\n                \n                <form id=\"logout-form\" method=\"post\" action=\"/admin/logout/\">\n                    <input type=\"hidden\" name=\"csrfmiddlewaretoken\" value=\"eGbND0OzQaTesGBfXe0PVdCPAPj3CcLEUcpkW9ElOLtKX4eCyTbaR7rN4tiApzP6\">\n                    <button type=\"submit\">Log out</button>\n                </form>\n                \n<button class=\"theme-toggle\">\n  <span class=\"visually-hidden theme-label-when-auto\">Toggle theme (current theme: auto)</span>\n  <span class=\"visually-hidden theme-label-when-light\">Toggle theme (cu\n...[truncated]"
+}
+[2026-04-08 10:08:12,639] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/admin/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n\n<html lang=\"en-us\" dir=\"ltr\">\n<head>\n<title>Site administration | Django site admin</title>\n<link rel=\"stylesheet\" href=\"/static/admin/css/base.css\">\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/dark_mode.css\">\n  <script src=\"/static/admin/js/theme.js\"></script>\n\n\n  <link rel=\"stylesheet\" href=\"/static/admin/css/nav_sidebar.css\">\n  <script src=\"/static/admin/js/nav_sidebar.js\" defer></script>\n\n<link rel=\"stylesheet\" href=\"/static/admin/css/dashboard.css\">\n\n\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"/static/admin/css/responsive.css\">\n    \n\n<meta name=\"robots\" content=\"NONE,NOARCHIVE\">\n</head>\n\n<body class=\" dashboard\"\n  data-admin-utc-offset=\"19800\">\n<a href=\"#content-start\" class=\"skip-to-content-link\">Skip to main content</a>\n<!-- Container -->\n<div id=\"container\">\n\n    \n    <!-- Header -->\n    \n      <header id=\"header\">\n        <div id=\"branding\">\n        \n<div id=\"site-name\"><a href=\"/admin/\">Django administration</a></div>\n\n\n        </div>\n        \n        \n        <div id=\"user-tools\">\n            \n                Welcome,\n                <strong>yashkumaryk066@gmail.com</strong>.\n            \n            \n                \n                    <a href=\"/\">View site</a> /\n                \n                \n                    \n                    \n                \n                \n                <a href=\"/admin/password_change/\">Change password</a> /\n                \n                <form id=\"logout-form\" method=\"post\" action=\"/admin/logout/\">\n                    <input type=\"hidden\" name=\"csrfmiddlewaretoken\" value=\"mC1KBzkE5kx5vEeGfoJWqDJN9r9a03SY28fhUIaq3V7B02R3Q3UhmxyLD58HNqWq\">\n                    <button type=\"submit\">Log out</button>\n                </form>\n                \n<button class=\"theme-toggle\">\n  <span class=\"visually-hidden theme-label-when-auto\">Toggle theme (current theme: auto)</span>\n  <span class=\"visually-hidden theme-label-when-light\">Toggle theme (cu\n...[truncated]"
+}

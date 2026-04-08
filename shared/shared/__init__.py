@@ -1,4 +1,2 @@
-# from .models import *
-# from .utils import *
-# from .middleware import *
-
+# Internal package exports
+# Avoid importing models here to prevent AppRegistryNotReady errors.

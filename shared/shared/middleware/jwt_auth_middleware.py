@@ -16,6 +16,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         '/api/v1/auth/send-reset-password-emails',
         '/api/v1/auth/setpassword',
         '/api/v1/auth/refreshtokens',
+        '/api/v1/auth/login/',
     ]
 
     ALLOWED_PATHS_ON_COMPANY_SUBSCRIPTION_END = [

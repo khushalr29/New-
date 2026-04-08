@@ -12,3 +12,9 @@ class MeetingRoom(TenantModel):
     equipment = models.TextField(blank=True, null=True)
     booking_url = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=CommonStatus.choices, default=CommonStatus.ACTIVE)
+
+    def __str__(self):
+        return f"{self.name} ({self.location})"
+
+    class Meta:
+        db_table = 'meeting_room'
