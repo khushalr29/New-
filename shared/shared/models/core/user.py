@@ -41,7 +41,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     image = models.TextField(blank=True, null=True)
-    email = models.EmailField(verbose_name='Email', max_length=255)
+    email = models.EmailField(verbose_name='Email', max_length=255, unique=True)
     full_name = models.CharField(max_length=80)
     country_number_code = models.PositiveIntegerField(default=91)
     phone_number = models.CharField(max_length=15)
