@@ -6,10 +6,10 @@ class SoftDeleteManager(models.Manager):
         return super().get_queryset().filter(deleted_at__isnull=True)
 
 class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
-    is_enabled = models.BooleanField(default=True)
+    is_enabled = models.BooleanField(default=True, null=True, blank=True)
 
     objects = models.Manager()
     active_objects = SoftDeleteManager()
@@ -25,7 +25,7 @@ class BaseModel(models.Model):
         super().delete(using=using, keep_parents=keep_parents)
 
 class TenantModel(BaseModel):
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         abstract = True

@@ -53,18 +53,26 @@ class Branch(TenantModel):
     def __str__(self):
         return f"{self.branch_name} — {self.city}"
 
-class DocumentType(BaseModel):
+class DocumentType(TenantModel):
     document_type = models.CharField(max_length=100, validators=[validate_name])
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=10, choices= DocStatus.choices, default=DocStatus.REQUIRED)
 
+    class Meta:
+        db_table = 'document_type'
+        unique_together = ('document_type', 'company')
+
     def __str__(self):
         return self.document_type    
 
-class AwardType(BaseModel):
+class AwardType(TenantModel):
     award_type = models.CharField(max_length=100, validators=[validate_name])
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=10, choices= BranchStatus.choices, default=BranchStatus.ACTIVE)
+
+    class Meta:
+        db_table = 'award_type'
+        unique_together = ('award_type', 'company')
 
     def __str__(self):
         return self.award_type
@@ -83,19 +91,19 @@ class Designation(TenantModel):
     def __str__(self):
         return f"{self.title} ({self.level})"
 
-class IndicatorCategory(BaseModel):
+class IndicatorCategory(TenantModel):
     category_name = models.CharField(max_length=255, validators=[validate_char_field])
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=BranchStatus.choices, default=BranchStatus.ACTIVE)
 
     class Meta:
         db_table = 'indicator_category'
-        unique_together = ('category_name',)
+        unique_together = ('category_name', 'company')
  
     def __str__(self):
         return self.category_name
 
-class Indicator(BaseModel):
+class Indicator(TenantModel):
     indicator_name = models.CharField(max_length=255, validators=[validate_char_field])
     category = models.ForeignKey(IndicatorCategory, on_delete=models.CASCADE, related_name='indicators')
     description = models.TextField(blank=True, null=True)
@@ -105,24 +113,24 @@ class Indicator(BaseModel):
 
     class Meta:
         db_table = 'indicator'
-        unique_together = ('category', 'indicator_name')
+        unique_together = ('category', 'indicator_name', 'company')
  
     def __str__(self):
         return f"{self.indicator_name} ({self.category.category_name})"
 
-class GoalType(BaseModel):
+class GoalType(TenantModel):
     goal_name = models.CharField(max_length=255, validators=[validate_char_field])
     description = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=BranchStatus.choices, default=BranchStatus.ACTIVE)
 
     class Meta:
         db_table = 'goal'
-        unique_together = ('goal_name',)
+        unique_together = ('goal_name', 'company')
  
     def __str__(self):
         return self.goal_name
 
-class ReviewCycle(BaseModel):
+class ReviewCycle(TenantModel):
     cycle_name = models.CharField(max_length=255, validators=[validate_char_field])
     frequency = models.CharField(max_length=20, choices=FrequencyEnum.choices, default=FrequencyEnum.ANNUAL)
     description = models.TextField(blank=True, null=True)
@@ -132,12 +140,12 @@ class ReviewCycle(BaseModel):
 
     class Meta:
         db_table = 'review_cycle'
-        unique_together = ('cycle_name',)
+        unique_together = ('cycle_name', 'company')
  
     def __str__(self):
         return self.cycle_name
 
-class Resignations(BaseModel):
+class Resignations(TenantModel):
     employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='resignations')
     resignation_date = models.DateField()
     last_working_day = models.DateField()
@@ -149,12 +157,12 @@ class Resignations(BaseModel):
 
     class Meta:
         db_table = 'resignation_reason'
-        unique_together = ('resignation_reason',)
+        unique_together = ('resignation_reason', 'company')
  
     def __str__(self):
         return self.resignation_reason
 
-class Termination(BaseModel):
+class Termination(TenantModel):
     employee = models.ForeignKey('Employee', on_delete=models.CASCADE, related_name='terminations')
     termination_type = models.CharField(max_length=50,choices=TerminationType.choices, default=TerminationType.VOLUNTARY)
     termination_date = models.DateField()
@@ -166,7 +174,7 @@ class Termination(BaseModel):
 
     class Meta:
         db_table = 'termination_reason'
-        unique_together = ('termination_reason',)
+        unique_together = ('termination_reason', 'company')
  
     def __str__(self):
         return self.termination_reason
