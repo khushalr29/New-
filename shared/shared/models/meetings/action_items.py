@@ -2,8 +2,10 @@ from django.db import models
 from .meetings import Meeting
 from ..core.employee import Employee
 from ..core.enums import PriorityChoices
+from ..core.base import BaseModel
 
-class ActionItem(models.Model):
+
+class ActionItem(BaseModel):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='action_items')
     action_item_title = models.CharField(max_length=255)
     description = models.TextField()
@@ -12,9 +14,6 @@ class ActionItem(models.Model):
     priority = models.CharField(max_length=20, choices=PriorityChoices.choices)
     progress = models.PositiveIntegerField(default=0)
     notes = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(null=True, blank=True)
-    updated_at = models.DateTimeField(null=True, blank=True)
-    deleted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'action_item'

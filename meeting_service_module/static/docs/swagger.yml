@@ -1,0 +1,319 @@
+openapi: 3.0.3
+info:
+  title: Standalone Meeting Management API
+  description: |-
+    Professional Multi-tenant API for Meeting Management.
+    
+    ### Key Features:
+    * **Centralized Auth**: Tokens managed by User Service
+    * **Soft Delete**: All records are preserved but hidden when deleted
+    * **Multi-tenancy**: Data isolated by Company
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: admin@gmail.com
+servers:
+  - url: /api/v1
+    description: Current server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Meeting:
+      type: object
+      required: [title, meeting_date, start_time, end_time, recurrence]
+      properties:
+        title: {type: string, example: "Sprint Planning"}
+        description: {type: string, example: "Discuss next sprint goals"}
+        meeting_type: {type: integer, example: 1, description: "ID of MeetingType record"}
+        meeting_room: {type: integer, example: 1, description: "ID of MeetingRoom record"}
+        meeting_date: {type: string, format: date, example: "2026-04-10"}
+        start_time: {type: string, format: date-time, example: "2026-04-10T10:00:00Z"}
+        end_time: {type: string, format: date-time, example: "2026-04-10T11:00:00Z"}
+        organizer: {type: integer, example: 1}
+        recurrence: {type: string, enum: [daily, weekly, monthly, yearly], example: "weekly"}
+        recurrence_end_date: {type: string, format: date, example: "2026-12-31"}
+        agenda: {type: string, example: "1. Review tasks\n2. Assign points"}
+
+    MeetingType:
+      type: object
+      required: [name, color, default_duration]
+      properties:
+        name: {type: string, example: "Client Meeting"}
+        description: {type: string, example: "External client discussions"}
+        color: {type: string, example: "#FF5733"}
+        default_duration: {type: integer, example: 60, description: "Minutes"}
+        status: {type: string, enum: [active, inactive], default: "active"}
+
+    MeetingRoom:
+      type: object
+      required: [name, capacity, type]
+      properties:
+        name: {type: string, example: "Board Room"}
+        description: {type: string, example: "Level 4, East Wing"}
+        type: {type: string, enum: [virtual, physical], example: "physical"}
+        location: {type: string, example: "Main HQ"}
+        capacity: {type: integer, example: 12}
+        equipment: {type: string, example: "TV, Whiteboard, Polycom"}
+        status: {type: string, enum: [active, inactive], default: "active"}
+
+    Attendee:
+      type: object
+      required: [meeting, employee, attendance_type, rsvp_status, attendance_status]
+      properties:
+        meeting: {type: integer, example: 1}
+        employee: {type: integer, example: 1}
+        attendance_type: {type: string, enum: [required, optional], example: "required"}
+        rsvp_status: {type: string, enum: [accepted, declined, tentative, pending], example: "pending"}
+        attendance_status: {type: string, enum: [not_attended, present, late, left_early], example: "present"}
+
+    Minutes:
+      type: object
+      required: [meeting, topic, minutes_type, content, recorded_date, recorded_time]
+      properties:
+        meeting: {type: integer, example: 1}
+        topic: {type: string, example: "Project Architecture Discussion"}
+        minutes_type: {type: string, enum: [formal, informal], example: "formal"}
+        content: {type: string, example: "Decision made to use microservices..."}
+        recorded_by: {type: integer, example: 1}
+        recorded_date: {type: string, format: date, example: "2026-04-10"}
+        recorded_time: {type: string, example: "11:30:00"}
+
+    ActionItem:
+      type: object
+      required: [meeting, action_item_title, due_date, priority]
+      properties:
+        meeting: {type: integer, example: 1}
+        action_item_title: {type: string, example: "Update API Documentation"}
+        description: {type: string, example: "Ensure all endpoints are documented"}
+        assigned_to: {type: integer, example: 1}
+        due_date: {type: string, format: date, example: "2026-04-09"}
+        priority: {type: string, enum: [High, Medium, Low], example: "High"}
+        progress: {type: integer, example: 50}
+
+paths:
+  /meetings/:
+    get:
+      summary: List all active meetings
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      responses:
+        '200':
+          description: List of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Meeting'}
+    post:
+      summary: Create a new meeting
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Meeting'}
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Meeting'}
+
+  /meetings/{id}/:
+    get:
+      summary: Get meeting details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      responses:
+        '200': {description: Success}
+    patch:
+      summary: Update meeting partialy
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Meeting'}
+      responses:
+        '200': {description: Updated}
+    delete:
+      summary: Soft Delete a meeting
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      responses:
+        '204': {description: Deleted}
+
+  /meeting-types/:
+    get:
+      summary: List meeting types
+      security: [{bearerAuth: []}]
+      tags: [Configuration]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create a meeting type
+      security: [{bearerAuth: []}]
+      tags: [Configuration]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/MeetingType'}
+      responses:
+        '201': {description: Created}
+
+  /meetingtypedetails/{id}/:
+    get:
+      summary: Get meeting type detail
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Configuration]
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Delete meeting type (Soft)
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Configuration]
+      responses:
+        '204': {description: Deleted}
+
+  /meeting-rooms/:
+    get:
+      summary: List meeting rooms
+      security: [{bearerAuth: []}]
+      tags: [Resources]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create a meeting room
+      security: [{bearerAuth: []}]
+      tags: [Resources]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/MeetingRoom'}
+      responses:
+        '201': {description: Created}
+
+  /meeting-rooms/{id}/:
+    get:
+      summary: Get room detail
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Resources]
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Soft delete room
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Resources]
+      responses:
+        '204': {description: Deleted}
+
+  /meeting-attendees/:
+    get:
+      summary: List attendees records
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Add attendee record
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Attendee'}
+      responses:
+        '201': {description: Created}
+
+  /meeting-attendees/{id}/:
+    delete:
+      summary: Remove attendee (Soft Delete)
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '204': {description: Deleted}
+
+  /meeting-minutes/:
+    get:
+      summary: List meeting minutes
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Record meeting minutes
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Minutes'}
+      responses:
+        '201': {description: Created}
+
+  /meeting-minutes/{id}/:
+    delete:
+      summary: Remove minutes (Soft Delete)
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '204': {description: Deleted}
+
+  /action-items/:
+    get:
+      summary: List all action items
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create action item
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActionItem'}
+      responses:
+        '201': {description: Created}
+
+  /action-items/{id}/:
+    patch:
+      summary: Update action item status
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ActionItem'}
+      responses:
+        '200': {description: Updated}
+    delete:
+      summary: Remove action item (Soft Delete)
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Management]
+      responses:
+        '204': {description: Deleted}
