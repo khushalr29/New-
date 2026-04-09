@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from shared.models import Attendance
 
-class AttendenceRecordSerializer(serializers.ModelSerializer):
+class AttendanceRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = [
@@ -10,7 +10,7 @@ class AttendenceRecordSerializer(serializers.ModelSerializer):
             'total_work_hours', 'is_overtime', 'is_holiday', 'remarks',
         ]
 
-class AttendenceRecordListSerializer(serializers.ModelSerializer):
+class AttendanceRecordListSerializer(serializers.ModelSerializer):
     employee_name = serializers.CharField(source='employee.full_name', read_only=True)
     shift_name = serializers.CharField(source='shift.shift_name', read_only=True)
 

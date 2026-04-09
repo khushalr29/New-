@@ -5,7 +5,7 @@ info:
   version: "1.0.0"
 
 servers:
-  - url: /api/v1/attendence
+  - url: /api/v1/attendance
     description: Attendance Service API
 
 components:
@@ -152,7 +152,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-policy:
+  /attendance-policy:
     get:
       summary: List attendance policies
       tags: [Attendance Policies]
@@ -195,7 +195,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-policy/{id}:
+  /attendance-policy/{id}:
     get:
       summary: Get policy details
       tags: [Attendance Policies]
@@ -224,7 +224,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-records:
+  /attendance-records:
     get:
       summary: List attendance records
       tags: [Attendance Records]
@@ -264,7 +264,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-records/{id}:
+  /attendance-records/{id}:
     get:
       summary: Get record details
       tags: [Attendance Records]
@@ -293,7 +293,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-regularization:
+  /attendance-regularization:
     get:
       summary: List regularization requests
       tags: [Attendance Regularization]
@@ -333,7 +333,7 @@ paths:
       responses:
         200: {description: Success}
 
-  /attendence-regularization/{id}:
+  /attendance-regularization/{id}:
     get:
       summary: Get regularization details
       tags: [Attendance Regularization]
