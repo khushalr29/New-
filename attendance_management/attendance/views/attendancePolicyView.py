@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from shared.models import AttendancePolicy, UserActivityLog
-from ..serializers.attendencePolicySerializer import AttendencePolicySerializer, AttendencePolicyListSerializer
+from ..serializers.attendancePolicySerializer import attendancePolicySerializer, attendancePolicyListSerializer
 from shared.utils.response.handlers import ResponseHandler
 from shared.utils.response.messages import ResponseMessages
 from shared.utils.common.pagination import paginate_queryset
@@ -10,12 +10,12 @@ from shared.utils.errors.protectedErrors import check_references_and_get_deletab
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-class AttendencePolicyView(APIView):
+class attendancePolicyView(APIView):
     def get(self, request, id=None):
         if id:
             check_permissions(request, ['view_attendancepolicy'])
             instance = get_object_or_404(AttendancePolicy, id=id, company=request.user.company)
-            serializer = AttendencePolicyListSerializer(instance)
+            serializer = attendancePolicyListSerializer(instance)
             return ResponseHandler.success(serializer.data)
         
         check_permissions(request, ['list_attendancepolicy'])
@@ -29,31 +29,31 @@ class AttendencePolicyView(APIView):
             data = data.filter(status=status)
     
         if paginate == "false":
-            serializer = AttendencePolicyListSerializer(data, many=True)
+            serializer = attendancePolicyListSerializer(data, many=True)
             return ResponseHandler.list_success(serializer.data)
-        return paginate_queryset(data, request, AttendencePolicyListSerializer, view=self)
+        return paginate_queryset(data, request, attendancePolicyListSerializer, view=self)
 
-    @log_activity(UserActivityLog.CREATE, 'AttendencePolicy')
+    @log_activity(UserActivityLog.CREATE, 'attendancePolicy')
     def post(self, request):
         check_permissions(request, ['add_attendancepolicy'])
-        serializer = AttendencePolicySerializer(data=request.data)
+        serializer = attendancePolicySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('Attendence Policy')
+            return ResponseHandler.create_success('attendance Policy')
         return ResponseHandler.create_failed(serializer.errors)
 
-    @log_activity(UserActivityLog.UPDATE, 'AttendencePolicy')
+    @log_activity(UserActivityLog.UPDATE, 'attendancePolicy')
     def put(self, request, id=None):
         check_permissions(request, ['change_attendancepolicy'])
         instance = get_object_or_404(AttendancePolicy, id=id, company=request.user.company)
-        serializer = AttendencePolicySerializer(instance, data=request.data, partial=True)
+        serializer = attendancePolicySerializer(instance, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Attendence Policy')
+            return ResponseHandler.update_success('attendance Policy')
         return ResponseHandler.update_failed(serializer.errors)
 
-    @log_activity(UserActivityLog.DELETE, 'AttendencePolicy')
+    @log_activity(UserActivityLog.DELETE, 'attendancePolicy')
     def delete(self, request):
         check_permissions(request, ['delete_attendancepolicy'])
         ids = request.data.get("ids", [])
@@ -64,7 +64,7 @@ class AttendencePolicyView(APIView):
         deletable_instances, reference_details = check_references_and_get_deletable_instances(AttendancePolicy, ids)
         
         if reference_details:
-            return ResponseHandler.dependency_error(message=ResponseMessages.protected_error("Attendence Policy"))
+            return ResponseHandler.dependency_error(message=ResponseMessages.protected_error("attendance Policy"))
         
         queryset.update(deleted_at=timezone.now())
-        return ResponseHandler.delete_success("Attendence Policy")
+        return ResponseHandler.delete_success("attendance Policy")

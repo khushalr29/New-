@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from shared.models import AttendancePolicy
 
-class AttendencePolicySerializer(serializers.ModelSerializer):
+class AttendancePolicySerializer(serializers.ModelSerializer):
     class Meta:
         model = AttendancePolicy
         fields = [
@@ -22,7 +22,7 @@ class AttendencePolicySerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Early departure grace time cannot be greater than late arrival grace time")
         return attrs
 
-class AttendencePolicyListSerializer(serializers.ModelSerializer):
+class AttendancePolicyListSerializer(serializers.ModelSerializer):
     company_name = serializers.CharField(source='company.company_name', read_only=True)
 
     class Meta:

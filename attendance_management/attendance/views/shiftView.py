@@ -24,7 +24,7 @@ class ShiftView(APIView):
         data = Shift.objects.filter(company=request.user.company).order_by("-id")
         search = request.query_params.get("search")
         if search:
-            data = data.filter(shift_name__icontains=search)
+            data = data.filter(policy_name__icontains=search)
         
         start_date = request.query_params.get("start_date")
         end_date = request.query_params.get("end_date")
@@ -78,7 +78,6 @@ class ShiftView(APIView):
         if not isinstance(ids, list) or not ids:
             return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
         
-        # Soft delete logic based on user's diff
         queryset = Shift.objects.filter(id__in=ids, company=request.user.company)
         deletable_instances, reference_details = check_references_and_get_deletable_instances(Shift, ids)
         

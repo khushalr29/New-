@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from shared.models import Attendance, UserActivityLog
-from ..serializers.attendenceRecordSerializer import AttendenceRecordSerializer, AttendenceRecordListSerializer
+from ..serializers.attendanceRecordSerializer import AttendanceRecordSerializer, AttendanceRecordListSerializer
 from shared.utils.response.handlers import ResponseHandler
 from shared.utils.response.messages import ResponseMessages
 from shared.utils.common.pagination import paginate_queryset
@@ -11,12 +11,12 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import datetime
 
-class AttendenceRecordsView(APIView):
+class AttendanceRecordsView(APIView):
     def get(self, request, id=None):
         if id:
             check_permissions(request, ['view_attendance'])
             instance = get_object_or_404(Attendance, id=id, company=request.user.company)
-            serializer = AttendenceRecordListSerializer(instance)
+            serializer = AttendanceRecordListSerializer(instance)
             return ResponseHandler.success(serializer.data)
         
         check_permissions(request, ['list_attendance'])
@@ -42,31 +42,31 @@ class AttendenceRecordsView(APIView):
             data = data.filter(status=status)
      
         if paginate == "false":
-            serializer = AttendenceRecordListSerializer(data, many=True)
+            serializer = AttendanceRecordListSerializer(data, many=True)
             return ResponseHandler.list_success(serializer.data)
-        return paginate_queryset(data, request, AttendenceRecordListSerializer, view=self)
+        return paginate_queryset(data, request, AttendanceRecordListSerializer, view=self)
 
-    @log_activity(UserActivityLog.CREATE, 'AttendenceRecord')
+    @log_activity(UserActivityLog.CREATE, 'Attendance Record')
     def post(self, request):
         check_permissions(request, ['add_attendance'])
-        serializer = AttendenceRecordSerializer(data=request.data)
+        serializer = AttendanceRecordSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('Attendence Record')
+            return ResponseHandler.create_success('Attendance Record')
         return ResponseHandler.create_failed(serializer.errors)
 
-    @log_activity(UserActivityLog.UPDATE, 'AttendenceRecord')
+    @log_activity(UserActivityLog.UPDATE, 'Attendance Record')
     def put(self, request, id=None):
         check_permissions(request, ['change_attendance'])
         instance = get_object_or_404(Attendance, id=id, company=request.user.company)
-        serializer = AttendenceRecordSerializer(instance, data=request.data, partial=True)
+        serializer = AttendanceRecordSerializer(instance, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Attendence Record')
+            return ResponseHandler.update_success('Attendance Record')
         return ResponseHandler.update_failed(serializer.errors)
 
-    @log_activity(UserActivityLog.DELETE, 'AttendenceRecord')
+    @log_activity(UserActivityLog.DELETE, 'Attendance Record')
     def delete(self, request):
         check_permissions(request, ['delete_attendance'])
         ids = request.data.get("ids", [])
@@ -77,7 +77,7 @@ class AttendenceRecordsView(APIView):
         deletable_instances, reference_details = check_references_and_get_deletable_instances(Attendance, ids)
         
         if reference_details:
-            return ResponseHandler.dependency_error(message=ResponseMessages.protected_error("Attendence Record"))
+            return ResponseHandler.dependency_error(message=ResponseMessages.protected_error("Attendance Record"))
         
         queryset.update(deleted_at=timezone.now())
-        return ResponseHandler.delete_success("Attendence Record")
+        return ResponseHandler.delete_success("Attendance Record")

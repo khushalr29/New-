@@ -472,5 +472,10 @@ class MeetingMinutesType(models.TextChoices):
     INFORMAL = 'informal', 'Informal'
 
 
-
-
+class AttendanceStatus(models.TextChoices):
+    PRESENT = 'present', 'Present'
+    ABSENT = 'absent', 'Absent'
+    LATE = 'late', 'Late'
+    HALF_DAY = 'half_day', 'Half Day'
+    ON_LEAVE = 'on_leave', 'On Leave'
+    HOLIDAY = 'holiday', 'Holiday'

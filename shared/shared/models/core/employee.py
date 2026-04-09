@@ -72,7 +72,6 @@ class Employee(TenantModel):
         try:
             return super().save(*args, **kwargs)
         except IntegrityError:
-            # Simple retry for ID collision
             if not kwargs.get('force_insert'):
                  self.employee_id = self._generate_employee_id()
                  self.employee_code = self.employee_id
