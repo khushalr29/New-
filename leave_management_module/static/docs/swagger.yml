@@ -1,0 +1,269 @@
+openapi: 3.0.3
+info:
+  title: Leave Management API
+  description: |-
+    Professional Multi-tenant API for Leave Management.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: admin@gmail.com
+servers:
+  - url: /api/v1
+    description: Current server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LeaveType:
+      type: object
+      required: [name, max_days_per_year]
+      properties:
+        name: {type: string, example: "Sick Leave"}
+        description: {type: string}
+        max_days_per_year: {type: integer, example: 12}
+        color: {type: string, example: "#FF5733"}
+        paid_leave: {type: boolean, default: true}
+        status: {type: string, enum: [active, inactive]}
+
+    LeavePolicy:
+      type: object
+      required: [policy_name, leave_type, accrual_type]
+      properties:
+        policy_name: {type: string, example: "Standard Sick Leave Policy"}
+        leave_type: {type: integer, example: 1}
+        accrual_type: {type: string, enum: [monthly, yearly, upfront]}
+        accrual_rate: {type: integer, example: 1}
+        carry_forward_limit: {type: integer, example: 5}
+        min_days_per_application: {type: integer, example: 1}
+        max_days_per_application: {type: integer, example: 10}
+        is_required_approval: {type: boolean, default: true}
+
+    LeaveApplication:
+      type: object
+      required: [leave_type, start_date, end_date]
+      properties:
+        employee: {type: integer, example: 1}
+        leave_type: {type: integer, example: 1}
+        start_date: {type: string, format: date, example: "2026-05-01"}
+        end_date: {type: string, format: date, example: "2026-05-03"}
+        reason: {type: string, example: "Going to hometown"}
+        status: {type: string, enum: [pending, approved, rejected, cancelled]}
+
+    LeaveBalance:
+      type: object
+      required: [employee, leave_type, year, allocated_days]
+      properties:
+        employee: {type: integer, example: 1}
+        leave_type: {type: integer, example: 1}
+        year: {type: integer, example: 2026}
+        allocated_days: {type: integer, example: 12}
+        carry_forwarded_days: {type: integer, example: 2}
+
+paths:
+  /leave-types/:
+    get:
+      summary: List Leave Types
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create Leave Type
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeaveType'}
+      responses:
+        '201': {description: Created}
+
+  /leavetypedetails/{id}/:
+    get:
+      summary: Get Leave Type Details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      responses:
+        '200': {description: Success}
+    put:
+      summary: Update Leave Type
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeaveType'}
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Delete Leave Type
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      responses:
+        '200': {description: Deleted}
+    patch:
+      summary: Partially Update Leave Type
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Types]
+      responses:
+        '200': {description: Success}
+
+  /leave-policies/:
+    get:
+      summary: List Leave Policies
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create Leave Policy
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeavePolicy'}
+      responses:
+        '201': {description: Created}
+
+  /leavepolicydetails/{id}/:
+    get:
+      summary: Get Leave Policy Details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      responses:
+        '200': {description: Success}
+    put:
+      summary: Update Leave Policy
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeavePolicy'}
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Delete Leave Policy
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      responses:
+        '200': {description: Deleted}
+    patch:
+      summary: Partially Update Leave Policy
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Policies]
+      responses:
+        '200': {description: Success}
+
+  /leave-balances/:
+    get:
+      summary: List Leave Balances
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Create/Adjust Leave Balance
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeaveBalance'}
+      responses:
+        '201': {description: Created}
+  /leavebalancedetails/{id}/:
+    get:
+      summary: Get Leave Balance Details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      responses:
+        '200': {description: Success}
+    put:
+      summary: Update Leave Balance
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      responses:
+        '200': {description: Success}
+    patch:
+      summary: Partially Update Leave Balance
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Delete Leave Balance
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Balances]
+      responses:
+        '200': {description: Deleted}
+
+  /leave-applications/:
+    get:
+      summary: List Leave Applications
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      responses:
+        '200': {description: Success}
+    post:
+      summary: Apply for Leave
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeaveApplication'}
+      responses:
+        '201': {description: Created}
+
+  /leaveapplicationdetails/{id}/:
+    get:
+      summary: Get Leave Application Details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      responses:
+        '200': {description: Success}
+    put:
+      summary: Update Leave Application
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/LeaveApplication'}
+      responses:
+        '200': {description: Success}
+    patch:
+      summary: Partially Update Leave Application
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Cancel/Delete Leave Application
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      security: [{bearerAuth: []}]
+      tags: [Leave Applications]
+      responses:
+        '200': {description: Deleted}

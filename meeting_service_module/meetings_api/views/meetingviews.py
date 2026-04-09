@@ -34,23 +34,13 @@ class MeetingListView(APIView):
 
 class MeetingDetailsView(APIView):
 
-    def get_object(self, id, company):
-        try:
-            return Meeting.active_objects.get(id=id, company=company)
-        except Meeting.DoesNotExist:
-            return None
-
     def get(self, request, id):
-        meeting = self.get_object(id, request.user.company)
-        if not meeting:
-            return ResponseHandler.not_found_error()
+        meeting = get_object_or_404(Meeting.active_objects, id=id, company=request.user.company)
         serializer = MeetingSerializer(meeting, context={'request': request})
         return ResponseHandler.success(serializer.data)
     
     def put(self, request, id):
-        meeting = self.get_object(id, request.user.company)
-        if not meeting:
-            return ResponseHandler.not_found_error()
+        meeting = get_object_or_404(Meeting.active_objects, id=id, company=request.user.company)
         serializer = MeetingSerializer(meeting, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -58,9 +48,7 @@ class MeetingDetailsView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
     
     def patch(self, request, id):
-        meeting = self.get_object(id, request.user.company)
-        if not meeting:
-            return ResponseHandler.not_found_error()
+        meeting = get_object_or_404(Meeting.active_objects, id=id, company=request.user.company)
         serializer = MeetingSerializer(meeting, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -68,9 +56,7 @@ class MeetingDetailsView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
     
     def delete(self, request, id):
-        meeting = self.get_object(id, request.user.company)
-        if not meeting:
-            return ResponseHandler.not_found_error()
+        meeting = get_object_or_404(Meeting.active_objects, id=id, company=request.user.company)
         meeting.delete()
         return ResponseHandler.delete_success("Meeting")
 

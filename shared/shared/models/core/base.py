@@ -25,7 +25,7 @@ class BaseModel(models.Model):
         super().delete(using=using, keep_parents=keep_parents)
 
 class TenantModel(BaseModel):
-    company = models.ForeignKey('Company', on_delete=models.CASCADE, null=True, blank=True)
+    company = models.ForeignKey('shared.Company', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         abstract = True

@@ -9,11 +9,11 @@ class AttendeeListView(APIView):
 
     def get(self, request):
         attendees = MeetingAttendee.active_objects.filter(meeting__company=request.user.company).order_by('id')
-        parms = ['meeting', 'employee', 'attendance_type', 'rsvp_status']
-        for parms in parms:
-            if parms in parms in request.query_parms:
-                value = request.query_farms.get(parms)
-                filter_kwargs = {f"{parms}__iexact": value}
+        params = ['meeting', 'employee', 'attendance_type', 'rsvp_status']
+        for param in params:
+            if param in request.query_params:
+                value = request.query_params.get(param)
+                filter_kwargs = {f"{param}__iexact": value}
                 attendees = attendees.filter(**filter_kwargs)
 
         return paginate_queryset(attendees, request, MeetingAttendeeSerializer)
@@ -30,23 +30,14 @@ class AttendeeListView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
 
 class AttendeeDetailsView(APIView):
-    def get_object(self, id, company):
-        try:
-            return MeetingAttendee.active_objects.get(id=id, meeting__company=company)
-        except MeetingAttendee.DoesNotExist:
-            return None
 
     def get(self, request, id):
-        attendee = self.get_object(id, request.user.company)
-        if not attendee:
-            return ResponseHandler.not_found_error()
+        attendee = get_object_or_404(MeetingAttendee.active_objects, id=id, meeting__company=request.user.company)
         serializer = MeetingAttendeeSerializer(attendee, context={'request': request})
         return ResponseHandler.success(serializer.data)
 
     def put(self, request, id):
-        attendee = self.get_object(id, request.user.company)
-        if not attendee:
-            return ResponseHandler.not_found_error()
+        attendee = get_object_or_404(MeetingAttendee.active_objects, id=id, meeting__company=request.user.company)
         serializer = MeetingAttendeeSerializer(attendee, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -54,9 +45,7 @@ class AttendeeDetailsView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
 
     def patch(self, request, id):
-        attendee = self.get_object(id, request.user.company)
-        if not attendee:
-            return ResponseHandler.not_found_error()
+        attendee = get_object_or_404(MeetingAttendee.active_objects, id=id, meeting__company=request.user.company)
         serializer = MeetingAttendeeSerializer(attendee, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
@@ -64,9 +53,7 @@ class AttendeeDetailsView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
 
     def delete(self, request, id):
-        attendee = self.get_object(id, request.user.company)
-        if not attendee:
-            return ResponseHandler.not_found_error()
+        attendee = get_object_or_404(MeetingAttendee.active_objects, id=id, meeting__company=request.user.company)
         attendee.delete()
         return ResponseHandler.delete_success("Attendee")
 

@@ -4,6 +4,7 @@ from shared.models.contract_management.contract_template import ContractTemplate
 from ..serializers.contracttTemplateserializer import ContractTemplateSerializer
 from shared.utils.common.pagination import paginate_queryset
 from shared.utils.response.handlers import ResponseHandler
+from django.shortcuts import get_object_or_404
 
 class ContractTemplateListView(APIView):
     def get(self, request):

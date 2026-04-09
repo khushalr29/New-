@@ -11,7 +11,6 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """
-        Check that start_time is before end_time.
         """
         start_time = data.get('start_time')
         end_time = data.get('end_time')

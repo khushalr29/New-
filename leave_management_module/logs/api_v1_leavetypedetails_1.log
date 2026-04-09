@@ -1,0 +1,9 @@
+[2026-04-09 18:47:33,985] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.190",
+  "method": "GET",
+  "path": "/api/v1/leavetypedetails/1/",
+  "status": 200,
+  "response_body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"created_at\": \"2026-04-09T18:42:34.953017+05:30\",\n    \"updated_at\": \"2026-04-09T18:42:34.953032+05:30\",\n    \"deleted_at\": null,\n    \"is_enabled\": true,\n    \"name\": \"Sick Leave\",\n    \"description\": \"string\",\n    \"max_days_per_year\": 12,\n    \"color\": \"#FF5733\",\n    \"paid_leave\": true,\n    \"status\": \"active\",\n    \"company\": 1\n  },\n  \"message\": \"Success\"\n}"
+}

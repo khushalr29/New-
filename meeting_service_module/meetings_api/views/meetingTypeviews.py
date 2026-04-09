@@ -29,24 +29,13 @@ class MeetingTypeListView(APIView):
         return ResponseHandler.create_failed(serializer.errors)
 
 class MeetingTypeDetailsView(APIView):
-
-    def get_object(self, id, company):
-        try:
-            return MeetingType.active_objects.get(id=id, company=company)
-        except MeetingType.DoesNotExist:
-            return None
-
     def get(self, request, id):
-        mtype = self.get_object(id, request.user.company)
-        if not mtype:
-            return ResponseHandler.not_found_error()
+        mtype = get_object_or_404(MeetingType.active_objects, id=id, company=request.user.company)
         serializer = MeetingTypeSerializer(mtype, context={'request': request})
         return ResponseHandler.success(serializer.data)
     
     def delete(self, request, id):
-        mtype = self.get_object(id, request.user.company)
-        if not mtype:
-            return ResponseHandler.not_found_error()
+        mtype = get_object_or_404(MeetingType.active_objects, id=id, company=request.user.company)
         mtype.delete()
         return ResponseHandler.delete_success("Meeting type")
 
