@@ -106,3 +106,183 @@
   "status": 200,
   "response_body": "{\n  \"swagger\": \"2.0\",\n  \"info\": {\n    \"title\": \"Meeting Management API\",\n    \"description\": \"Professional API for managing meetings, rooms, and types.\",\n    \"termsOfService\": \"https://www.google.com/policies/terms/\",\n    \"contact\": {\n      \"email\": \"admin@gmail.com\"\n    },\n    \"license\": {\n      \"name\": \"BSD License\"\n    },\n    \"version\": \"v1\"\n  },\n  \"host\": \"127.0.0.1:8000\",\n  \"schemes\": [\n    \"http\"\n  ],\n  \"basePath\": \"/api/v1\",\n  \"consumes\": [\n    \"application/json\"\n  ],\n  \"produces\": [\n    \"application/json\"\n  ],\n  \"securityDefinitions\": {\n    \"Basic\": {\n      \"type\": \"basic\"\n    }\n  },\n  \"security\": [\n    {\n      \"Basic\": []\n    }\n  ],\n  \"paths\": {\n    \"/action-items/\": {\n      \"get\": {\n        \"operationId\": \"action-items_list\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"post\": {\n        \"operationId\": \"action-items_create\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"201\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": []\n    },\n    \"/action-items/{id}/\": {\n      \"patch\": {\n        \"operationId\": \"action-items_partial_update\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"delete\": {\n        \"operationId\": \"action-items_delete\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"204\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"type\": \"string\"\n        }\n      ]\n    },\n...[truncated]"
 }
+[2026-04-08 10:29:25,744] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"utf-8\"/>\n    <title>Meeting Management API</title>\n\n    \n        \n    \n\n    \n        \n        <link rel=\"icon\" type=\"image/png\" href=\"/static/drf-yasg/swagger-ui-dist/favicon-32x32.png\"/>\n    \n\n    \n        <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/drf-yasg/style.css\"/>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/drf-yasg/swagger-ui-dist/swagger-ui.css\">\n    \n    \n        \n    \n</head>\n\n<body class=\"swagger-body\">\n\n\n    \n\n\n<div id=\"swagger-ui\"></div>\n\n\n    \n\n\n<script id=\"swagger-settings\" type=\"application/json\">{\"docExpansion\": \"list\", \"deepLinking\": false, \"showExtensions\": true, \"defaultModelRendering\": \"model\", \"defaultModelExpandDepth\": 3, \"defaultModelsExpandDepth\": 3, \"showCommonExtensions\": true, \"supportedSubmitMethods\": [\"get\", \"put\", \"post\", \"delete\", \"options\", \"head\", \"patch\", \"trace\"], \"displayOperationId\": true, \"persistAuth\": false, \"refetchWithAuth\": false, \"refetchOnLogout\": false, \"fetchSchemaWithQuery\": true, \"csrfCookie\": \"csrftoken\", \"csrfHeader\": \"X-CSRFTOKEN\"}</script>\n<script id=\"oauth2-config\" type=\"application/json\">{}</script>\n\n\n    <script src=\"/static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js\"></script>\n    <script src=\"/static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js\"></script>\n    <script src=\"/static/drf-yasg/insQ.min.js\"></script>\n    <script src=\"/static/drf-yasg/immutable.min.js\"></script>\n    <script src=\"/static/drf-yasg/swagger-ui-init.js\"></script>\n\n\n    \n\n\n<a id=\"oauth2-redirect-url\" href=\"/static/drf-yasg/swagger-ui-dist/oauth2-redirect.html\" class=\"hidden\"></a>\n\n\n    <div id=\"django-session-auth\" class=\"hidden\">\n        \n            <input type=\"hidden\" name=\"csrfmiddlewaretoken\" value=\"Agkx9pu4yOvCGwt0MPDSmNMAOOgiiSnNgMy4sykQwp58bU6nnuOdiHByisfP5frf\">\n\n            \n                \n            \n\n            \n                <div class='btn authorize'>\n                    <a id=\"auth\" class=\"header__btn\" href=\"/accounts/login/?n\n...[truncated]"
+}
+[2026-04-08 10:29:25,905] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/?format=openapi",
+  "status": 200,
+  "response_body": "{\n  \"swagger\": \"2.0\",\n  \"info\": {\n    \"title\": \"Meeting Management API\",\n    \"description\": \"Professional API for managing meetings, rooms, and types.\",\n    \"termsOfService\": \"https://www.google.com/policies/terms/\",\n    \"contact\": {\n      \"email\": \"admin@gmail.com\"\n    },\n    \"license\": {\n      \"name\": \"BSD License\"\n    },\n    \"version\": \"v1\"\n  },\n  \"host\": \"127.0.0.1:8001\",\n  \"schemes\": [\n    \"http\"\n  ],\n  \"basePath\": \"/api/v1\",\n  \"consumes\": [\n    \"application/json\"\n  ],\n  \"produces\": [\n    \"application/json\"\n  ],\n  \"securityDefinitions\": {\n    \"Basic\": {\n      \"type\": \"basic\"\n    }\n  },\n  \"security\": [\n    {\n      \"Basic\": []\n    }\n  ],\n  \"paths\": {\n    \"/action-items/\": {\n      \"get\": {\n        \"operationId\": \"action-items_list\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"post\": {\n        \"operationId\": \"action-items_create\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"201\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": []\n    },\n    \"/action-items/{id}/\": {\n      \"patch\": {\n        \"operationId\": \"action-items_partial_update\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"delete\": {\n        \"operationId\": \"action-items_delete\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"204\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"type\": \"string\"\n        }\n      ]\n    },\n...[truncated]"
+}
+[2026-04-08 10:33:44,511] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"utf-8\"/>\n    <title>Meeting Management API</title>\n\n    \n        \n    \n\n    \n        \n        <link rel=\"icon\" type=\"image/png\" href=\"/static/drf-yasg/swagger-ui-dist/favicon-32x32.png\"/>\n    \n\n    \n        <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/drf-yasg/style.css\"/>\n        <link rel=\"stylesheet\" type=\"text/css\" href=\"/static/drf-yasg/swagger-ui-dist/swagger-ui.css\">\n    \n    \n        \n    \n</head>\n\n<body class=\"swagger-body\">\n\n\n    \n\n\n<div id=\"swagger-ui\"></div>\n\n\n    \n\n\n<script id=\"swagger-settings\" type=\"application/json\">{\"docExpansion\": \"list\", \"deepLinking\": false, \"showExtensions\": true, \"defaultModelRendering\": \"model\", \"defaultModelExpandDepth\": 3, \"defaultModelsExpandDepth\": 3, \"showCommonExtensions\": true, \"supportedSubmitMethods\": [\"get\", \"put\", \"post\", \"delete\", \"options\", \"head\", \"patch\", \"trace\"], \"displayOperationId\": true, \"persistAuth\": false, \"refetchWithAuth\": false, \"refetchOnLogout\": false, \"fetchSchemaWithQuery\": true, \"csrfCookie\": \"csrftoken\", \"csrfHeader\": \"X-CSRFTOKEN\"}</script>\n<script id=\"oauth2-config\" type=\"application/json\">{}</script>\n\n\n    <script src=\"/static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js\"></script>\n    <script src=\"/static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js\"></script>\n    <script src=\"/static/drf-yasg/insQ.min.js\"></script>\n    <script src=\"/static/drf-yasg/immutable.min.js\"></script>\n    <script src=\"/static/drf-yasg/swagger-ui-init.js\"></script>\n\n\n    \n\n\n<a id=\"oauth2-redirect-url\" href=\"/static/drf-yasg/swagger-ui-dist/oauth2-redirect.html\" class=\"hidden\"></a>\n\n\n    <div id=\"django-session-auth\" class=\"hidden\">\n        \n            <input type=\"hidden\" name=\"csrfmiddlewaretoken\" value=\"5sN4S06eZeAkJtce83KcaBU8RDXvzPLsLY1Bb9W0XPaQeRPBJIVx6vJ6lhW2mcPU\">\n\n            \n                \n            \n\n            \n                <div class='btn authorize'>\n                    <a id=\"auth\" class=\"header__btn\" href=\"/accounts/login/?n\n...[truncated]"
+}
+[2026-04-08 10:33:45,792] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/?format=openapi",
+  "status": 200,
+  "response_body": "{\n  \"swagger\": \"2.0\",\n  \"info\": {\n    \"title\": \"Meeting Management API\",\n    \"description\": \"Professional API for managing meetings, rooms, and types.\",\n    \"termsOfService\": \"https://www.google.com/policies/terms/\",\n    \"contact\": {\n      \"email\": \"admin@gmail.com\"\n    },\n    \"license\": {\n      \"name\": \"BSD License\"\n    },\n    \"version\": \"v1\"\n  },\n  \"host\": \"127.0.0.1:8001\",\n  \"schemes\": [\n    \"http\"\n  ],\n  \"basePath\": \"/api/v1\",\n  \"consumes\": [\n    \"application/json\"\n  ],\n  \"produces\": [\n    \"application/json\"\n  ],\n  \"securityDefinitions\": {\n    \"Basic\": {\n      \"type\": \"basic\"\n    }\n  },\n  \"security\": [\n    {\n      \"Basic\": []\n    }\n  ],\n  \"paths\": {\n    \"/action-items/\": {\n      \"get\": {\n        \"operationId\": \"action-items_list\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"post\": {\n        \"operationId\": \"action-items_create\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"201\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": []\n    },\n    \"/action-items/{id}/\": {\n      \"patch\": {\n        \"operationId\": \"action-items_partial_update\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"200\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"delete\": {\n        \"operationId\": \"action-items_delete\",\n        \"description\": \"\",\n        \"parameters\": [],\n        \"responses\": {\n          \"204\": {\n            \"description\": \"\"\n          }\n        },\n        \"tags\": [\n          \"action-items\"\n        ]\n      },\n      \"parameters\": [\n        {\n          \"name\": \"id\",\n          \"in\": \"path\",\n          \"required\": true,\n          \"type\": \"string\"\n        }\n      ]\n    },\n...[truncated]"
+}
+[2026-04-08 10:41:13,566] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 10:43:11,230] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 10:44:42,694] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 10:49:34,647] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 10:58:38,173] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 11:00:24,248] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 11:16:47,790] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 12:58:04,226] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 12:58:31,578] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 13:05:22,613] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 13:15:38,999] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 13:15:56,005] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Meeting Management API Docs</title>\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui.css\" />\n  </head>\n  <body>\n    <div id=\"swagger-ui\"></div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js\"></script>\n    <script>\n      const swaggerFile = \"/static/docs/swagger.yml\";\n\n      const ui = SwaggerUIBundle({\n        url: swaggerFile,\n        dom_id: '#swagger-ui',\n        filter: true,\n        syntaxHighlight: {\n          activated: true,\n          theme:'arta'\n        },\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIBundle.SwaggerUIStandalonePreset\n        ],\n        requestInterceptor: function(request) {\n          request.headers['X-From-Swagger'] = 'true';\n          return request;\n        }\n      });\n    </script>\n  </body>\n</html>"
+}
+[2026-04-08 13:38:59,369] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Meeting Management API | Docs</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css\" >\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-16x16.png\" sizes=\"16x16\" />\n    <style>\n      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }\n      *, *:before, *:after { box-sizing: inherit; }\n      body { margin:0; background: #fafafa; font-family: 'Inter', sans-serif; }\n      .swagger-ui .topbar { background-color: #1b1b1b; padding: 10px 0; }\n      .swagger-ui .info .title { color: #2c3e50; }\n      .swagger-ui .scheme-container { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 20px 0; }\n    </style>\n</head>\n\n<body>\n    <div id=\"swagger-ui\"></div>\n\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js\"> </script>\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js\"> </script>\n    <script>\n    window.onload = function() {\n      const ui = SwaggerUIBundle({\n        url: \"/static/docs/swagger.yml\",\n        dom_id: '#swagger-ui',\n        deepLinking: true,\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIStandalonePreset\n        ],\n        plugins: [\n          SwaggerUIBundle.plugins.DownloadUrl\n        ],\n        layout: \"BaseLayout\",\n        docExpansion: 'list',\n        defaultModelsExpandDepth: 1,\n        defaultModelExpandDepth: 1,\n        filter: true,\n        tryItOutEnabled: true,\n        displayRequestDuration: true,\n      });\n      window.ui = ui;\n    };\n  </script>\n</body>\n</html>"
+}
+[2026-04-08 14:34:17,689] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Meeting Management API | Docs</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css\" >\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-16x16.png\" sizes=\"16x16\" />\n    <style>\n      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }\n      *, *:before, *:after { box-sizing: inherit; }\n      body { margin:0; background: #fafafa; font-family: 'Inter', sans-serif; }\n      .swagger-ui .topbar { background-color: #1b1b1b; padding: 10px 0; }\n      .swagger-ui .info .title { color: #2c3e50; }\n      .swagger-ui .scheme-container { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 20px 0; }\n    </style>\n</head>\n\n<body>\n    <div id=\"swagger-ui\"></div>\n\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js\"> </script>\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js\"> </script>\n    <script>\n    window.onload = function() {\n      const ui = SwaggerUIBundle({\n        url: \"/static/docs/swagger.yml\",\n        dom_id: '#swagger-ui',\n        deepLinking: true,\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIStandalonePreset\n        ],\n        plugins: [\n          SwaggerUIBundle.plugins.DownloadUrl\n        ],\n        layout: \"BaseLayout\",\n        docExpansion: 'list',\n        defaultModelsExpandDepth: 1,\n        defaultModelExpandDepth: 1,\n        filter: true,\n        tryItOutEnabled: true,\n        displayRequestDuration: true,\n      });\n      window.ui = ui;\n    };\n  </script>\n</body>\n</html>"
+}
+[2026-04-08 14:42:23,183] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Meeting Management API | Docs</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css\" >\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-16x16.png\" sizes=\"16x16\" />\n    <style>\n      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }\n      *, *:before, *:after { box-sizing: inherit; }\n      body { margin:0; background: #fafafa; font-family: 'Inter', sans-serif; }\n      .swagger-ui .topbar { background-color: #1b1b1b; padding: 10px 0; }\n      .swagger-ui .info .title { color: #2c3e50; }\n      .swagger-ui .scheme-container { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 20px 0; }\n    </style>\n</head>\n\n<body>\n    <div id=\"swagger-ui\"></div>\n\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js\"> </script>\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js\"> </script>\n    <script>\n    window.onload = function() {\n      const ui = SwaggerUIBundle({\n        url: \"/static/docs/swagger.yml\",\n        dom_id: '#swagger-ui',\n        deepLinking: true,\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIStandalonePreset\n        ],\n        plugins: [\n          SwaggerUIBundle.plugins.DownloadUrl\n        ],\n        layout: \"BaseLayout\",\n        docExpansion: 'list',\n        defaultModelsExpandDepth: 1,\n        defaultModelExpandDepth: 1,\n        filter: true,\n        tryItOutEnabled: true,\n        displayRequestDuration: true,\n      });\n      window.ui = ui;\n    };\n  </script>\n</body>\n</html>"
+}
+[2026-04-08 14:54:58,161] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/swagger/",
+  "status": 200,
+  "response_body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <title>Meeting Management API | Docs</title>\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css\" >\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-32x32.png\" sizes=\"32x32\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"https://unpkg.com/swagger-ui-dist@5.11.0/favicon-16x16.png\" sizes=\"16x16\" />\n    <style>\n      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }\n      *, *:before, *:after { box-sizing: inherit; }\n      body { margin:0; background: #fafafa; font-family: 'Inter', sans-serif; }\n      .swagger-ui .topbar { background-color: #1b1b1b; padding: 10px 0; }\n      .swagger-ui .info .title { color: #2c3e50; }\n      .swagger-ui .scheme-container { background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.1); margin: 20px 0; }\n    </style>\n</head>\n\n<body>\n    <div id=\"swagger-ui\"></div>\n\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js\"> </script>\n    <script src=\"https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js\"> </script>\n    <script>\n    window.onload = function() {\n      const ui = SwaggerUIBundle({\n        url: \"/static/docs/swagger.yml\",\n        dom_id: '#swagger-ui',\n        deepLinking: true,\n        presets: [\n          SwaggerUIBundle.presets.apis,\n          SwaggerUIStandalonePreset\n        ],\n        plugins: [\n          SwaggerUIBundle.plugins.DownloadUrl\n        ],\n        layout: \"BaseLayout\",\n        docExpansion: 'list',\n        defaultModelsExpandDepth: 1,\n        defaultModelExpandDepth: 1,\n        filter: true,\n        tryItOutEnabled: true,\n        displayRequestDuration: true,\n      });\n      window.ui = ui;\n    };\n  </script>\n</body>\n</html>"
+}

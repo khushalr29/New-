@@ -4,10 +4,7 @@ info:
   description: |-
     Professional Multi-tenant API for Meeting Management.
     
-    ### Key Features:
-    * **Centralized Auth**: Tokens managed by User Service
-    * **Soft Delete**: All records are preserved but hidden when deleted
-    * **Multi-tenancy**: Data isolated by Company
+   
   version: 1.0.0
   contact:
     name: API Support
@@ -98,33 +95,66 @@ components:
 
 paths:
   /meetings/:
-    get:
-      summary: List all active meetings
-      security: [{bearerAuth: []}]
-      tags: [Meetings]
+      parameters:
+        - name: search
+          in: query
+          description: Search by title, description or agenda
+          required: false
+          schema: {type: string}
+        - name: meeting_type
+          in: query
+          description: Filter by Meeting Type ID
+          required: false
+          schema: {type: integer}
+        - name: meeting_room
+          in: query
+          description: Filter by Meeting Room ID
+          required: false
+          schema: {type: integer}
+        - name: date
+          in: query
+          description: Filter by date (YYYY-MM-DD)
+          required: false
+          schema: {type: string, format: date}
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          description: Items per page
+          required: false
+          schema: {type: integer, default: 10}
       responses:
         '200':
-          description: List of items
+          description: Paginated list of items
           content:
             application/json:
               schema:
-                type: array
-                items: {$ref: '#/components/schemas/Meeting'}
-    post:
-      summary: Create a new meeting
-      security: [{bearerAuth: []}]
-      tags: [Meetings]
-      requestBody:
-        required: true
+                type: object
+                properties:
+                  count: {type: integer}
+                  page: {type: integer}
+                  page_size: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/Meeting'}
+  post:
+    summary: Create a new meeting
+    security: [{bearerAuth: []}]
+    tags: [Meetings]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/Meeting'}
+    responses:
+      '201':
+        description: Created
         content:
           application/json:
             schema: {$ref: '#/components/schemas/Meeting'}
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema: {$ref: '#/components/schemas/Meeting'}
 
   /meetings/{id}/:
     get:
@@ -190,11 +220,46 @@ paths:
 
   /meeting-rooms/:
     get:
-      summary: List meeting rooms
-      security: [{bearerAuth: []}]
-      tags: [Resources]
+      parameters:
+        - name: search
+          in: query
+          description: Search by name, location or description
+          required: false
+          schema: {type: string}
+        - name: type
+          in: query
+          description: Filter by room type
+          required: false
+          schema: {type: string, enum: [virtual, physical]}
+        - name: capacity
+          in: query
+          description: Filter by minimum capacity
+          required: false
+          schema: {type: integer}
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          description: Items per page
+          required: false
+          schema: {type: integer, default: 10}
       responses:
-        '200': {description: Success}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  page: {type: integer}
+                  page_size: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/MeetingRoom'}
     post:
       summary: Create a meeting room
       security: [{bearerAuth: []}]
@@ -225,11 +290,46 @@ paths:
 
   /meeting-attendees/:
     get:
-      summary: List attendees records
-      security: [{bearerAuth: []}]
-      tags: [Management]
+      parameters:
+        - name: meeting
+          in: query
+          description: Filter by Meeting ID
+          required: false
+          schema: {type: integer}
+        - name: employee
+          in: query
+          description: Filter by Employee ID
+          required: false
+          schema: {type: integer}
+        - name: rsvp_status
+          in: query
+          description: Filter by RSVP Status
+          required: false
+          schema: {type: string, enum: [accepted, declined, tentative, pending]}
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          description: Items per page
+          required: false
+          schema: {type: integer, default: 10}
       responses:
-        '200': {description: Success}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  page: {type: integer}
+                  page_size: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/Attendee'}
     post:
       summary: Add attendee record
       security: [{bearerAuth: []}]
@@ -253,11 +353,46 @@ paths:
 
   /meeting-minutes/:
     get:
-      summary: List meeting minutes
-      security: [{bearerAuth: []}]
-      tags: [Management]
+      parameters:
+        - name: search
+          in: query
+          description: Search by topic or content
+          required: false
+          schema: {type: string}
+        - name: meeting
+          in: query
+          description: Filter by Meeting ID
+          required: false
+          schema: {type: integer}
+        - name: type
+          in: query
+          description: Filter by Minutes Type
+          required: false
+          schema: {type: string, enum: [formal, informal]}
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          description: Items per page
+          required: false
+          schema: {type: integer, default: 10}
       responses:
-        '200': {description: Success}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  page: {type: integer}
+                  page_size: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/Minutes'}
     post:
       summary: Record meeting minutes
       security: [{bearerAuth: []}]
@@ -281,11 +416,51 @@ paths:
 
   /action-items/:
     get:
-      summary: List all action items
-      security: [{bearerAuth: []}]
-      tags: [Management]
+      parameters:
+        - name: search
+          in: query
+          description: Search by title or description
+          required: false
+          schema: {type: string}
+        - name: meeting
+          in: query
+          description: Filter by Meeting ID
+          required: false
+          schema: {type: integer}
+        - name: priority
+          in: query
+          description: Filter by Priority
+          required: false
+          schema: {type: string, enum: [High, Medium, Low]}
+        - name: assigned_to
+          in: query
+          description: Filter by Employee ID
+          required: false
+          schema: {type: integer}
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          description: Items per page
+          required: false
+          schema: {type: integer, default: 10}
       responses:
-        '200': {description: Success}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  page: {type: integer}
+                  page_size: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/ActionItem'}
     post:
       summary: Create action item
       security: [{bearerAuth: []}]

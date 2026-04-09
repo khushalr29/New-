@@ -1,49 +1,74 @@
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from django.shortcuts import get_object_or_404
 from shared.models.meetings.meeting_room import MeetingRoom
 from ..serializers import MeetingRoomSerializer
+from django.db.models import Q
+from shared.utils.common.pagination import paginate_queryset
+from shared.utils.response.handlers import ResponseHandler
 
 class MeetingRoomListView(APIView):
 
     def get(self, request):
-       
-        rooms = MeetingRoom.active_objects.filter(company=request.user.company)
-        serializer = MeetingRoomSerializer(rooms, many=True, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        # Base Queryset
+        rooms = MeetingRoom.active_objects.filter(company=request.user.company).order_by('name')
+        
+        # Manual Searching
+        search_query = request.query_params.get('search')
+        if search_query:
+            rooms = rooms.filter(
+                Q(name__icontains=search_query) | 
+                Q(location__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
+        
+        # Manual Filtering
+        room_type = request.query_params.get('type')
+        if room_type:
+            rooms = rooms.filter(type=room_type)
+            
+        capacity = request.query_params.get('capacity')
+        if capacity:
+            rooms = rooms.filter(capacity__gte=capacity)
+
+        return paginate_queryset(rooms, request, MeetingRoomSerializer)
     
     def post(self, request):
-        
         serializer = MeetingRoomSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return ResponseHandler.create_success("Meeting room", serializer.data)
+        return ResponseHandler.create_failed(serializer.errors)
 
 class MeetingRoomDetailsView(APIView):
 
     def get_object(self, id, company):
-        return get_object_or_404(MeetingRoom.active_objects, id=id, company=company)
+        try:
+            return MeetingRoom.active_objects.get(id=id, company=company)
+        except MeetingRoom.DoesNotExist:
+            return None
 
     def get(self, request, id):
         room = self.get_object(id, request.user.company)
+        if not room:
+            return ResponseHandler.not_found_error()
         serializer = MeetingRoomSerializer(room, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return ResponseHandler.success(serializer.data)
     
     def put(self, request, id):
         room = self.get_object(id, request.user.company)
+        if not room:
+            return ResponseHandler.not_found_error()
         serializer = MeetingRoomSerializer(room, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return ResponseHandler.update_success("Meeting room", serializer.data)
+        return ResponseHandler.create_failed(serializer.errors)
     
     def delete(self, request, id):
         room = self.get_object(id, request.user.company)
+        if not room:
+            return ResponseHandler.not_found_error()
         room.delete()
-        return Response(
-            {"message": "Room deleted successfully"}, 
-            status=status.HTTP_204_NO_CONTENT
-        )
+        return ResponseHandler.delete_success("Meeting room")
+
 

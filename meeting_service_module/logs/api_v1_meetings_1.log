@@ -1,0 +1,27 @@
+[2026-04-08 14:46:01,635] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/api/v1/meetings/1/",
+  "status": 200,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T14:44:23.399704+05:30\",\n  \"updated_at\": \"2026-04-08T14:44:23.399718+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"title\": \"Test Meeting 1\",\n  \"description\": \"Testing the meeting module\",\n  \"meeting_date\": \"2026-04-10\",\n  \"start_time\": \"2026-04-10T15:30:00+05:30\",\n  \"end_time\": \"2026-04-10T16:30:00+05:30\",\n  \"recurrence\": \"weekly\",\n  \"recurrence_end_date\": \"2026-12-31\",\n  \"agenda\": \"Test Agenda\",\n  \"company\": 1,\n  \"meeting_type\": 1,\n  \"meeting_room\": 1,\n  \"organizer\": null\n}"
+}
+[2026-04-08 14:48:36,672] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "PATCH",
+  "path": "/api/v1/meetings/1/",
+  "status": 200,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T14:44:23.399704+05:30\",\n  \"updated_at\": \"2026-04-08T14:48:36.660265+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"title\": \"Updated Meeting\",\n  \"description\": \"Testing the meeting module\",\n  \"meeting_date\": \"2026-04-10\",\n  \"start_time\": \"2026-04-10T15:30:00+05:30\",\n  \"end_time\": \"2026-04-10T16:30:00+05:30\",\n  \"recurrence\": \"weekly\",\n  \"recurrence_end_date\": \"2026-12-31\",\n  \"agenda\": \"Test Agenda\",\n  \"company\": 1,\n  \"meeting_type\": 1,\n  \"meeting_room\": 1,\n  \"organizer\": null\n}"
+}
+[2026-04-08 14:50:05,674] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "DELETE",
+  "path": "/api/v1/meetings/1/",
+  "status": 204,
+  "response_body": "{\n  \"message\": \"Meeting 'Updated Meeting' has been successfully deleted.\"\n}"
+}

@@ -1,0 +1,9 @@
+[2026-04-08 17:34:03,178] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.174",
+  "method": "POST",
+  "path": "/api/contracts/templates/",
+  "status": 400,
+  "response_body": "{\n  \"contract\": [\n    \"This field is required.\"\n  ],\n  \"variables\": [\n    \"This field is required.\"\n  ],\n  \"contract_type\": [\n    \"This field is required.\"\n  ]\n}"
+}

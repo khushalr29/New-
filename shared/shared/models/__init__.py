@@ -1,6 +1,6 @@
 from .core import *
 from .hr_management import *
-from .attendence import *
+from .attendance import *
 from .leave_management import *
 from .document_managements import *
 from .meetings import *

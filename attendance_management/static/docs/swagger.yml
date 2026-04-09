@@ -1,0 +1,363 @@
+openapi: 3.0.0
+info:
+  title: Shift Management API
+  description: API for managing work shifts, attendance policies, records, and regularization.
+  version: "1.0.0"
+
+servers:
+  - url: /api/v1/attendence
+    description: Attendance Service API
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Shift:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        shift_name: {type: string, example: "Morning Shift"}
+        start_time: {type: string, format: time, example: "08:00:00"}
+        end_time: {type: string, format: time, example: "16:00:00"}
+        break_duration: {type: integer, example: 60}
+        break_start_time: {type: string, format: time, nullable: true}
+        break_end_time: {type: string, format: time, nullable: true}
+        grade_period: {type: integer, example: 30}
+        is_night_shift: {type: boolean}
+        status: {type: string, enum: [active, inactive]}
+
+    AttendancePolicy:
+      type: object
+      required: [policy_name, late_arrival_grace_time, early_departure_grace_time]
+      properties:
+        id: {type: integer, readOnly: true}
+        policy_name: {type: string, example: "Standard Office Policy"}
+        description: {type: string, nullable: true, example: "Default rules for office"}
+        late_arrival_grace_time: {type: integer, description: "Grace time in minutes", example: 15}
+        early_departure_grace_time: {type: integer, description: "Grace time in minutes", example: 10}
+        overtime_rate_per_hour: {type: number, format: float, example: 1.5}
+        status: {type: string, enum: [active, inactive], default: active}
+
+    AttendanceRecord:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        employee: {type: integer}
+        date: {type: string, format: date}
+        clock_in: {type: string, format: time, nullable: true}
+        clock_out: {type: string, format: time, nullable: true}
+        shift: {type: integer, nullable: true}
+        status: {type: string, enum: [present, absent, late, early_departure, holiday, leave]}
+        late_by: {type: integer, nullable: true}
+        early_by: {type: integer, nullable: true}
+        overtime_by: {type: integer, nullable: true}
+        total_work_hours: {type: number, format: float, nullable: true}
+        is_overtime: {type: boolean}
+        is_holiday: {type: boolean}
+        remarks: {type: string, nullable: true}
+
+    AttendanceRegularization:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        employee: {type: integer}
+        attendance_record: {type: integer, nullable: true}
+        request_clock_in: {type: string, format: time}
+        request_clock_out: {type: string, format: time}
+        reason: {type: string}
+
+    ErrorResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        error: {type: string}
+
+paths:
+  /shift:
+    get:
+      summary: List all shifts
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: status
+          in: query
+          schema: {type: string, enum: [active, inactive]}
+        - name: shift_type
+          in: query
+          schema: {type: string, enum: [day, night]}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create a new shift
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Shift'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete shifts
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /shift/{id}:
+    get:
+      summary: Get shift details
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update a shift
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Shift'}
+      responses:
+        200: {description: Success}
+
+  /attendence-policy:
+    get:
+      summary: List attendance policies
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: status
+          in: query
+          schema: {type: string, enum: [active, inactive]}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create attendance policy
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendancePolicy'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete policies
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /attendence-policy/{id}:
+    get:
+      summary: Get policy details
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update policy
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendancePolicy'}
+      responses:
+        200: {description: Success}
+
+  /attendence-records:
+    get:
+      summary: List attendance records
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create attendance record
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendanceRecord'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete records
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /attendence-records/{id}:
+    get:
+      summary: Get record details
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update record
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendanceRecord'}
+      responses:
+        200: {description: Success}
+
+  /attendence-regularization:
+    get:
+      summary: List regularization requests
+      tags: [Attendance Regularization]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create regularization request
+      tags: [Attendance Regularization]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendanceRegularization'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete regularization
+      tags: [Attendance Regularization]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /attendence-regularization/{id}:
+    get:
+      summary: Get regularization details
+      tags: [Attendance Regularization]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update regularization
+      tags: [Attendance Regularization]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AttendanceRegularization'}
+      responses:
+        200: {description: Success}

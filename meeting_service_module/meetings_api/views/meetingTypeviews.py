@@ -1,41 +1,53 @@
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from django.shortcuts import get_object_or_404
 from shared.models.meetings.meetings_type import MeetingType
 from ..serializers import MeetingTypeSerializer
+from django.db.models import Q
+from shared.utils.common.pagination import paginate_queryset
+from shared.utils.response.handlers import ResponseHandler
 
 class MeetingTypeListView(APIView):
 
     def get(self, request):
-        
-        types = MeetingType.active_objects.filter(company=request.user.company)
-        serializer = MeetingTypeSerializer(types, many=True, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+     
+        types = MeetingType.active_objects.filter(company=request.user.company).order_by('name')
+
+        search_query = request.query_params.get('search')
+        if search_query:
+            types = types.filter(
+                Q(name__icontains=search_query) | 
+                Q(description__icontains=search_query)
+            )
+
+        return paginate_queryset(types, request, MeetingTypeSerializer)
     
     def post(self, request):
-      
         serializer = MeetingTypeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return ResponseHandler.create_success("Meeting type", serializer.data)
+        return ResponseHandler.create_failed(serializer.errors)
 
 class MeetingTypeDetailsView(APIView):
 
     def get_object(self, id, company):
-        return get_object_or_404(MeetingType.active_objects, id=id, company=company)
+        try:
+            return MeetingType.active_objects.get(id=id, company=company)
+        except MeetingType.DoesNotExist:
+            return None
 
     def get(self, request, id):
         mtype = self.get_object(id, request.user.company)
+        if not mtype:
+            return ResponseHandler.not_found_error()
         serializer = MeetingTypeSerializer(mtype, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return ResponseHandler.success(serializer.data)
     
     def delete(self, request, id):
         mtype = self.get_object(id, request.user.company)
+        if not mtype:
+            return ResponseHandler.not_found_error()
         mtype.delete()
-        return Response(
-            {"message": "Meeting type deleted successfully"}, 
-            status=status.HTTP_204_NO_CONTENT
-        )
+        return ResponseHandler.delete_success("Meeting type")
+
 

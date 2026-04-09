@@ -1,0 +1,18 @@
+[2026-04-08 17:29:13,224] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.174",
+  "method": "POST",
+  "path": "/api/contracts/types/",
+  "status": 201,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T17:29:13.219219+05:30\",\n  \"updated_at\": \"2026-04-08T17:29:13.219230+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"contract_type_name\": \"yash\",\n  \"description\": \"hrbfjrhcf\",\n  \"default_duration_months\": 0,\n  \"probation_period\": 0,\n  \"notice_period\": 1,\n  \"is_renewable\": false,\n  \"status\": \"active\",\n  \"company\": 1\n}"
+}
+[2026-04-08 17:29:41,007] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.174",
+  "method": "GET",
+  "path": "/api/contracts/types/?search=1&page=1&page_size=10",
+  "status": 200,
+  "response_body": "{\n  \"count\": 0,\n  \"page\": 1,\n  \"page_size\": 10,\n  \"results\": []\n}"
+}

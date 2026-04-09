@@ -1,0 +1,9 @@
+[2026-04-08 14:28:27,697] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/api/v1/meetingtypedetails/2/",
+  "status": 404,
+  "response_body": "{\n  \"detail\": \"No MeetingType matches the given query.\"\n}"
+}

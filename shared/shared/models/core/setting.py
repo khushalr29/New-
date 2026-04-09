@@ -4,15 +4,19 @@ from ..core.enums import (LanguageEnum, DateFormatEnum, TimeFormatEnum, TimeZone
                         SidebarVarientEnum, SidebarStyleEnum, LayoutDirectionEnum, 
                         ThemeModeEnum, SymbolPositionEnum, DecimalSeparatorEnum, ThousandsSeparatorEnum,
                         EmailProvider, SmtpEncryption, DocumentTemplateType, StorageDriver, CacheDriver, FileTypeEnum)
+from .base import TenantModel
 
-class SystemSetting(models.Model):
+class SystemSetting(TenantModel):
     default_language = models.CharField(max_length=20,choices=LanguageEnum.choices, default=LanguageEnum.ENGLISH)
     date_format = models.CharField(max_length=20, choices = DateFormatEnum.choices,default= DateFormatEnum.Y_M_D )
     time_format = models.CharField(max_length = 20 , choices=TimeFormatEnum.choices, default=TimeFormatEnum.H_I)
     default_timezone = models.CharField(max_length=50,choices=TimeZone.choices, default=TimeZone.UTC)
     ip_restriction = models.BooleanField(default=False)
 
-class BrandSetting(models.Model):    
+    class Meta:
+        db_table = 'system_setting'
+
+class BrandSetting(TenantModel):    
     logo_dark = models.TextField(null=True, blank=True)
     logo_light = models.TextField(null =True, blank=True)
     favicon = models.TextField(null=True, blank=True)
@@ -26,7 +30,10 @@ class BrandSetting(models.Model):
     layout_direction = models.CharField(max_length=15, choices =LayoutDirectionEnum.choices, default=LayoutDirectionEnum.LEFT_TO_RIGHT)
     theme_mode = models.CharField(max_length=15, choices=ThemeModeEnum.choices, default = ThemeModeEnum.LIGHT)
 
-class CurrencySetting(models.Model):
+    class Meta:
+        db_table = 'brand_setting'
+
+class CurrencySetting(TenantModel):
     currency_amount = models.DecimalField(max_digits=20, decimal_places=4, default=0.00)
     default_currency = models.ForeignKey(Currency, on_delete=models.CASCADE, related_name= 'currency')
     currency_symbol = models.CharField(max_length=5, default='$')
@@ -38,13 +45,14 @@ class CurrencySetting(models.Model):
     add_space = models.BooleanField(default=False)
 
     class Meta:
+        db_table = 'currency_settings'
         verbose_name = 'Currency Settings'
 
     def __str__(self):
         return f"Currency — {self.default_currency}"
 
 
-class EmailSetting(models.Model):
+class EmailSetting(TenantModel):
     email_provider = models.CharField(max_length=15, choices=EmailProvider.choices , default=EmailProvider.SMTP)
     mail_driver = models.CharField(max_length=15, choices=EmailProvider.choices , default=EmailProvider.SMTP)
     smtp_host = models.CharField(max_length=255, null= True, blank=True)
@@ -58,7 +66,10 @@ class EmailSetting(models.Model):
     mail_domain = models.CharField(max_length=255, blank=True)
     send_test_to = models.EmailField(max_length=255)
 
-class WorkingDaysSetting(models.Model):
+    class Meta:
+        db_table = 'email_settings'
+
+class WorkingDaysSetting(TenantModel):
     is_monday = models.BooleanField(default=False)
     is_tuesday = models.BooleanField(default=False)
     is_wednesday = models.BooleanField(default=False)
@@ -67,12 +78,14 @@ class WorkingDaysSetting(models.Model):
     is_saturday = models.BooleanField(default=False)
     is_sunday = models.BooleanField(default=False)
 
-class IPRestrictionSettings(models.Model):
+    class Meta:
+        db_table = 'working_days_setting'
+
+class IPRestrictionSettings(TenantModel):
     is_enabled = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'ip_restriction_settings'
         verbose_name = 'IP Restriction Settings'
 
     def __str__(self):
@@ -92,21 +105,20 @@ class AllowedIP(models.Model):
     def __str__(self):
         return f"{self.ip_address} — {self.label}"
     
-class ZKTecoSettings(models.Model):
+class ZKTecoSettings(TenantModel):
     is_enabled = models.BooleanField(default=False)
     device_ip = models.GenericIPAddressField(null=True, blank=True)
     device_port = models.PositiveIntegerField(default=4370)
     timeout = models.PositiveIntegerField(default=5)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'zkteco_settings'
         verbose_name = 'ZKTeco Settings'
 
     def __str__(self):
         return f"ZKTeco — {self.device_ip}:{self.device_port}"
 
-class DocumentTemplateSettings(models.Model):
+class DocumentTemplateSettings(TenantModel):
     template_type = models.CharField(
         max_length=30,
         choices=DocumentTemplateType.choices,
@@ -114,17 +126,16 @@ class DocumentTemplateSettings(models.Model):
     )
     language = models.CharField(max_length=10, default='en')
     template_content = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'document_template_settings'
         verbose_name = 'Document Template Settings'
 
     def __str__(self):
-        return f" ({self.language})"
+        return f"{self.template_type} ({self.language})"
 
 
-class StorageSettings(models.Model):
+class StorageSettings(TenantModel):
     driver = models.CharField(
         max_length=20,
         choices=StorageDriver.choices,
@@ -138,49 +149,45 @@ class StorageSettings(models.Model):
     base_url = models.TextField(blank=True)
     allowed_file_type = models.CharField(max_length=10, choices = FileTypeEnum.choices)
     max_file_size_mb = models.PositiveIntegerField(default=10)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'storage_settings'
         verbose_name = 'Storage Settings'
 
     def __str__(self):
         return f"Storage — {self.driver}"
 
-class ReCaptchaSettings(models.Model):
+class ReCaptchaSettings(TenantModel):
     is_enabled = models.BooleanField(default=False)
     site_key = models.CharField(max_length=255, blank=True)
     secret_key = models.CharField(max_length=255, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'recaptcha_settings'
         verbose_name = 'ReCaptcha Settings'
 
     def __str__(self):
         return f"ReCaptcha — {'Enabled' if self.is_enabled else 'Disabled'}"
 
-class ChatGPTSettings(models.Model):
+class ChatGPTSettings(TenantModel):
     is_enabled = models.BooleanField(default=False)
     api_key = models.CharField(max_length=255, blank=True)
     model_name = models.CharField(max_length=100, default='gpt-3.5-turbo')
     max_tokens = models.PositiveIntegerField(default=1000)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'chatgpt_settings'
         verbose_name = 'Chat GPT Settings'
 
     def __str__(self):
         return f"ChatGPT — {self.model_name}"
 
-class CookieSettings(models.Model):
+class CookieSettings(TenantModel):
     is_enabled = models.BooleanField(default=False)
     consent_text = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'cookie_settings'
         verbose_name = 'Cookie Settings'
 
     def __str__(self):
@@ -201,7 +208,7 @@ class CustomCookieItem(models.Model):
     def __str__(self):
         return self.name
 
-class SEOSettings(models.Model):
+class SEOSettings(TenantModel):
     meta_title = models.CharField(max_length=255, blank=True)
     meta_description = models.TextField(blank=True)
     meta_keywords = models.TextField(blank=True)
@@ -211,16 +218,15 @@ class SEOSettings(models.Model):
     google_analytics_id = models.CharField(max_length=50, blank=True)
     google_tag_manager_id = models.CharField(max_length=50, blank=True)
     robots_txt = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'seo_settings'
         verbose_name = 'SEO Settings'
 
     def __str__(self):
         return f"SEO — {self.meta_title}"
 
-class CacheSettings(models.Model):
+class CacheSettings(TenantModel):
     driver = models.CharField(
         max_length=20,
         choices=CacheDriver.choices,
@@ -231,10 +237,9 @@ class CacheSettings(models.Model):
     password = models.CharField(max_length=255, blank=True)
     database_index = models.PositiveSmallIntegerField(default=0)
     ttl_seconds = models.PositiveIntegerField(default=3600)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        db_table = 'cache_settings'
         verbose_name = 'Cache Settings'
 
     def __str__(self):

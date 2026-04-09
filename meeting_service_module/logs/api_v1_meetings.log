@@ -1,0 +1,117 @@
+[2026-04-08 10:46:38,864] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/api/v1/meetings/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 10:50:23,406] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/api/v1/meetings/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 13:16:10,573] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/api/v1/meetings/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 13:16:32,201] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"title\": [\n    \"This field is required.\"\n  ],\n  \"meeting_date\": [\n    \"This field is required.\"\n  ],\n  \"start_time\": [\n    \"This field is required.\"\n  ],\n  \"end_time\": [\n    \"This field is required.\"\n  ],\n  \"recurrence\": [\n    \"This field is required.\"\n  ],\n  \"company\": [\n    \"This field is required.\"\n  ]\n}"
+}
+[2026-04-08 13:16:35,094] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"title\": [\n    \"This field is required.\"\n  ],\n  \"meeting_date\": [\n    \"This field is required.\"\n  ],\n  \"start_time\": [\n    \"This field is required.\"\n  ],\n  \"end_time\": [\n    \"This field is required.\"\n  ],\n  \"recurrence\": [\n    \"This field is required.\"\n  ],\n  \"company\": [\n    \"This field is required.\"\n  ]\n}"
+}
+[2026-04-08 13:36:50,862] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/api/v1/meetings/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 13:36:57,223] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"title\": [\n    \"This field is required.\"\n  ],\n  \"meeting_date\": [\n    \"This field is required.\"\n  ],\n  \"start_time\": [\n    \"This field is required.\"\n  ],\n  \"end_time\": [\n    \"This field is required.\"\n  ],\n  \"recurrence\": [\n    \"This field is required.\"\n  ]\n}"
+}
+[2026-04-08 13:40:03,455] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"recurrence\": [\n    \"\\\"NONE\\\" is not a valid choice.\"\n  ],\n  \"meeting_type\": [\n    \"Invalid pk \\\"1\\\" - object does not exist.\"\n  ],\n  \"meeting_room\": [\n    \"Invalid pk \\\"1\\\" - object does not exist.\"\n  ],\n  \"organizer\": [\n    \"Invalid pk \\\"1\\\" - object does not exist.\"\n  ]\n}"
+}
+[2026-04-08 13:41:42,934] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"recurrence\": [\n    \"\\\"none\\\" is not a valid choice.\"\n  ],\n  \"meeting_type\": [\n    \"Invalid pk \\\"2\\\" - object does not exist.\"\n  ],\n  \"meeting_room\": [\n    \"Invalid pk \\\"3\\\" - object does not exist.\"\n  ],\n  \"organizer\": [\n    \"Invalid pk \\\"5\\\" - object does not exist.\"\n  ]\n}"
+}
+[2026-04-08 14:27:19,387] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"recurrence\": [\n    \"\\\"none\\\" is not a valid choice.\"\n  ],\n  \"meeting_type\": [\n    \"Invalid pk \\\"2\\\" - object does not exist.\"\n  ],\n  \"meeting_room\": [\n    \"Invalid pk \\\"3\\\" - object does not exist.\"\n  ],\n  \"organizer\": [\n    \"Invalid pk \\\"5\\\" - object does not exist.\"\n  ]\n}"
+}
+[2026-04-08 14:35:13,853] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "GET",
+  "path": "/api/v1/meetings/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 14:41:11,923] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 400,
+  "response_body": "{\n  \"organizer\": [\n    \"Invalid pk \\\"5\\\" - object does not exist.\"\n  ]\n}"
+}
+[2026-04-08 14:44:23,412] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meetings/",
+  "status": 201,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T14:44:23.399704+05:30\",\n  \"updated_at\": \"2026-04-08T14:44:23.399718+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"title\": \"Test Meeting 1\",\n  \"description\": \"Testing the meeting module\",\n  \"meeting_date\": \"2026-04-10\",\n  \"start_time\": \"2026-04-10T15:30:00+05:30\",\n  \"end_time\": \"2026-04-10T16:30:00+05:30\",\n  \"recurrence\": \"weekly\",\n  \"recurrence_end_date\": \"2026-12-31\",\n  \"agenda\": \"Test Agenda\",\n  \"company\": 1,\n  \"meeting_type\": 1,\n  \"meeting_room\": 1,\n  \"organizer\": null\n}"
+}

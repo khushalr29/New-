@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  title: Contract Management API
+  description: Professional Multi-tenant API for Employee Contract Management.
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ContractType:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        contract_type_name: {type: string}
+        description: {type: string}
+        is_enabled: {type: boolean}
+
+    ContractTemplate:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        template_name: {type: string}
+        subject: {type: string}
+        body: {type: string}
+        is_enabled: {type: boolean}
+
+    EmployeeContract:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        employee: {type: integer, description: "Employee ID"}
+        contract_type: {type: integer, description: "Contract Type ID"}
+        start_date: {type: string, format: date}
+        end_date: {type: string, format: date}
+        basic_salary: {type: integer}
+        terms_condition: {type: string}
+        is_enabled: {type: boolean}
+
+paths:
+  /api/contracts/types/:
+    get:
+      summary: List contract types
+      security: [{bearerAuth: []}]
+      tags: [Contract Types]
+      parameters:
+        - name: search
+          in: query
+          description: Search by name or description
+          required: false
+          schema: {type: string}
+        - name: page
+          in: query
+          schema: {type: integer, default: 1}
+        - name: page_size
+          in: query
+          schema: {type: integer, default: 10}
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/ContractType'}
+    post:
+      summary: Create contract type
+      security: [{bearerAuth: []}]
+      tags: [Contract Types]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ContractType'}
+      responses:
+        '201': {description: Created}
+
+  /api/contracts/templates/:
+    get:
+      summary: List contract templates
+      security: [{bearerAuth: []}]
+      tags: [Templates]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: page
+          in: query
+          schema: {type: integer, default: 1}
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/ContractTemplate'}
+    post:
+      summary: Create template
+      security: [{bearerAuth: []}]
+      tags: [Templates]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ContractTemplate'}
+      responses:
+        '201': {description: Created}
+
+  /api/contracts/employee-contracts/:
+    get:
+      summary: List employee contracts
+      security: [{bearerAuth: []}]
+      tags: [Employee Contracts]
+      parameters:
+        - name: employee
+          in: query
+          description: Filter by Employee ID
+          schema: {type: integer}
+        - name: type
+          in: query
+          description: Filter by Contract Type ID
+          schema: {type: integer}
+        - name: page
+          in: query
+          schema: {type: integer, default: 1}
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: {type: integer}
+                  results:
+                    type: array
+                    items: {$ref: '#/components/schemas/EmployeeContract'}
+    post:
+      summary: Create employee contract
+      security: [{bearerAuth: []}]
+      tags: [Employee Contracts]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/EmployeeContract'}
+      responses:
+        '201': {description: Created}

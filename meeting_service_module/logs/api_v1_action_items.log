@@ -1,0 +1,18 @@
+[2026-04-08 10:54:05,185] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.146",
+  "method": "GET",
+  "path": "/api/v1/action-items/",
+  "status": 200,
+  "response_body": "[]"
+}
+[2026-04-08 14:29:03,833] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/action-items/",
+  "status": 400,
+  "response_body": "{\n  \"priority\": [\n    \"\\\"HIGH\\\" is not a valid choice.\"\n  ],\n  \"meeting\": [\n    \"Invalid pk \\\"1\\\" - object does not exist.\"\n  ],\n  \"assigned_to\": [\n    \"Invalid pk \\\"1\\\" - object does not exist.\"\n  ]\n}"
+}

@@ -4,7 +4,6 @@ from ..core.employee import Employee
 from ..core.enums import AttendanceStatus, AttendenceType, RSVPStatus
 from ..core.base import BaseModel
 
-
 class MeetingAttendee(BaseModel):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='attendees')
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='meeting_attendances')
@@ -15,4 +14,7 @@ class MeetingAttendee(BaseModel):
 
     class Meta:
         db_table = 'meeting_attendee'
-        unique_together = ('meeting', 'employee')
+        unique_together = ('meeting', 'employee', 'company')
+
+    def __str__(self):
+        return f"{self.employee.full_name} for {self.meeting.title}"

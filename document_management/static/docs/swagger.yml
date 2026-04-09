@@ -1,0 +1,353 @@
+openapi: 3.0.0
+info:
+  title: Document Management API
+  description: API for managing document categories, HR documents, templates, and acknowledgements.
+  version: "1.0.0"
+
+servers:
+  - url: /api/v1/document
+    description: Document Service API
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    DocumentCategory:
+      type: object
+      required: [category_name, color, status]
+      properties:
+        id: {type: integer, readOnly: true}
+        category_name: {type: string, example: "HR Policies"}
+        description: {type: string, nullable: true}
+        color: {type: string, example: "#FF0000"}
+        icon: {type: string, example: "folder"}
+        mandatory_category: {type: string, enum: [yes_mandatory, no_optional]}
+        status: {type: string, enum: [active, inactive]}
+
+    HRDocument:
+      type: object
+      required: [document_title, category, file, effective_date, expiry_date]
+      properties:
+        id: {type: integer, readOnly: true}
+        document_title: {type: string, example: "Employee Handbook 2024"}
+        description: {type: string, nullable: true}
+        category: {type: integer, description: "Category ID"}
+        file: {type: string, description: "File content or URL"}
+        effective_date: {type: string, format: date}
+        expiry_date: {type: string, format: date}
+        is_requires_acknowledgement: {type: boolean}
+
+    Acknowledgement:
+      type: object
+      required: [document, user]
+      properties:
+        id: {type: integer, readOnly: true}
+        document: {type: integer, description: "HR Document ID"}
+        user: {type: integer, description: "Employee ID"}
+        due_date: {type: string, format: date}
+        note: {type: string, nullable: true}
+
+    DocumentTemplate:
+      type: object
+      required: [template_name, category, content]
+      properties:
+        id: {type: integer, readOnly: true}
+        template_name: {type: string, example: "Offer Letter Template"}
+        category: {type: integer}
+        file_format: {type: string, enum: [pdf, docx, txt]}
+        status: {type: string, enum: [active, inactive]}
+        description: {type: string, nullable: true}
+        is_set_default_category: {type: boolean}
+        content: {type: string}
+        placeholder: {type: string}
+        default_values: {type: string}
+
+    ErrorResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        error: {type: string}
+
+paths:
+  /document-categories:
+    get:
+      summary: List all document categories
+      tags: [Categories]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: status
+          in: query
+          schema: {type: string, enum: [active, inactive]}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create a new category
+      tags: [Categories]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DocumentCategory'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete categories
+      tags: [Categories]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /document-categories/{id}:
+    get:
+      summary: Get category details
+      tags: [Categories]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update a category
+      tags: [Categories]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DocumentCategory'}
+      responses:
+        200: {description: Success}
+
+  /hr-document:
+    get:
+      summary: List HR documents
+      tags: [HR Documents]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Upload HR document
+      tags: [HR Documents]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/HRDocument'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete HR documents
+      tags: [HR Documents]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /hr-document/{id}:
+    get:
+      summary: Get document details
+      tags: [HR Documents]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update HR document
+      tags: [HR Documents]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/HRDocument'}
+      responses:
+        200: {description: Success}
+
+  /acknowledgement:
+    get:
+      summary: List acknowledgements
+      tags: [Acknowledgements]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create acknowledgement request
+      tags: [Acknowledgements]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Acknowledgement'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete acknowledgements
+      tags: [Acknowledgements]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /acknowledgement/{id}:
+    get:
+      summary: Get acknowledgement details
+      tags: [Acknowledgements]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update acknowledgement
+      tags: [Acknowledgements]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/Acknowledgement'}
+      responses:
+        200: {description: Success}
+
+  /document-template:
+    get:
+      summary: List document templates
+      tags: [Templates]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+        - name: paginate
+          in: query
+          schema: {type: string, enum: ["true", "false"]}
+      responses:
+        200: {description: Success}
+    post:
+      summary: Create document template
+      tags: [Templates]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DocumentTemplate'}
+      responses:
+        201: {description: Created}
+    delete:
+      summary: Bulk delete templates
+      tags: [Templates]
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        200: {description: Success}
+
+  /document-template/{id}:
+    get:
+      summary: Get template details
+      tags: [Templates]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
+    put:
+      summary: Update template
+      tags: [Templates]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DocumentTemplate'}
+      responses:
+        200: {description: Success}

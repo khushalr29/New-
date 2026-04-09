@@ -13,11 +13,13 @@ class ActionItem(BaseModel):
     due_date = models.DateField()
     priority = models.CharField(max_length=20, choices=PriorityChoices.choices)
     progress = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=20, choices=CommonStatus.choices, default=CommonStatus.ACTIVE)
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'action_item'
         ordering = ['due_date']
+        unique_together = ('action_item_title', 'meeting', 'company')
 
     def __str__(self):
         return f"{self.action_item_title} - {self.due_date}"

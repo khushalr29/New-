@@ -1,0 +1,9 @@
+[2026-04-08 14:52:08,149] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-minutes/",
+  "status": 201,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T14:52:08.134486+05:30\",\n  \"updated_at\": \"2026-04-08T14:52:08.134498+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"topic\": \"Test Minutes\",\n  \"minutes_type\": \"formal\",\n  \"content\": \"Test content\",\n  \"recorded_date\": \"2026-04-08\",\n  \"recorded_time\": \"12:00:00\",\n  \"company\": 1,\n  \"meeting\": 1,\n  \"recorded_by\": null\n}"
+}

@@ -1,0 +1,72 @@
+[2026-04-08 14:20:35,373] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"CONFERENCE\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:20:55,926] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"confrence\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:21:49,101] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"Nonworker\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:22:02,028] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"NONWORKER\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:22:04,122] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"NONWORKER\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:26:14,221] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 400,
+  "response_body": "{\n  \"type\": [\n    \"\\\"Physical\\\" is not a valid choice.\"\n  ]\n}"
+}
+[2026-04-08 14:26:38,807] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 201,
+  "response_body": "{\n  \"id\": 1,\n  \"created_at\": \"2026-04-08T14:26:38.795527+05:30\",\n  \"updated_at\": \"2026-04-08T14:26:38.795539+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"name\": \"Board Room\",\n  \"description\": \"Level 4, East Wing\",\n  \"type\": \"virtual\",\n  \"location\": \"Main HQ\",\n  \"capacity\": 12,\n  \"equipment\": \"TV\",\n  \"booking_url\": null,\n  \"status\": \"active\",\n  \"company\": 1\n}"
+}
+[2026-04-08 14:28:07,764] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.166",
+  "method": "POST",
+  "path": "/api/v1/meeting-rooms/",
+  "status": 201,
+  "response_body": "{\n  \"id\": 2,\n  \"created_at\": \"2026-04-08T14:28:07.753456+05:30\",\n  \"updated_at\": \"2026-04-08T14:28:07.753464+05:30\",\n  \"deleted_at\": null,\n  \"is_enabled\": true,\n  \"name\": \"Board Room\",\n  \"description\": \"Level 4, East Wing\",\n  \"type\": \"virtual\",\n  \"location\": \"Main HQ\",\n  \"capacity\": 12,\n  \"equipment\": \"TV\",\n  \"booking_url\": null,\n  \"status\": \"active\",\n  \"company\": 1\n}"
+}
