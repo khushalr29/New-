@@ -8,3 +8,4 @@ from .payroll_management import *
 from .recruitment import *
 from .time_tracking import *
 from .contract_management import *
+from .media_library import *
