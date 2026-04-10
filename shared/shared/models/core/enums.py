@@ -479,3 +479,9 @@ class AttendanceStatus(models.TextChoices):
     HALF_DAY = 'half_day', 'Half Day'
     ON_LEAVE = 'on_leave', 'On Leave'
     HOLIDAY = 'holiday', 'Holiday'
+
+class LeaveStatus(models.TextChoices):
+    PENDING = 'pending', 'Pending'
+    APPROVED = 'approved', 'Approved'
+    REJECTED = 'rejected', 'Rejected'
+    CANCELLED = 'cancelled', 'Cancelled'
