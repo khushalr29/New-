@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shared.shared.models.core.employee import Employee
+from shared.models.core.employee import Employee
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:

@@ -7,6 +7,8 @@ info:
 servers:
   - url: /api/v1/auth
     description: Primary Auth Module Gateway
+  - url: /api/v1/company-employee
+    description: Company & Employee Module Gateway
 
 components:
   securitySchemes:
@@ -42,20 +44,461 @@ components:
         is_enabled: {type: boolean, example: true}
         company_id: {type: integer, example: 1}
 
+
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company_name:
+          type: string
+          maxLength: 255
+        company_code:
+          type: string
+          maxLength: 50
+        company_type:
+          type: integer
+          description: Foreign key to CompanyType
+        logo:
+          type: string
+          description: Base64 encoded logo or URL
+        established_date:
+          type: string
+          format: date
+          nullable: true
+        about_company:
+          type: string
+        client_name:
+          type: string
+          maxLength: 100
+        client_designation:
+          type: string
+          maxLength: 255
+        country_number_code:
+          type: integer
+          default: 91
+        client_number:
+          type: string
+          maxLength: 20
+        client_email:
+          type: string
+          format: email
+        client_gender:
+          type: string
+          enum: [Male, Female, Other]
+          maxLength: 20
+        website:
+          type: string
+          maxLength: 255
+        address_line_1:
+          type: string
+          maxLength: 255
+        address_line_2:
+          type: string
+          maxLength: 255
+        country:
+          type: integer
+          nullable: true
+          description: Foreign key to Country
+        state:
+          type: integer
+          nullable: true
+          description: Foreign key to State
+        city:
+          type: integer
+          nullable: true
+          description: Foreign key to City
+        pincode:
+          type: string
+          maxLength: 6
+        no_of_floors:
+          type: integer
+          nullable: true
+          minimum: 0
+        no_of_blocks:
+          type: integer
+          nullable: true
+          minimum: 0
+        no_of_rooms:
+          type: integer
+          nullable: true
+          minimum: 0
+        special_features:
+          type: string
+        allow_plan_renewal_on_same_price:
+          type: boolean
+          default: true
+        bill_me:
+          type: string
+          maxLength: 20
+          default: Monthly
+        plan_type:
+          type: integer
+          nullable: true
+          description: Foreign key to Plan
+        adds_on_services:
+          type: string
+          maxLength: 255
+          nullable: true
+        plan_activation_date:
+          type: string
+          format: date
+          nullable: true
+        subscription_end_date:
+          type: string
+          format: date
+          nullable: true
+        no_of_users:
+          type: integer
+          minimum: 0
+        no_of_employees:
+          type: integer
+          minimum: 0
+        payment_mode:
+          type: string
+          enum: [online, offline, cash, cheque, card]
+          maxLength: 20
+          default: online
+        payment_status:
+          type: string
+          enum: [pending, completed, failed, refunded]
+          maxLength: 20
+        amount_paid:
+          type: number
+          format: decimal
+          multipleOf: 0.01
+        sub_domain:
+          type: string
+          maxLength: 255
+        timezone:
+          type: string
+          maxLength: 100
+          default: Asia/Kolkata
+      required:
+        - company_name
+        - company_code
+        - company_type
+        - about_company
+        - client_name
+        - client_designation
+        - client_number
+        - client_email
+        - client_gender
+        - address_line_1
+        - pincode
+        - no_of_users
+        - no_of_employees
+        - payment_mode
+        - payment_status
+        - amount_paid
+        - sub_domain
+
+    CompanyList:
+      allOf:
+        - $ref: '#/components/schemas/Company'
+        - type: object
+          properties:
+            created_at:
+              type: string
+              format: date-time
+              readOnly: true
+            updated_at:
+              type: string
+              format: date-time
+              readOnly: true
+            deleted_at:
+              type: string
+              format: date-time
+              nullable: true
+              readOnly: true
+
+    CompanyInput:
+      type: object
+      properties:
+        company_name: {type: string, maxLength: 255}
+        company_code: {type: string, maxLength: 50}
+        company_type: {type: integer}
+        logo: {type: string}
+        established_date: {type: string, format: date}
+        about_company: {type: string}
+        client_name: {type: string, maxLength: 100}
+        client_designation: {type: string, maxLength: 255}
+        country_number_code: {type: integer}
+        client_number: {type: string, maxLength: 20}
+        client_email: {type: string, format: email}
+        client_gender: {type: string, enum: [Male, Female, Other]}
+        website: {type: string}
+        address_line_1: {type: string, maxLength: 255}
+        address_line_2: {type: string, maxLength: 255}
+        country: {type: integer}
+        state: {type: integer}
+        city: {type: integer}
+        pincode: {type: string, maxLength: 6}
+        no_of_floors: {type: integer, minimum: 0}
+        no_of_blocks: {type: integer, minimum: 0}
+        no_of_rooms: {type: integer, minimum: 0}
+        special_features: {type: string}
+        allow_plan_renewal_on_same_price: {type: boolean}
+        bill_me: {type: string}
+        plan_type: {type: integer}
+        adds_on_services: {type: string}
+        plan_activation_date: {type: string, format: date}
+        subscription_end_date: {type: string, format: date}
+        no_of_users: {type: integer, minimum: 0}
+        no_of_employees: {type: integer, minimum: 0}
+        payment_mode: {type: string, enum: [online, offline, cash, cheque, card]}
+        payment_status: {type: string, enum: [pending, completed, failed, refunded]}
+        amount_paid: {type: number, format: decimal}
+        sub_domain: {type: string, maxLength: 255}
+        timezone: {type: string}
+
+    CompanyDetailResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        data: {$ref: '#/components/schemas/Company'}
+
+    CompanyListResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        count: {type: integer}
+        next: {type: string, format: uri, nullable: true}
+        previous: {type: string, format: uri, nullable: true}
+        results: {type: array, items: {$ref: '#/components/schemas/CompanyList'}}
+
+    CompanyListUnpaginatedResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        data: {type: array, items: {$ref: '#/components/schemas/CompanyList'}}
+
+    EmployeeCreate:
+      type: object
+      required: [full_name, personal_email_id, official_email_id, password]
+      properties:
+        full_name: {type: string}
+        employee_id: {type: string}
+        employee_code: {type: string}
+        personal_email_id: {type: string, format: email}
+        official_email_id: {type: string, format: email}
+        password: {type: string, format: password}
+        date_of_birth: {type: string, format: date}
+        gender: {type: string, enum: ["Male", "Female", "Other"]}
+        date_of_joining: {type: string, format: date}
+        employment_type: {type: string, enum: ["Full Time", "Part Time", "Contract", "Intern"]}
+        phone_number: {type: string}
+        address: {type: string}
+
+    EmployeeUpdate:
+      type: object
+      properties:
+        full_name: {type: string}
+        date_of_birth: {type: string}
+        gender: {type: string}
+        phone_number: {type: string}
+        address: {type: string}
+
+    EmployeeDetail:
+      type: object
+      properties:
+        id: {type: integer}
+        full_name: {type: string}
+        employee_id: {type: string}
+        employee_code: {type: string}
+        email: {type: string}
+        date_of_birth: {type: string, format: date}
+        profile_image: {type: string}
+        gender: {type: string}
+        department: {type: object}
+        designation: {type: object}
+        date_of_joining: {type: string, format: date}
+        status: {type: string}
+        is_enabled: {type: boolean}
+
+    EmployeeListResponse:
+      type: array
+      items: {$ref: '#/components/schemas/EmployeeDetail'}
+
+    PaginatedEmployeeListResponse:
+      type: object
+      properties:
+        count: {type: integer}
+        next: {type: string, nullable: true}
+        previous: {type: string, nullable: true}
+        results: {type: array, items: {$ref: '#/components/schemas/EmployeeDetail'}}
+
+    PlanCreate:
+      type: object
+      required: [plan_name, plan_price_inr, plan_price_usd, no_of_users, no_of_employees, description]
+      properties:
+        plan_name: {type: string}
+        plan_price_inr: {type: number}
+        plan_price_usd: {type: number}
+        no_of_users: {type: integer}
+        no_of_employees: {type: integer}
+        payment_duration: {type: string}
+        feature: {type: object}
+        description: {type: string}
+        visible_to_user: {type: boolean, default: true}
+        permissions: {type: array, items: {type: integer}}
+
+    PlanUpdate:
+      type: object
+      properties:
+        plan_name: {type: string}
+        plan_price_inr: {type: number}
+        plan_price_usd: {type: number}
+        no_of_users: {type: integer}
+        no_of_employees: {type: integer}
+        payment_duration: {type: string}
+        feature: {type: object}
+        description: {type: string}
+        visible_to_user: {type: boolean}
+
+    PlanDetail:
+      type: object
+      properties:
+        id: {type: integer}
+        plan_name: {type: string}
+        plan_price_inr: {type: number}
+        plan_price_usd: {type: number}
+        no_of_users: {type: integer}
+        no_of_employees: {type: integer}
+        payment_duration: {type: string}
+        feature: {type: object}
+        description: {type: string}
+        visible_to_user: {type: boolean}
+        permissions: {type: array, items: {type: integer}}
+
+    PlanListResponse:
+      type: array
+      items: {$ref: '#/components/schemas/PlanDetail'}
+
+    SubscriptionDetail:
+      type: object
+      properties:
+        id: {type: integer}
+        company: {type: integer}
+        plan_type: {type: integer}
+        amount_paid: {type: number}
+        plan_activation_date: {type: string, format: date}
+        subscription_end_date: {type: string, format: date}
+        payment_mode: {type: string}
+        status: {type: string}
+        transaction_ref_no: {type: string}
+        remarks: {type: string}
+        gateway: {type: string}
+
+    PaginatedSubscriptionResponse:
+      type: object
+      properties:
+        count: {type: integer}
+        next: {type: string, nullable: true}
+        previous: {type: string, nullable: true}
+        results: {type: array, items: {$ref: '#/components/schemas/SubscriptionDetail'}}
+
+    SubscriptionRenewRequest:
+      type: object
+      required: [company]
+      properties:
+        company: {type: integer}
+        payment_mode: {type: string, enum: ["cash", "online", "upi", "bank_transfer"]}
+        amount_paid: {type: number}
+        remarks: {type: string}
+        send_email: {type: boolean, default: true}
+
+    SubscriptionUpgradeRequest:
+      type: object
+      required: [company, plan_id]
+      properties:
+        company: {type: integer}
+        plan_id: {type: integer}
+        amount_paid: {type: number}
+        payment_mode: {type: string, enum: ["cash", "online"]}
+        remarks: {type: string}
+        send_email: {type: boolean, default: true}
+
+    CreatePaymentRequest:
+      type: object
+      required: [company_id]
+      properties:
+        company_id: {type: integer}
+        send_email: {type: boolean, default: true}
+
+    PaymentLinkResponse:
+      type: object
+      properties:
+        status: {type: string, example: success}
+        message: {type: string}
+        data:
+          type: object
+          properties:
+            payment_link: {type: string}
+            qr_code: {type: string}
+            link_expiry_time: {type: string, format: date-time}
+
+    RoleCreate:
+      type: object
+      required: [name]
+      properties:
+        name: {type: string}
+        description: {type: string}
+        permissions: {type: array, items: {type: integer}}
+
+    RoleUpdate:
+      type: object
+      properties:
+        name: {type: string}
+        description: {type: string}
+        permissions: {type: array, items: {type: integer}}
+
     RoleDetail:
       type: object
       properties:
-        id: {type: integer, example: 52}
-        name: {type: string, example: "HR Manager"}
-        is_enabled: {type: boolean, example: true}
+        id: {type: integer}
+        name: {type: string}
+        description: {type: string}
+        permissions: {type: array, items: {$ref: '#/components/schemas/PermissionDetail'}}
+
+    RoleListResponse:
+      type: array
+      items: {$ref: '#/components/schemas/RoleListItem'}
+
+    RoleListItem:
+      type: object
+      properties:
+        id: {type: integer}
+        name: {type: string}
+        description: {type: string}
+
+    PermissionDetail:
+      type: object
+      properties:
+        id: {type: integer}
+        name: {type: string}
+        codename: {type: string}
+
+    SuccessResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        message: {type: string, example: Operation completed successfully}
+
+    ErrorResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: false}
+        message: {type: string}
+        errors: {type: object, additionalProperties: true}
 
 paths:
   /creates:
     post:
       summary: Create New User
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       requestBody:
         required: true
         content:
@@ -68,8 +511,7 @@ paths:
     put:
       summary: Update User
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -87,8 +529,7 @@ paths:
     get:
       summary: Get User Profile
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -101,8 +542,7 @@ paths:
     get:
       summary: Get Current User Profile
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -110,8 +550,7 @@ paths:
     get:
       summary: List All Users
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -119,8 +558,7 @@ paths:
     delete:
       summary: Bulk Delete Users
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       requestBody:
         required: true
         content:
@@ -136,8 +574,7 @@ paths:
     patch:
       summary: Change User Status
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -150,8 +587,7 @@ paths:
     get:
       summary: List Enabled Users
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -159,8 +595,7 @@ paths:
     patch:
       summary: Set User MPIN
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -168,8 +603,7 @@ paths:
     post:
       summary: Verify User MPIN
       tags: [Users]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -190,15 +624,13 @@ paths:
                 company_id: {type: integer, example: 1}
                 host: {type: string, example: "telepathy.com"}
       responses:
-        200:
-          description: Login Successful
+        200: {description: Login Successful}
 
   /impersonation-logins:
     post:
       summary: SSO Impersonation
       tags: [Auth]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -213,8 +645,7 @@ paths:
     post:
       summary: User Logout
       tags: [Auth]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -257,8 +688,7 @@ paths:
     post:
       summary: Verify Password
       tags: [Auth]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -266,8 +696,7 @@ paths:
     get:
       summary: List Permissions
       tags: [Permissions]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -275,8 +704,7 @@ paths:
     get:
       summary: Get Permission Detail
       tags: [Permissions]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -289,8 +717,7 @@ paths:
     post:
       summary: Update User Permissions
       tags: [Permissions]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -303,8 +730,7 @@ paths:
     get:
       summary: Get User Permission List
       tags: [Permissions]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -317,8 +743,7 @@ paths:
     post:
       summary: Create Role
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         201: {description: Created}
 
@@ -326,8 +751,7 @@ paths:
     get:
       summary: List Roles
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -335,8 +759,7 @@ paths:
     get:
       summary: Get Role Detail
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -349,8 +772,7 @@ paths:
     delete:
       summary: Delete Role
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -358,8 +780,7 @@ paths:
     post:
       summary: Map Permissions to Role
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -372,8 +793,7 @@ paths:
     post:
       summary: Assign Role to User
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -386,8 +806,7 @@ paths:
     patch:
       summary: Toggle Role Status
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       parameters:
         - name: id
           in: path
@@ -400,8 +819,7 @@ paths:
     get:
       summary: List Enabled Roles
       tags: [Roles]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -416,8 +834,7 @@ paths:
     get:
       summary: Session Metadata
       tags: [System]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
 
@@ -425,7 +842,382 @@ paths:
     get:
       summary: Admin Audit Log
       tags: [System]
-      security: 
-        - BearerAuth: []
+      security: [{BearerAuth: []}]
       responses:
         200: {description: Success}
+
+  /companies:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Company]
+      summary: List all companies
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: paginate
+          in: query
+          schema: {type: string, enum: [true, false], default: true}
+      responses:
+        '200': {description: Success}
+
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Company]
+      summary: Create a new company
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CompanyInput'}
+      responses:
+        '201': {description: Success}
+
+    delete:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Company]
+      summary: Delete companies (bulk soft delete)
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+
+  /companies/{id}:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Company]
+      summary: Get company by ID
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        '200': {description: Success}
+
+    put:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Company]
+      summary: Update company
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CompanyInput'}
+      responses:
+        '200': {description: Success}
+
+  /companies/status/{id}:
+    patch:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Status]
+      summary: Toggle company status
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        '200': {description: Success}
+
+  /employees:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: List Employees
+      responses:
+        '200': {description: Success}
+
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: Create Employee
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/EmployeeCreate'}
+      responses:
+        '201': {description: Success}
+
+    delete:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: Bulk Delete Employees (Soft Delete)
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+
+  /employees/{id}:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: Retrieve Employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: Success}
+
+    put:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: Update Employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/EmployeeUpdate'}
+      responses:
+        '200': {description: Success}
+
+  /employees/status/{id}:
+    patch:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Employees]
+      summary: Toggle Employee Status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: Success}
+
+  /plans:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Plans]
+      summary: List All Plans
+      responses:
+        '200': {description: Success}
+
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Plans]
+      summary: Create New Plan
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PlanCreate'}
+      responses:
+        '201': {description: Success}
+
+    delete:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Plans]
+      summary: Bulk Delete Plans
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+
+  /plans/{id}:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Plans]
+      summary: Get Plan Detail
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      responses:
+        '200': {description: Success}
+
+    put:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Plans]
+      summary: Update Plan
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/PlanUpdate'}
+      responses:
+        '200': {description: Success}
+
+  /subscriptions:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Subscriptions]
+      summary: List Subscriptions
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: Success}
+
+  /subscriptions/{id}:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Subscriptions]
+      summary: Get Subscription Detail
+      security: [{BearerAuth: []}]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      responses:
+        '200': {description: Success}
+
+  /subscriptions/renew:
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Subscriptions]
+      summary: Renew Subscription
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SubscriptionRenewRequest'}
+      responses:
+        '200': {description: Success}
+
+  /subscriptions/update:
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Subscriptions]
+      summary: Upgrade Subscription
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SubscriptionUpgradeRequest'}
+      responses:
+        '200': {description: Success}
+
+  /subscriptions/payment:
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Subscriptions]
+      summary: Create Easebuzz Payment Link
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/CreatePaymentRequest'}
+      responses:
+        '200': {description: Success}
+
+  /roles:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Roles]
+      summary: List Roles
+      security: [{BearerAuth: []}]
+      responses:
+        '200': {description: Success}
+
+    post:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Roles]
+      summary: Create Role
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RoleCreate'}
+      responses:
+        '201': {description: Created}
+
+    delete:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Roles]
+      summary: Bulk Delete Roles (Soft Delete)
+      security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+
+  /roles/{id}:
+    get:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Roles]
+      summary: Get Role Detail
+      security: [{BearerAuth: []}]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      responses:
+        '200': {description: Success}
+
+    put:
+      servers: [{url: /api/v1/company-employee}]
+      tags: [Roles]
+      summary: Update Role
+      security: [{BearerAuth: []}]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: {type: integer}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RoleUpdate'}
+      responses:
+        '200': {description: Success}

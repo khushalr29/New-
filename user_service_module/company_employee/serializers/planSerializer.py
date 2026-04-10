@@ -1,9 +1,9 @@
-from rest_framework import serializer
-from shared.shared.models.core.company import Plain
+from rest_framework import serializers
+from shared.models.core.company import Plan
 
-class PlainSerializer(serializers.ModelSerializer):
+class PlanSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Plain
+        model = Plan
         fields = [
             'id',
             'plan_name',

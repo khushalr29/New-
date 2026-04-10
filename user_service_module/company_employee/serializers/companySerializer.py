@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from shared.shared.models.core.company import Company
+from shared.models.core.company import Company
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:

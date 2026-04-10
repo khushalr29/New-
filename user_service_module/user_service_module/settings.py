@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'shared',
     'guardian',
     'auth',
+    'company_employee',
 ]
 
 MIDDLEWARE = [
@@ -190,9 +191,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3061",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "authorization",
