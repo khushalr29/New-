@@ -17,6 +17,7 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         '/api/v1/auth/setpassword',
         '/api/v1/auth/refreshtokens',
         '/api/v1/auth/login/',
+        '/api/v1/company-employee/plans',
     ]
 
     ALLOWED_PATHS_ON_COMPANY_SUBSCRIPTION_END = [

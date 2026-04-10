@@ -2,9 +2,9 @@ from django.db import models
 from .meetings import Meeting
 from ..core.employee import Employee
 from ..core.enums import AttendanceStatus, AttendenceType, RSVPStatus
-from ..core.base import BaseModel
+from ..core.base import BaseModel, TenantModel
 
-class MeetingAttendee(BaseModel):
+class MeetingAttendee(TenantModel):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='attendees')
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='meeting_attendances')
     attendance_type = models.CharField(max_length=20, choices=AttendenceType.choices)

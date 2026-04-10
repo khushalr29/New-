@@ -1,11 +1,11 @@
 from django.db import models
 from .meetings import Meeting
 from ..core.employee import Employee
-from ..core.enums import PriorityChoices
-from ..core.base import BaseModel
+from ..core.enums import PriorityChoices, CommonStatus
+from ..core.base import BaseModel, TenantModel
 
 
-class ActionItem(BaseModel):
+class ActionItem(TenantModel):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='action_items')
     action_item_title = models.CharField(max_length=255)
     description = models.TextField()
