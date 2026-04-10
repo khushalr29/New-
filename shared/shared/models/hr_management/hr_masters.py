@@ -23,11 +23,13 @@ class CompanyType(BaseModel):
 
 class Department(TenantModel):
     department = models.CharField(max_length=255)
+    branch = models.ForeignKey('shared.Branch', on_delete=models.CASCADE, related_name='departments')
     description = models.TextField(blank=True, null=True)
     unique_code = models.CharField(max_length=255, unique=True)
     parent = models.ForeignKey('self', null=True, blank=True,
     on_delete=models.SET_NULL, related_name='sub_departments')
     status = models.CharField(max_length=10, choices= BranchStatus.choices, default=BranchStatus.ACTIVE)
+    created_by = models.ForeignKey('shared.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='departments_created')
 
     class Meta:
         db_table = 'department'
@@ -38,17 +40,20 @@ class Department(TenantModel):
     
 class Branch(TenantModel):
     branch_name = models.CharField(max_length=255, validators=[validate_char_field])
+    branch_code = models.CharField(max_length=255, unique=True)
     address = models.TextField(blank=True, null=True, validators=[validate_address])
     city = models.CharField(max_length=100, validators=[validate_char_field])
     state = models.CharField(max_length=100, validators=[validate_char_field])
     zip_code = models.CharField(max_length=20, validators=[validate_char_field])
-    phone = models.CharField(max_length=15, validators=[validate_phone_number])
+    country_code_number = models.CharField(max_length=5)
+    phone_number = models.CharField(max_length=15, validators=[validate_phone_number])
     email = models.EmailField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=10, choices= BranchStatus.choices, default=BranchStatus.ACTIVE)
+    created_by = models.ForeignKey('shared.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='branches_created')
 
     class Meta:
         db_table = 'branch'
-        unique_together = ('branch_name', 'phone', 'company')
+        unique_together = ('branch_name', 'phone_number', 'company')
   
     def __str__(self):
         return f"{self.branch_name} — {self.city}"

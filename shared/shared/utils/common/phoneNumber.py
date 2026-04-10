@@ -7,7 +7,25 @@ COUNTRY_PHONE_RULES = {
 }
 
 
+def validate_phone_field(value):
+    """Simple validator for a single phone number field string."""
+    if not value:
+        return value
+    
+    number_str = str(value).strip()
+    if number_str.startswith('+'):
+        raise serializers.ValidationError(ResponseMessages.PHONE_SHOULD_NOT_INCLUDE_PLUS.format(field_name="Phone Number"))
+    
+    clean_number = re.sub(r'\D', '', number_str)
+    if not clean_number.isdigit():
+        raise serializers.ValidationError(ResponseMessages.PHONE_FORMAT_INVALID.format(field_name="Phone Number"))
+    
+    return clean_number
+
 def validate_phone_number(data, *, phone_field="phone_number", code_field="country_number_code"):
+    if not isinstance(data, dict):
+        return validate_phone_field(data)
+
     number = data.get(phone_field)
     code = data.get(code_field)
 

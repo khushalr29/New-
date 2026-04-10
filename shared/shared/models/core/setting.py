@@ -244,6 +244,3 @@ class CacheSettings(TenantModel):
 
     def __str__(self):
         return f"Cache — {self.driver}"    
-
-
-   

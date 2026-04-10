@@ -924,7 +924,7 @@ paths:
   /companies/status/{id}:
     patch:
       servers: [{url: /api/v1/company-employee}]
-      tags: [Status]
+      tags: [Company]
       summary: Toggle company status
       security: [{BearerAuth: []}]
       parameters:
