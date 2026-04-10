@@ -21,10 +21,24 @@ class AttendanceRegularizationView(APIView):
         
         check_permissions(request, ['list_attendance_regularization'])
         paginate = request.query_params.get("paginate", "true")
-        data = AttendanceRegularization.objects.filter(company=request.user.company).order_by("-id")
+        data = AttendanceRegularization.active_objects.filter(company=request.user.company).order_by("-id")
         search = request.query_params.get("search")
         if search:
             data = data.filter(employee__full_name__icontains=search)
+        
+        date_from = request.query_params.get("date_from")
+        date_to = request.query_params.get("date_to")
+        if date_from and date_to:
+            try:
+                start = datetime.datetime.strptime(date_from, '%H:%M:%S').time()
+                end = datetime.datetime.strptime(date_to, '%H:%M:%S').time()
+                data = data.filter(request_clock_in__gte=start, request_clock_out__lte=end)
+            except ValueError:
+                pass
+
+        status = request.query_params.get("status")
+        if status:
+            data = data.filter(status=status)
         
         if paginate == "false":
             serializer = AttendanceRegularizationListSerializer(data, many=True)
@@ -37,7 +51,7 @@ class AttendanceRegularizationView(APIView):
         serializer = AttendanceRegularizationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('Attendance Regularization')
+            return ResponseHandler.create_success('Attendance Regularization', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'Attendance Regularization')
@@ -48,13 +62,16 @@ class AttendanceRegularizationView(APIView):
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Attendance Regularization')
+            return ResponseHandler.update_success('Attendance Regularization', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'Attendance Regularization')
-    def delete(self, request):
+    def delete(self, request, id=None):
         check_permissions(request, ['delete_attendance_regularization'])
         ids = request.data.get("ids", [])
+        if id:
+            ids.append(id)
+            
         if not isinstance(ids, list) or not ids:
             return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
         

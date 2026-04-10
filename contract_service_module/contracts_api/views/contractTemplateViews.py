@@ -1,59 +1,76 @@
 from rest_framework.views import APIView
-from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from shared.models.contract_management.contract_template import ContractTemplate
+from shared.models import UserActivityLog
 from ..serializers.contracttTemplateserializer import ContractTemplateSerializer
+from django.db.models import Q
 from shared.utils.common.pagination import paginate_queryset
 from shared.utils.response.handlers import ResponseHandler
-from django.shortcuts import get_object_or_404
+from shared.utils.response.messages import ResponseMessages
+from shared.utils.common.centarlisedPermission import check_permissions
+from shared.logs.decorators import log_activity
+from shared.utils.errors.protectedErrors import check_references_and_get_deletable_instances
+from django.utils import timezone
 
-class ContractTemplateListView(APIView):
-    def get(self, request):
-        templates = ContractTemplate.active_objects.filter(company=request.user.company).order_by('-created_at')
+class ContractTemplateView(APIView):
+    def get(self, request, id=None):
+        if id:
+            check_permissions(request, ['view_contract_template'])
+            instance = get_object_or_404(ContractTemplate.active_objects, id=id, company=request.user.company)
+            serializer = ContractTemplateSerializer(instance, context={'request': request})
+            return ResponseHandler.success(serializer.data)
+        
+        check_permissions(request, ['list_contract_template'])
+        paginate = request.query_params.get("paginate", "true")
+        data = ContractTemplate.active_objects.filter(company=request.user.company).order_by('-created_at')
         
         search_query = request.query_params.get('search')
         if search_query:
-            templates = templates.filter(
+            data = data.filter(
                 Q(template_name__icontains=search_query) |
                 Q(subject__icontains=search_query)
-            )
-        
-        return paginate_queryset(templates, request, serializer_class=ContractTemplateSerializer, view=self)
+            ).distinct()
+            
+        if paginate == "false":
+            serializer = ContractTemplateSerializer(data, many=True, context={'request': request})
+            return ResponseHandler.list_success(serializer.data)
+        return paginate_queryset(data, request, ContractTemplateSerializer, view=self)
 
+    @log_activity(UserActivityLog.CREATE, 'Contract Template')
     def post(self, request):
+        check_permissions(request, ['add_contract_template'])
         serializer = ContractTemplateSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success("Contract template", serializer.data)
+            return ResponseHandler.create_success('Contract Template', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
-class ContractTemplateDetailView(APIView):
-    def get_object(self, id, company):
-        try:
-            return ContractTemplate.active_objects.get(pk=id, company=company)
-        except ContractTemplate.DoesNotExist:
-            return None
+    @log_activity(UserActivityLog.UPDATE, 'Contract Template')
+    def put(self, request, id=None):
+        check_permissions(request, ['change_contract_template'])
+        instance = get_object_or_404(ContractTemplate.active_objects, id=id, company=request.user.company)
+        serializer = ContractTemplateSerializer(instance, data=request.data, partial=True, context={'request': request})
 
-    def get(self, request, id):
-        instance = self.get_object(id, request.user.company)
-        if not instance:
-            return ResponseHandler.not_found_error()
-        serializer = ContractTemplateSerializer(instance, context={'request': request})
-        return ResponseHandler.success(serializer.data)
-
-    def put(self, request, id):
-        instance = self.get_object(id, request.user.company)
-        if not instance:
-            return ResponseHandler.not_found_error()
-        serializer = ContractTemplateSerializer(instance, data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save()
-            return ResponseHandler.update_success("Contract template", serializer.data)
-        return ResponseHandler.create_failed(serializer.errors)
+            serializer.save(updated_at=timezone.now())
+            return ResponseHandler.update_success('Contract Template', serializer.data)
+        return ResponseHandler.update_failed(serializer.errors)
 
-    def delete(self, request, id):
-        instance = self.get_object(id, request.user.company)
-        if not instance:
-            return ResponseHandler.not_found_error()
-        instance.delete()
-        return ResponseHandler.delete_success("Contract template")
-
+    @log_activity(UserActivityLog.DELETE, 'Contract Template')
+    def delete(self, request, id=None):
+        check_permissions(request, ['delete_contract_template'])
+        ids = request.data.get("ids", [])
+        if id:
+            ids.append(id)
+            
+        if not isinstance(ids, list) or not ids:
+            return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
+        
+        queryset = ContractTemplate.active_objects.filter(id__in=ids, company=request.user.company)
+        deletable_instances, reference_details = check_references_and_get_deletable_instances(ContractTemplate, ids)
+        
+        if reference_details:
+            return ResponseHandler.dependency_error(message=ResponseMessages.protected_error("Contract Template"))
+        
+        queryset.update(deleted_at=timezone.now())
+        return ResponseHandler.delete_success("Contract Template")

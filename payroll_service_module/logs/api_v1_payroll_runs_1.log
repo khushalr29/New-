@@ -1,0 +1,18 @@
+[2026-04-10 16:00:44,899] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "GET",
+  "path": "/api/v1/payroll-runs/1/",
+  "status": 200,
+  "response_body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": 1,\n    \"created_at\": \"2026-04-10T15:59:52.657247+05:30\",\n    \"updated_at\": \"2026-04-10T15:59:52.657257+05:30\",\n    \"deleted_at\": null,\n    \"is_enabled\": true,\n    \"title\": \"string\",\n    \"payroll_frequency\": \"Monthly\",\n    \"pay_period_start\": \"2026-04-10\",\n    \"pay_period_end\": \"2026-04-10\",\n    \"pay_date\": \"2026-04-10\",\n    \"notes\": \"string\",\n    \"company\": 1\n  },\n  \"message\": \"Success\"\n}"
+}
+[2026-04-10 16:06:24,773] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "DELETE",
+  "path": "/api/v1/payroll-runs/1/",
+  "status": 200,
+  "response_body": "{\n  \"success\": true,\n  \"message\": \"Payroll Run deleted successfully\"\n}"
+}

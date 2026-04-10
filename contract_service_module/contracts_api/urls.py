@@ -1,18 +1,18 @@
 from django.urls import path
-from .views.contractTypeViews import ContractTypeListView, ContractTypeDetailView
-from .views.contractTemplateViews import ContractTemplateListView, ContractTemplateDetailView
-from .views.employeContractViews import EmployeeContractListView, EmployeeContractDetailView
+from .views.contractTypeViews import ContractTypeView
+from .views.contractTemplateViews import ContractTemplateView
+from .views.employeContractViews import EmployeeContractView
 
 urlpatterns = [
     # Contract Types
-    path('types/', ContractTypeListView.as_view(), name='contract-type-list'),
-    path('types/<int:pk>/', ContractTypeDetailView.as_view(), name='contract-type-detail'),
+    path('types/', ContractTypeView.as_view(), name='contract-type'),
+    path('types/<int:id>/', ContractTypeView.as_view(), name='contract-type-detail'),
     
     # Contract Templates
-    path('templates/', ContractTemplateListView.as_view(), name='contract-template-list'),
-    path('templates/<int:pk>/', ContractTemplateDetailView.as_view(), name='contract-template-detail'),
+    path('templates/', ContractTemplateView.as_view(), name='contract-template'),
+    path('templates/<int:id>/', ContractTemplateView.as_view(), name='contract-template-detail'),
     
     # Employee Contracts
-    path('employee-contracts/', EmployeeContractListView.as_view(), name='employee-contract-list'),
-    path('employee-contracts/<int:pk>/', EmployeeContractDetailView.as_view(), name='employee-contract-detail'),
+    path('employee-contracts/', EmployeeContractView.as_view(), name='employee-contract'),
+    path('employee-contracts/<int:id>/', EmployeeContractView.as_view(), name='employee-contract-detail'),
 ]

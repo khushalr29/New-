@@ -20,7 +20,7 @@ class HRDocumentView(APIView):
         
         check_permissions(request, ['list_hr_document'])
         paginate = request.query_params.get("paginate", "true")
-        data = HRDocument.objects.filter(company=request.user.company).order_by("-id")
+        data = HRDocument.active_objects.filter(company=request.user.company).order_by("-id")
         
         search = request.query_params.get("search")
         if search:
@@ -37,7 +37,7 @@ class HRDocumentView(APIView):
         serializer = HRDocumentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('HR Document')
+            return ResponseHandler.create_success('HR Document', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'HR Document')
@@ -48,7 +48,7 @@ class HRDocumentView(APIView):
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('HR Document')
+            return ResponseHandler.update_success('HR Document', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'HR Document')

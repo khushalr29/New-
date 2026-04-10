@@ -51,7 +51,7 @@ components:
         clock_in: {type: string, format: time, nullable: true}
         clock_out: {type: string, format: time, nullable: true}
         shift: {type: integer, nullable: true}
-        status: {type: string, enum: [present, absent, late, early_departure, holiday, leave]}
+        status: {type: string, enum: [present, absent, late, half_day, on_leave, holiday]}
         late_by: {type: integer, nullable: true}
         early_by: {type: integer, nullable: true}
         overtime_by: {type: integer, nullable: true}
@@ -70,11 +70,27 @@ components:
         request_clock_out: {type: string, format: time}
         reason: {type: string}
 
+    GenericResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        message: {type: string}
+        data: {type: object}
+
+    PaginatedResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        message: {type: string, example: "Data fetched successfully"}
+        count: {type: integer}
+        data: {type: array, items: {type: object}}
+
     ErrorResponse:
       type: object
       properties:
-        success: {type: boolean}
-        error: {type: string}
+        success: {type: boolean, example: false}
+        message: {type: string}
+        errors: {type: string}
 
 paths:
   /shift:
@@ -112,8 +128,12 @@ paths:
       summary: Bulk delete shifts
       tags: [Shifts]
       security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: false
+          schema: {type: integer}
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -149,6 +169,17 @@ paths:
         content:
           application/json:
             schema: {$ref: '#/components/schemas/Shift'}
+      responses:
+        200: {description: Success}
+    delete:
+      summary: Soft delete shift
+      tags: [Shifts]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
       responses:
         200: {description: Success}
 
@@ -223,6 +254,17 @@ paths:
             schema: {$ref: '#/components/schemas/AttendancePolicy'}
       responses:
         200: {description: Success}
+    delete:
+      summary: Soft delete policy
+      tags: [Attendance Policies]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
+      responses:
+        200: {description: Success}
 
   /attendance-records:
     get:
@@ -290,6 +332,17 @@ paths:
         content:
           application/json:
             schema: {$ref: '#/components/schemas/AttendanceRecord'}
+      responses:
+        200: {description: Success}
+    delete:
+      summary: Soft delete record
+      tags: [Attendance Records]
+      security: [{BearerAuth: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: integer}
       responses:
         200: {description: Success}
 

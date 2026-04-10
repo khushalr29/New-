@@ -1,0 +1,45 @@
+[2026-04-10 15:36:07,463] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/payroll-runs/",
+  "status": 400,
+  "response_body": "{\n  \"success\": false,\n  \"errors\": \"payroll_frequency: \\\"frfgr\\\" is not a valid choice.\"\n}"
+}
+[2026-04-10 15:59:52,669] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/payroll-runs/",
+  "status": 201,
+  "response_body": "{\n  \"success\": true,\n  \"message\": \"Payroll Run added successfully.\",\n  \"data\": {\n    \"id\": 1,\n    \"created_at\": \"2026-04-10T15:59:52.657247+05:30\",\n    \"updated_at\": \"2026-04-10T15:59:52.657257+05:30\",\n    \"deleted_at\": null,\n    \"is_enabled\": true,\n    \"title\": \"string\",\n    \"payroll_frequency\": \"Monthly\",\n    \"pay_period_start\": \"2026-04-10\",\n    \"pay_period_end\": \"2026-04-10\",\n    \"pay_date\": \"2026-04-10\",\n    \"notes\": \"string\",\n    \"company\": 1\n  }\n}"
+}
+[2026-04-10 16:00:29,054] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "GET",
+  "path": "/api/v1/payroll-runs/?search=string&payroll_frequency=string",
+  "status": 200,
+  "response_body": "{\n  \"count\": 0,\n  \"data\": []\n}"
+}
+[2026-04-10 16:01:33,291] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "GET",
+  "path": "/api/v1/payroll-runs/?search=string&payroll_frequency=Monthly",
+  "status": 200,
+  "response_body": "{\n  \"count\": 1,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"created_at\": \"2026-04-10T15:59:52.657247+05:30\",\n      \"updated_at\": \"2026-04-10T15:59:52.657257+05:30\",\n      \"deleted_at\": null,\n      \"is_enabled\": true,\n      \"title\": \"string\",\n      \"payroll_frequency\": \"Monthly\",\n      \"pay_period_start\": \"2026-04-10\",\n      \"pay_period_end\": \"2026-04-10\",\n      \"pay_date\": \"2026-04-10\",\n      \"notes\": \"string\",\n      \"company\": 1\n    }\n  ]\n}"
+}
+[2026-04-10 17:11:01,153] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/payroll-runs/",
+  "status": 201,
+  "response_body": "{\n  \"success\": true,\n  \"message\": \"Payroll Run added successfully.\",\n  \"data\": {\n    \"id\": 2,\n    \"created_at\": \"2026-04-10T17:11:01.141708+05:30\",\n    \"updated_at\": \"2026-04-10T17:11:01.141719+05:30\",\n    \"deleted_at\": null,\n    \"is_enabled\": true,\n    \"title\": \"sdfghjkl\",\n    \"payroll_frequency\": \"Monthly\",\n    \"pay_period_start\": \"2026-04-10\",\n    \"pay_period_end\": \"2026-04-10\",\n    \"pay_date\": \"2026-04-10\",\n    \"notes\": \"string\",\n    \"company\": 1\n  }\n}"
+}

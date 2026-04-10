@@ -1,6 +1,7 @@
-from .meetingviews import MeetingListView, MeetingDetailsView
-from .meetingRoomviews import MeetingRoomListView, MeetingRoomDetailsView
-from .meetingTypeviews import MeetingTypeListView, MeetingTypeDetailsView
-from .meetingAttendeeviews import AttendeeListView, AttendeeDetailsView
-from .meetingMinutes import MinutesListView, MinutesDetailsView
-from .actionitemviews import ActionItemListView, ActionItemDetailsView
+from .meetingviews import MeetingView
+from .meetingRoomviews import MeetingRoomView
+from .meetingTypeviews import MeetingTypeView
+from .meetingAttendeeviews import MeetingAttendeeView
+from .meetingMinutes import MeetingMinutesView
+from .actionitemviews import ActionItemView
+

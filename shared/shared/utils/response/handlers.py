@@ -270,7 +270,7 @@ class ResponseHandler:
     
     @staticmethod
     def dependency_error(message):
-        return Response({'success': 'False', 'message': message}, status=HttpResponseCode.CONFLICT)
+        return Response({'success': False, 'message': message}, status=HttpResponseCode.CONFLICT)
     
     @staticmethod
     def json_rate_limited(message=ResponseMessages.TOO_MANY_REQUESTS, data=None):

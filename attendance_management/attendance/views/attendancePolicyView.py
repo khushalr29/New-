@@ -10,7 +10,7 @@ from shared.utils.errors.protectedErrors import check_references_and_get_deletab
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-class attendancePolicyView(APIView):
+class AttendancePolicyView(APIView):
     def get(self, request, id=None):
         if id:
             check_permissions(request, ['view_attendancepolicy'])
@@ -20,7 +20,7 @@ class attendancePolicyView(APIView):
         
         check_permissions(request, ['list_attendancepolicy'])
         paginate = request.query_params.get("paginate", "true")
-        data = AttendancePolicy.objects.filter(company=request.user.company).order_by("-id")
+        data = AttendancePolicy.active_objects.filter(company=request.user.company).order_by("-id")
         search = request.query_params.get("search")
         if search:
             data = data.filter(policy_name__icontains=search)
@@ -39,7 +39,7 @@ class attendancePolicyView(APIView):
         serializer = attendancePolicySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('attendance Policy')
+            return ResponseHandler.create_success('attendance Policy', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'attendancePolicy')
@@ -50,13 +50,16 @@ class attendancePolicyView(APIView):
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('attendance Policy')
+            return ResponseHandler.update_success('attendance Policy', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'attendancePolicy')
-    def delete(self, request):
+    def delete(self, request, id=None):
         check_permissions(request, ['delete_attendancepolicy'])
         ids = request.data.get("ids", [])
+        if id:
+            ids.append(id)
+            
         if not isinstance(ids, list) or not ids:
             return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
         

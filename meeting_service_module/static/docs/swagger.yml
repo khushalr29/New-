@@ -81,80 +81,74 @@ components:
         recorded_date: {type: string, format: date, example: "2026-04-10"}
         recorded_time: {type: string, example: "11:30:00"}
 
-    ActionItem:
-      type: object
-      required: [meeting, action_item_title, due_date, priority]
-      properties:
-        meeting: {type: integer, example: 1}
-        action_item_title: {type: string, example: "Update API Documentation"}
-        description: {type: string, example: "Ensure all endpoints are documented"}
-        assigned_to: {type: integer, example: 1}
-        due_date: {type: string, format: date, example: "2026-04-09"}
-        priority: {type: string, enum: [High, Medium, Low], example: "High"}
         progress: {type: integer, example: 50}
+
+    GenericResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        data: {type: object}
+
+    PaginatedResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        count: {type: integer}
+        data: {type: array, items: {type: object}}
 
 paths:
   /meetings/:
+    get:
+      summary: List all meetings
       parameters:
         - name: search
           in: query
-          description: Search by title, description or agenda
-          required: false
           schema: {type: string}
         - name: meeting_type
           in: query
-          description: Filter by Meeting Type ID
-          required: false
-          schema: {type: integer}
-        - name: meeting_room
-          in: query
-          description: Filter by Meeting Room ID
-          required: false
           schema: {type: integer}
         - name: date
           in: query
-          description: Filter by date (YYYY-MM-DD)
-          required: false
           schema: {type: string, format: date}
         - name: page
           in: query
-          description: Page number
-          required: false
           schema: {type: integer, default: 1}
         - name: page_size
           in: query
-          description: Items per page
-          required: false
           schema: {type: integer, default: 10}
       responses:
         '200':
-          description: Paginated list of items
+          description: Paginated response
           content:
             application/json:
-              schema:
-                type: object
-                properties:
-                  count: {type: integer}
-                  page: {type: integer}
-                  page_size: {type: integer}
-                  results:
-                    type: array
-                    items: {$ref: '#/components/schemas/Meeting'}
-  post:
-    summary: Create a new meeting
-    security: [{bearerAuth: []}]
-    tags: [Meetings]
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema: {$ref: '#/components/schemas/Meeting'}
-    responses:
-      '201':
-        description: Created
+              schema: {$ref: '#/components/schemas/PaginatedResponse'}
+    post:
+      summary: Create a new meeting
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      requestBody:
+        required: true
         content:
           application/json:
             schema: {$ref: '#/components/schemas/Meeting'}
+      responses:
+        '201': {description: Created}
+    delete:
+      summary: Bulk delete meetings
+      security: [{bearerAuth: []}]
+      tags: [Meetings]
+      parameters: [{name: id, in: path, required: false, schema: {type: integer}}]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
 
   /meetings/{id}/:
     get:
@@ -189,7 +183,11 @@ paths:
       security: [{bearerAuth: []}]
       tags: [Configuration]
       responses:
-        '200': {description: Success}
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PaginatedResponse'}
     post:
       summary: Create a meeting type
       security: [{bearerAuth: []}]
@@ -201,6 +199,20 @@ paths:
             schema: {$ref: '#/components/schemas/MeetingType'}
       responses:
         '201': {description: Created}
+    delete:
+      summary: Bulk delete meeting types
+      security: [{bearerAuth: []}]
+      tags: [Configuration]
+      parameters: [{name: id, in: path, required: false, schema: {type: integer}}]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
 
   /meetingtypedetails/{id}/:
     get:

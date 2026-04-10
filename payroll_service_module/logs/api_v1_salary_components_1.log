@@ -1,0 +1,18 @@
+[2026-04-10 16:05:17,419] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "DELETE",
+  "path": "/api/v1/salary-components/1/",
+  "status": 404,
+  "response_body": "{\n  \"detail\": \"No SalaryComponent matches the given query.\"\n}"
+}
+[2026-04-10 16:06:04,312] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "DELETE",
+  "path": "/api/v1/salary-components/1/",
+  "status": 200,
+  "response_body": "{\n  \"success\": true,\n  \"message\": \"Salary Component deleted successfully\"\n}"
+}

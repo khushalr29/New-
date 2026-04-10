@@ -1,23 +1,23 @@
 from django.urls import path
-from .views.leaveTypeViews import LeaveTypeListView, LeaveTypeDetailsView
-from .views.leavePolicyViews import LeavePolicyListView, LeavePolicyDetailsView
-from .views.leaveBalanceViews import LeaveBalanceListView, LeaveBalanceDetailsView
-from .views.leaveApplicationViews import LeaveApplicationListView, LeaveApplicationDetailsView
+from .views.leaveTypeViews import LeaveTypeView
+from .views.leavePolicyViews import LeavePolicyView
+from .views.leaveBalanceViews import LeaveBalanceView
+from .views.leaveApplicationViews import LeaveApplicationView
 
 urlpatterns = [
     # Leave Type URLs
-    path('leave-types/', LeaveTypeListView.as_view(), name='leavetype-list'),
-    path('leavetypedetails/<int:id>/', LeaveTypeDetailsView.as_view(), name='leavetype-details'),
+    path('leave-types/', LeaveTypeView.as_view(), name='leavetype'),
+    path('leavetypedetails/<int:id>/', LeaveTypeView.as_view(), name='leavetype-details'),
 
     # Leave Policy URLs
-    path('leave-policies/', LeavePolicyListView.as_view(), name='leavepolicy-list'),
-    path('leavepolicydetails/<int:id>/', LeavePolicyDetailsView.as_view(), name='leavepolicy-details'),
+    path('leave-policies/', LeavePolicyView.as_view(), name='leavepolicy'),
+    path('leavepolicydetails/<int:id>/', LeavePolicyView.as_view(), name='leavepolicy-details'),
 
     # Leave Balance URLs
-    path('leave-balances/', LeaveBalanceListView.as_view(), name='leavebalance-list'),
-    path('leavebalancedetails/<int:id>/', LeaveBalanceDetailsView.as_view(), name='leavebalance-details'),
+    path('leave-balances/', LeaveBalanceView.as_view(), name='leavebalance'),
+    path('leavebalancedetails/<int:id>/', LeaveBalanceView.as_view(), name='leavebalance-details'),
 
     # Leave Application URLs
-    path('leave-applications/', LeaveApplicationListView.as_view(), name='leaveapplication-list'),
-    path('leaveapplicationdetails/<int:id>/', LeaveApplicationDetailsView.as_view(), name='leaveapplication-details'),
+    path('leave-applications/', LeaveApplicationView.as_view(), name='leaveapplication'),
+    path('leaveapplicationdetails/<int:id>/', LeaveApplicationView.as_view(), name='leaveapplication-details'),
 ]

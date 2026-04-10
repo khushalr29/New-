@@ -21,7 +21,7 @@ class AttendanceRecordsView(APIView):
         
         check_permissions(request, ['list_attendance'])
         paginate = request.query_params.get("paginate", "true")
-        data = Attendance.objects.filter(company=request.user.company).order_by("-id")
+        data = Attendance.active_objects.filter(company=request.user.company).order_by("-id")
         
         search = request.query_params.get("search")
         if search:
@@ -52,7 +52,7 @@ class AttendanceRecordsView(APIView):
         serializer = AttendanceRecordSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('Attendance Record')
+            return ResponseHandler.create_success('Attendance Record', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'Attendance Record')
@@ -63,13 +63,16 @@ class AttendanceRecordsView(APIView):
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Attendance Record')
+            return ResponseHandler.update_success('Attendance Record', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'Attendance Record')
-    def delete(self, request):
+    def delete(self, request, id=None):
         check_permissions(request, ['delete_attendance'])
         ids = request.data.get("ids", [])
+        if id:
+            ids.append(id)
+            
         if not isinstance(ids, list) or not ids:
             return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
         

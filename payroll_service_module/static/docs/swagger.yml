@@ -1,0 +1,286 @@
+openapi: 3.0.0
+info:
+  title: Payroll Management API
+  description: API for managing payroll runs and salary components across the multi-tenant system.
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Current server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    PayrollRun:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+        payroll_frequency:
+          type: string
+          enum: ["Weekly", "Bi-Weekly", "Monthly"]
+          default: "Monthly"
+        pay_period_start:
+          type: string
+          format: date
+        pay_period_end:
+          type: string
+          format: date
+        pay_date:
+          type: string
+          format: date
+        notes:
+          type: string
+      required:
+        - title
+        - pay_period_start
+        - pay_period_end
+        - pay_date
+
+    SalaryComponent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        component_type:
+          type: string
+          enum: ["Earning", "Deduction"]
+        calculation_type:
+          type: string
+          enum: ["Fixed Amount", "Percentage of Basic"]
+        fixed_amount:
+          type: number
+        status:
+          type: string
+          enum: ["active", "inactive"]
+          default: "active"
+      required:
+        - name
+        - component_type
+        - calculation_type
+
+    GenericResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        data: {type: object}
+
+    PaginatedResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        count: {type: integer}
+        data: {type: array, items: {type: object}}
+
+security:
+  - bearerAuth: []
+paths:
+  /payroll-runs/:
+    get:
+      summary: List all payroll runs
+      tags:
+        - Payroll Runs
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by title or notes
+        - name: payroll_frequency
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paginated list of payroll runs
+    post:
+      summary: Create a new payroll run
+      tags:
+        - Payroll Runs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollRun'
+      responses:
+        '201':
+          description: Created successfully
+    delete:
+      summary: Bulk delete payroll runs
+      tags: [Payroll Runs]
+      parameters:
+        - name: id
+          in: path
+          required: false
+          schema: {type: integer}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+  /payroll-runs/{id}/:
+    get:
+      summary: Get payroll run details
+      tags:
+        - Payroll Runs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+    patch:
+      summary: Update a payroll run
+      tags:
+        - Payroll Runs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayrollRun'
+      responses:
+        '200':
+          description: Updated successfully
+    delete:
+      summary: Delete a payroll run
+      tags:
+        - Payroll Runs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+
+  /salary-components/:
+    get:
+      summary: List all salary components
+      tags:
+        - Salary Components
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search by name or description
+        - name: component_type
+          in: query
+          schema:
+            type: string
+        - name: calculation_type
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paginated list of salary components
+    post:
+      summary: Create a new salary component
+      tags:
+        - Salary Components
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalaryComponent'
+      responses:
+        '201':
+          description: Created successfully
+    delete:
+      summary: Bulk delete salary components
+      tags: [Salary Components]
+      parameters:
+        - name: id
+          in: path
+          required: false
+          schema: {type: integer}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+  /salary-components/{id}/:
+    get:
+      summary: Get salary component details
+      tags:
+        - Salary Components
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+    patch:
+      summary: Update a salary component
+      tags:
+        - Salary Components
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalaryComponent'
+      responses:
+        '200':
+          description: Updated successfully
+    delete:
+      summary: Delete a salary component
+      tags:
+        - Salary Components
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully

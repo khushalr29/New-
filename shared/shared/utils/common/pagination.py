@@ -8,6 +8,8 @@ class CustomPagination(PageNumberPagination):
 
     def get_paginated_response(self, data):
         return Response({
+            'success': True,
+            'message': 'Data fetched successfully',
             'count': self.page.paginator.count,
             'data': data
         })

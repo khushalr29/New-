@@ -287,7 +287,7 @@ components:
         date_of_birth: {type: string, format: date}
         gender: {type: string, enum: ["Male", "Female", "Other"]}
         date_of_joining: {type: string, format: date}
-        employment_type: {type: string, enum: ["Full Time", "Part Time", "Contract", "Intern"]}
+        employment_type: {type: string, enum: ["full_time", "part_time", "contract", "intern"]}
         phone_number: {type: string}
         address: {type: string}
 
@@ -480,6 +480,15 @@ components:
         name: {type: string}
         codename: {type: string}
 
+    TokenRefresh:
+      type: object
+      required: [refresh]
+      properties:
+        refresh:
+          type: string
+          description: "Your JWT refresh token"
+          example: "your_refresh_token_here"
+
     SuccessResponse:
       type: object
       properties:
@@ -596,6 +605,15 @@ paths:
       summary: Set User MPIN
       tags: [Users]
       security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mpin]
+              properties:
+                mpin: {type: string, minLength: 6, maxLength: 6, example: "123456"}
       responses:
         200: {description: Success}
 
@@ -604,6 +622,15 @@ paths:
       summary: Verify User MPIN
       tags: [Users]
       security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mpin]
+              properties:
+                mpin: {type: string, example: "123456"}
       responses:
         200: {description: Success}
 
@@ -631,6 +658,15 @@ paths:
       summary: SSO Impersonation
       tags: [Auth]
       security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [Company_id]
+              properties:
+                Company_id: {type: integer, example: 1}
       responses:
         200: {description: Success}
 
@@ -638,6 +674,18 @@ paths:
     post:
       summary: Refresh JWT
       tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh]
+              properties:
+                refresh:
+                  type: string
+                  description: "Your JWT refresh token"
+                  example: "your_refresh_token_here"
       responses:
         200: {description: Success}
 
@@ -653,6 +701,16 @@ paths:
     post:
       summary: Request Password Reset
       tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, host]
+              properties:
+                email: {type: string, format: email, example: "admin@telepathy.com"}
+                host: {type: string, example: "https://telepathy.com"}
       responses:
         200: {description: Success}
 
@@ -669,6 +727,16 @@ paths:
           in: path
           required: true
           schema: {type: string}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password, confirm_password]
+              properties:
+                password: {type: string, format: password}
+                confirm_password: {type: string, format: password}
       responses:
         200: {description: Success}
 
@@ -689,6 +757,15 @@ paths:
       summary: Verify Password
       tags: [Auth]
       security: [{BearerAuth: []}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                password: {type: string, format: password}
       responses:
         200: {description: Success}
 

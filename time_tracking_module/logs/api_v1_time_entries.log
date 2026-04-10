@@ -1,0 +1,27 @@
+[2026-04-10 11:59:10,104] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/time-entries/",
+  "status": 400,
+  "response_body": "{\n  \"success\": false,\n  \"errors\": \"employee: Invalid foreign key.\"\n}"
+}
+[2026-04-10 12:00:56,027] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/time-entries/",
+  "status": 400,
+  "response_body": "{\n  \"success\": false,\n  \"errors\": \"employee: Invalid foreign key.\"\n}"
+}
+[2026-04-10 12:01:25,552] INFO - RESPONSE:
+{
+  "client_ip": "127.0.0.1",
+  "server_ip": "192.168.2.199",
+  "method": "POST",
+  "path": "/api/v1/time-entries/",
+  "status": 400,
+  "response_body": "{\n  \"success\": false,\n  \"errors\": \"employee: Invalid foreign key.\"\n}"
+}

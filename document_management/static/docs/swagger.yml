@@ -25,7 +25,7 @@ components:
         description: {type: string, nullable: true}
         color: {type: string, example: "#FF0000"}
         icon: {type: string, example: "folder"}
-        mandatory_category: {type: string, enum: [yes_mandatory, no_optional]}
+        mandatory_category: {type: string, enum: ["Yes, Mandatory", "No, Optional"]}
         status: {type: string, enum: [active, inactive]}
 
     HRDocument:

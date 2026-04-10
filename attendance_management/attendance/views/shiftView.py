@@ -21,10 +21,10 @@ class ShiftView(APIView):
         
         check_permissions(request, ['list_shift'])
         paginate = request.query_params.get("paginate", "true")
-        data = Shift.objects.filter(company=request.user.company).order_by("-id")
+        data = Shift.active_objects.filter(company=request.user.company).order_by("-id")
         search = request.query_params.get("search")
         if search:
-            data = data.filter(policy_name__icontains=search)
+            data = data.filter(shift_name__icontains=search)
         
         start_date = request.query_params.get("start_date")
         end_date = request.query_params.get("end_date")
@@ -57,7 +57,7 @@ class ShiftView(APIView):
         serializer = ShiftSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(created_at=timezone.now(), company=request.user.company)
-            return ResponseHandler.create_success('Shift')
+            return ResponseHandler.create_success('Shift', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'Shift')
@@ -68,13 +68,16 @@ class ShiftView(APIView):
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Shift')
+            return ResponseHandler.update_success('Shift', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'Shift')
-    def delete(self, request):
+    def delete(self, request, id=None):
         check_permissions(request, ['delete_shift'])
         ids = request.data.get("ids", [])
+        if id:
+            ids.append(id)
+            
         if not isinstance(ids, list) or not ids:
             return ResponseHandler.bad_request(message=ResponseMessages.NO_IDS_PROVIDED)
         

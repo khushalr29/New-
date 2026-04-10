@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Time Tracking API
+  description: API for managing time tracking entries across the multi-tenant system.
+  version: 1.0.0
+servers:
+  - url: /api/v1/
+    description: Current server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    TimeEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        employee:
+          type: integer
+          description: ID of the employee
+        date:
+          type: string
+          format: date
+        hours:
+          type: integer
+        project:
+          type: string
+        description:
+          type: string
+      required:
+        - employee
+        - date
+        - hours
+        - description
+    GenericResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        data: {type: object}
+
+    PaginatedResponse:
+      type: object
+      properties:
+        success: {type: boolean}
+        message: {type: string}
+        count: {type: integer}
+        data: {type: array, items: {type: object}}
+
+security:
+  - bearerAuth: []
+paths:
+  /time-entries/:
+    get:
+      summary: List all time entries
+      tags: [Time Entries]
+      parameters:
+        - name: search
+          in: query
+          schema: {type: string}
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/PaginatedResponse'}
+    post:
+      summary: Create a new time entry
+      tags: [Time Entries]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/TimeEntry'}
+      responses:
+        '201': {description: Created}
+    delete:
+      summary: Bulk delete time entries
+      tags: [Time Entries]
+      parameters: [{name: id, in: path, required: false, schema: {type: integer}}]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids: {type: array, items: {type: integer}}
+      responses:
+        '200': {description: Success}
+
+  /time-entries/{id}/:
+    get:
+      summary: Get details
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      tags: [Time Entries]
+      responses:
+        '200': {description: Success}
+    put:
+      summary: Update entry
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      tags: [Time Entries]
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/TimeEntry'}
+      responses:
+        '200': {description: Success}
+    delete:
+      summary: Delete entry
+      parameters: [{name: id, in: path, required: true, schema: {type: integer}}]
+      tags: [Time Entries]
+      responses:
+        '200': {description: Success}
+

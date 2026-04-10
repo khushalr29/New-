@@ -16,7 +16,7 @@ class RoleView(APIView):
             return ResponseHandler.success(serializer.data)
         
         check_permissions(request, ['list_role'])
-        data = Role.objects.filter(company=request.user.company).order_by("-id")
+        data = Role.active_objects.filter(company=request.user.company).order_by("-id")
         serializer = RoleListSerializer(data, many=True)
         return ResponseHandler.list_success(serializer.data)
 
@@ -26,7 +26,7 @@ class RoleView(APIView):
         serializer = RoleSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
-            return ResponseHandler.create_success('Role')
+            return ResponseHandler.create_success('Role', serializer.data)
         return ResponseHandler.create_failed(serializer.errors)
 
     @log_activity(UserActivityLog.UPDATE, 'Role')
@@ -36,7 +36,7 @@ class RoleView(APIView):
         serializer = RoleSerializer(instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())
-            return ResponseHandler.update_success('Role')
+            return ResponseHandler.update_success('Role', serializer.data)
         return ResponseHandler.update_failed(serializer.errors)
 
     @log_activity(UserActivityLog.DELETE, 'Role')
