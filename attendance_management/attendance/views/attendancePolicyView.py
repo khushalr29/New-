@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from shared.models import AttendancePolicy, UserActivityLog
-from ..serializers.attendancePolicySerializer import attendancePolicySerializer, attendancePolicyListSerializer
+from ..serializers.attendancePolicySerializer import AttendancePolicySerializer, AttendancePolicyListSerializer
 from shared.utils.response.handlers import ResponseHandler
 from shared.utils.response.messages import ResponseMessages
 from shared.utils.common.pagination import paginate_queryset
@@ -15,7 +15,7 @@ class AttendancePolicyView(APIView):
         if id:
             check_permissions(request, ['view_attendancepolicy'])
             instance = get_object_or_404(AttendancePolicy, id=id, company=request.user.company)
-            serializer = attendancePolicyListSerializer(instance)
+            serializer = AttendancePolicyListSerializer(instance)
             return ResponseHandler.success(serializer.data)
         
         check_permissions(request, ['list_attendancepolicy'])
@@ -29,14 +29,14 @@ class AttendancePolicyView(APIView):
             data = data.filter(status=status)
     
         if paginate == "false":
-            serializer = attendancePolicyListSerializer(data, many=True)
+            serializer = AttendancePolicyListSerializer(data, many=True)
             return ResponseHandler.list_success(serializer.data)
-        return paginate_queryset(data, request, attendancePolicyListSerializer, view=self)
+        return paginate_queryset(data, request, AttendancePolicyListSerializer, view=self)
 
     @log_activity(UserActivityLog.CREATE, 'attendancePolicy')
     def post(self, request):
         check_permissions(request, ['add_attendancepolicy'])
-        serializer = attendancePolicySerializer(data=request.data)
+        serializer = AttendancePolicySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(company=request.user.company)
             return ResponseHandler.create_success('attendance Policy', serializer.data)
@@ -46,7 +46,7 @@ class AttendancePolicyView(APIView):
     def put(self, request, id=None):
         check_permissions(request, ['change_attendancepolicy'])
         instance = get_object_or_404(AttendancePolicy, id=id, company=request.user.company)
-        serializer = attendancePolicySerializer(instance, data=request.data, partial=True)
+        serializer = AttendancePolicySerializer(instance, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save(updated_at=timezone.now())

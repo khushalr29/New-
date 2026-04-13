@@ -1,0 +1,222 @@
+openapi: 3.0.0
+info:
+  title: HRMS HR Management Service
+  description: API documentation for HRMS HR Management (Branch, Department, Designation, Document Type, Employee)
+  version: "1.0.0"
+
+servers:
+  - url: /api/v1
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: true}
+        message: {type: string, example: "Operation successful"}
+        data: {type: object, nullable: true}
+
+    ErrorResponse:
+      type: object
+      properties:
+        success: {type: boolean, example: false}
+        message: {type: string}
+        error: {type: object, nullable: true}
+
+    DeleteRequest:
+      type: object
+      required: [ids]
+      properties:
+        ids: {type: array, items: {type: integer}, example: [1, 2, 3]}
+
+    # ==================== Branch Schemas ====================
+    Branch:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        branch_name: {type: string}
+        branch_code: {type: string}
+        address: {type: string, nullable: true}
+        status: {type: string, enum: [Active, Inactive]}
+
+    BranchList:
+      allOf:
+        - $ref: '#/components/schemas/Branch'
+        - type: object
+          properties:
+            created_at: {type: string, format: date-time}
+
+    BranchCreateUpdate:
+      type: object
+      required: [branch_name]
+      properties:
+        branch_name: {type: string}
+        branch_code: {type: string}
+        status: {type: string, enum: [Active, Inactive], default: Active}
+
+    # ==================== Department Schemas ====================
+    Department:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        branch: {type: integer}
+        department: {type: string}
+        status: {type: string, enum: [Active, Inactive]}
+
+    DepartmentList:
+      allOf:
+        - $ref: '#/components/schemas/Department'
+        - type: object
+          properties:
+            created_at: {type: string, format: date-time}
+
+    DepartmentCreateUpdate:
+      type: object
+      required: [branch, department]
+      properties:
+        branch: {type: integer}
+        department: {type: string}
+        status: {type: string, enum: [Active, Inactive], default: Active}
+
+    # ==================== Designation Schemas ====================
+    Designation:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        name: {type: string}
+        department: {type: integer}
+        status: {type: string, enum: [active, inactive]}
+
+    DesignationList:
+      allOf:
+        - $ref: '#/components/schemas/Designation'
+        - type: object
+          properties:
+            created_at: {type: string, format: date-time}
+
+    DesignationCreateUpdate:
+      type: object
+      required: [name, department]
+      properties:
+        name: {type: string}
+        department: {type: integer}
+        status: {type: string, enum: [active, inactive], default: active}
+
+    # ==================== Document Type Schemas ====================
+    DocumentType:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        document_type: {type: string}
+        status: {type: string, enum: [Active, Inactive]}
+
+    DocumentTypeList:
+      allOf:
+        - $ref: '#/components/schemas/DocumentType'
+        - type: object
+          properties:
+            created_at: {type: string, format: date-time}
+
+    DocumentTypeCreateUpdate:
+      type: object
+      required: [document_type]
+      properties:
+        document_type: {type: string}
+        status: {type: string, enum: [Active, Inactive], default: Active}
+
+    # ==================== Employee Schemas ====================
+    Employee:
+      type: object
+      properties:
+        id: {type: integer, readOnly: true}
+        full_name: {type: string}
+        branch: {type: integer}
+        department: {type: integer}
+        designation: {type: integer}
+        status: {type: string, enum: [active, inactive]}
+
+    EmployeeList:
+      allOf:
+        - $ref: '#/components/schemas/Employee'
+        - type: object
+          properties:
+            created_at: {type: string, format: date-time}
+
+    EmployeeCreateUpdate:
+      type: object
+      required: [full_name, branch, department, designation]
+      properties:
+        full_name: {type: string}
+        branch: {type: integer}
+        department: {type: integer}
+        designation: {type: integer}
+        status: {type: string, enum: [active, inactive], default: active}
+
+paths:
+  # === Branch ===
+  /branch:
+    get: {summary: List Branches, tags: [Branch], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post: {summary: Create Branch, tags: [Branch], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/BranchCreateUpdate'}}}}, responses: {'201': {description: Created}}}
+    delete: {summary: Bulk Delete Branches, tags: [Branch], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+
+  /branch/{id}:
+    get: {summary: Get Branch, tags: [Branch], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
+    put: {summary: Update Branch, tags: [Branch], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/BranchCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+
+  /branch/active:
+    get: {summary: List Active Branches, tags: [Branch], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+
+  # === Department ===
+  /department:
+    get: {summary: List Departments, tags: [Department], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post: {summary: Create Department, tags: [Department], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DepartmentCreateUpdate'}}}}, responses: {'201': {description: Created}}}
+    delete: {summary: Bulk Delete Departments, tags: [Department], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+
+  /department/{id}:
+    get: {summary: Get Department, tags: [Department], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
+    put: {summary: Update Department, tags: [Department], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DepartmentCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+
+  /department/active:
+    get: {summary: List Active Departments, tags: [Department], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+
+  # === Designation ===
+  /designation:
+    get: {summary: List Designations, tags: [Designation], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post: {summary: Create Designation, tags: [Designation], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DesignationCreateUpdate'}}}}, responses: {'201': {description: Created}}}
+    delete: {summary: Bulk Delete Designations, tags: [Designation], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+
+  /designation/{id}:
+    get: {summary: Get Designation, tags: [Designation], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
+    put: {summary: Update Designation, tags: [Designation], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DesignationCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+
+  /designation/active:
+    get: {summary: List Active Designations, tags: [Designation], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+
+  # === Document Type ===
+  /document-type:
+    get: {summary: List Document Types, tags: [Document Type], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post: {summary: Create Document Type, tags: [Document Type], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DocumentTypeCreateUpdate'}}}}, responses: {'201': {description: Created}}}
+    delete: {summary: Bulk Delete Document Types, tags: [Document Type], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+
+  /document-type/{id}:
+    get: {summary: Get Document Type, tags: [Document Type], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
+    put: {summary: Update Document Type, tags: [Document Type], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DocumentTypeCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+
+  # === Employee ===
+  /employee:
+    get: {summary: List Employees, tags: [Employee], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post: {summary: Create Employee, tags: [Employee], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/EmployeeCreateUpdate'}}}}, responses: {'201': {description: Created}}}
+    delete: {summary: Bulk Delete Employees, tags: [Employee], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+
+  /employee/{id}:
+    get: {summary: Get Employee, tags: [Employee], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
+    put: {summary: Update Employee, tags: [Employee], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/EmployeeCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+
+  /employee/active:
+    get: {summary: List Active Employees, tags: [Employee], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}

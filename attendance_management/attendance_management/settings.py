@@ -184,6 +184,7 @@ LOGGING = {
     }
 }
 
+<<<<<<< HEAD
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -205,6 +206,8 @@ SIMPLE_JWT = {
 }
 PASSWORD_RESET_TIMEOUT=900
 
+=======
+>>>>>>> 96ed6434ac61b7db74de23c7513ed8ec4dfcb111
 EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')

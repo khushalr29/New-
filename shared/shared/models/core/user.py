@@ -6,33 +6,38 @@ from django.contrib.auth.models import BaseUserManager,AbstractUser,Permission
 from .enums import Gender,UserStatus
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, password=None, full_name=None, phone_number=None, gender=None):
         if not email:
             raise ValueError('User must have an email address')
 
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-
         user = self.model(
             email=self.normalize_email(email),
-            **extra_fields
+            full_name=full_name,
+            phone_number=phone_number,
+            gender=gender 
         )
         
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('account_type', 'super_admin')
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
-
-        return self.create_user(email, password, **extra_fields)
+    def create_superuser(self, email, password=None, full_name=None, phone_number=None, gender=None):
+        if not email:
+            raise ValueError('User must have an email address')
+        user = self.create_user(
+            email=email,
+            password=password,
+            full_name=full_name,
+            phone_number=phone_number,
+            gender=gender
+        )
+        user.is_superuser = True
+        user.is_staff = True
+        user.account_type = User.SUPER_ADMIN
+        all_permissions = Permission.objects.all()
+        user.user_permissions.set(all_permissions)
+        user.save(using=self._db)
+        return user
 
 class User(AbstractUser):
     image = models.TextField(blank=True, null=True)
@@ -55,7 +60,6 @@ class User(AbstractUser):
     auth_token_issued_at = models.DateTimeField(null=True, blank=True, default=now)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     username = None
-
     first_name = None
     last_name = None
     created_at = models.DateTimeField(auto_now_add=True)

@@ -4,6 +4,9 @@ from .views.employeeView import EmployeeView, EmployeeStatusToggleView
 from .views.planView import PlanView
 from .views.subscriptionView import SubscriptionView
 from .views.roleView import RoleView
+from .views.paymentTransactionView import CreateEasebuzzPaymentView
+from .views.renewSubscriptionView import SubscriptionRenewView
+from .views.updateSubscriptionView import UpdateSubscriptionView
 
 urlpatterns = [
     # Company paths
@@ -23,7 +26,10 @@ urlpatterns = [
     # Subscription paths
     path('subscriptions', SubscriptionView.as_view(), name='subscription-list-create'),
     path('subscriptions/<int:pk>', SubscriptionView.as_view(), name='subscription-detail'),
-
+    path('subscriptions/renew', SubscriptionRenewView.as_view(), name='subscription-renew'),
+    path('subscriptions/update', UpdateSubscriptionView.as_view(), name='subscription-update'),
+    path('subscriptions/payment', CreateEasebuzzPaymentView.as_view(), name='subscription-payment'),
+    
     # Role paths
     path('roles', RoleView.as_view(), name='role-list-create'),
     path('roles/<int:pk>', RoleView.as_view(), name='role-detail'),
