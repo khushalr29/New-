@@ -6,19 +6,6 @@ from ...utils.common import validate_char_field
 from .enums import Gender, IdentityType, EmploymentType, EmployeeStatus
 from .base import TenantModel
 
-class EmployeeDesignation(TenantModel):
-    employee = models.ForeignKey('shared.Employee', on_delete=models.CASCADE, related_name='employee_designations')
-    designation = models.ForeignKey('shared.Designation', on_delete=models.CASCADE, related_name='employee_designations')
-    effective_from = models.DateField()
-    effective_to = models.DateField(null=True, blank=True)
-
-    class Meta:
-        db_table = 'employee_designation'
-        ordering = ['-effective_from']
-
-    def __str__(self):
-        return f"{self.employee.full_name if hasattr(self.employee, 'full_name') else 'Employee'} -> {self.designation.title}"
-
 class Employee(TenantModel):
     full_name = models.CharField(max_length=255, validators=[validate_char_field])
     employee_id = models.CharField(max_length=50, unique=True, db_index=True)
@@ -31,7 +18,7 @@ class Employee(TenantModel):
     gender = models.CharField(max_length=10, choices=Gender.choices)
     branch = models.ForeignKey('shared.Branch', on_delete=models.SET_NULL, null=True, blank=True, related_name='employees')
     department = models.ForeignKey('shared.Department', null=True, blank=True, on_delete=models.SET_NULL, related_name='employees')
-    designation = models.ForeignKey('shared.EmployeeDesignation', null=True, blank=True, on_delete=models.SET_NULL, related_name='employees')
+    designation = models.ForeignKey('shared.Designation', null=True, blank=True, on_delete=models.SET_NULL, related_name='employees')
     date_of_joining = models.DateField(default=timezone.now)
     employment_type = models.CharField(max_length=20, choices=EmploymentType.choices, default=EmploymentType.FULL_TIME)
     shift = models.ForeignKey('shared.Shift', null=True, blank=True, on_delete=models.SET_NULL, related_name='employees')

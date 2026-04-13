@@ -83,10 +83,8 @@ class AwardType(TenantModel):
         return self.award_type
 
 class Designation(TenantModel):
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=255)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='designations')
-    level = models.CharField(max_length=50, blank=True, help_text="e.g. Junior, Senior, Lead, Manager")
     status = models.CharField(max_length=20, choices=BranchStatus.choices, default=BranchStatus.ACTIVE)
  
     class Meta:
@@ -94,7 +92,7 @@ class Designation(TenantModel):
         unique_together = ('title', 'company')
  
     def __str__(self):
-        return f"{self.title} ({self.level})"
+        return f"{self.title}"
 
 class IndicatorCategory(TenantModel):
     category_name = models.CharField(max_length=255, validators=[validate_char_field])

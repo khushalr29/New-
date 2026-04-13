@@ -9,5 +9,5 @@ class CustomQuestions(TenantModel):
     class Meta:
         db_table = 'custom_questions'
 
-    def __str__(self):
+    def __str__(self):  
         return self.question

@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware', #imp for I18N
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -100,8 +101,17 @@ DATABASES = {
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
         'PORT': config('DB_PORT'),
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
+        
+        # Test database settings
+        'TEST': {
+            'CHARSET': 'utf8',
+        },
     }
 }
+
 
 
 # Password validation
@@ -134,10 +144,30 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
-
 USE_I18N = True
 
 USE_TZ = True
+
+LANGUAGE = [
+    ('en', 'English'),
+    ('hi','Hindi'),
+    ('ar', 'Arabic'),
+    ('zh-hans', 'Chinese'),
+    ('zh-hant', 'Chinese (Traditional)'),
+    ('fr', 'French'),
+    ('de', 'German'),
+    ('es', 'Spanish'),
+    ('it', 'Italian'),
+    ('pt', 'Portuguese'),
+    ('ru', 'Russian'),
+    ('ja', 'Japanese'),
+    ('ko', 'Korean'),
+    ('nl', 'Dutch'),
+    ('jp', 'Japanese'),
+    ('bn', 'Bengali'),
+    ('ta', 'Tamil'),
+    ('ur', 'Urdu'),
+]
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [

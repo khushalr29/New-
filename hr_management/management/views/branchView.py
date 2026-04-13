@@ -11,7 +11,6 @@ from shared.utils.errors.protectedErrors import check_references_and_get_deletab
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-
 class BranchView(APIView):
     def get(self, request, id=None):
         if id:
@@ -71,7 +70,6 @@ class BranchView(APIView):
         queryset.update(deleted_at=timezone.now())
         return ResponseHandler.delete_success("branch")
 
-
 class BranchStatusToggleView(APIView):
     def patch(self, request, id=None):
         check_permissions(request, ['change_branch'])
@@ -79,7 +77,6 @@ class BranchStatusToggleView(APIView):
         instance.status = "inactive" if instance.status == "active" else "active"
         instance.save()
         return ResponseHandler.success({"status": instance.status}, message="Status updated successfully")
-
 
 class ActiveBranchView(APIView):
     def get(self, request):
