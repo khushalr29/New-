@@ -1,11 +1,17 @@
 openapi: 3.0.0
 info:
-  title: HRMS HR Management Service
-  description: API documentation for HRMS HR Management (Branch, Department, Designation, Document Type, Employee)
+  title: HRMS Auth & User Service
+  description: Comprehensive API documentation for the Human Resource Management System.
   version: "1.0.0"
 
 servers:
-  - url: /api/v1
+  - url: /api/v1/auth
+    description: Primary Auth Module Gateway
+  - url: /api/v1/company-employee
+    description: Company & Employee Module Gateway
+
+security:
+  - BearerAuth: []
 
 components:
   securitySchemes:
@@ -18,200 +24,4420 @@ components:
     ApiResponse:
       type: object
       properties:
-        success: {type: boolean, example: true}
-        message: {type: string, example: "Operation successful"}
-        data: {type: object, nullable: true}
+        success:
+          type: boolean
+          description: "Indicates if the operation was successful"
+          example: true
+        message:
+          type: string
+          description: "Summary message of the operation"
+          example: "Operation successful"
+        data:
+          type: object
+          nullable: true
+          description: "Payload returned by the API"
 
-    ErrorResponse:
+    AnnouncementCreate:
+      type: object
+      required:
+        - title
+        - category
+        - content
+        - start_date
+        - end_date
+      properties:
+        title:
+          type: string
+          example: "Holiday Notice"
+        category:
+          type: string
+          example: "GENERAL"
+        short_description:
+          type: string
+          example: "Office will remain closed"
+        content:
+          type: string
+          example: "Detailed announcement content"
+        start_date:
+          type: string
+          format: date
+          example: "2026-04-01"
+        end_date:
+          type: string
+          format: date
+          example: "2026-04-02"
+        attachment:
+          type: string
+          format: binary
+        is_featured_announcement:
+          type: boolean
+          example: false
+        is_high_priority:
+          type: boolean
+          example: true
+        is_company_wide_announcement:
+          type: boolean
+          example: true
+        branch:
+          type: array
+          items:
+            type: integer
+          example: [1, 2]
+        department:
+          type: array
+          items:
+            type: integer
+          example: [3, 4]
+
+    AnnouncementResponse:
       type: object
       properties:
-        success: {type: boolean, example: false}
-        message: {type: string}
-        error: {type: object, nullable: true}
+        id:
+          type: integer
+        title:
+          type: string
+        category:
+          type: string
+        short_description:
+          type: string
+        content:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        attachment:
+          type: string
+        is_featured_announcement:
+          type: boolean
+        is_high_priority:
+          type: boolean
+        is_company_wide_announcement:
+          type: boolean
+        branch:
+          type: array
+          items:
+            type: object
+        department:
+          type: array
+          items:
+            type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
 
-    DeleteRequest:
+    AssetTypeCreate:
       type: object
-      required: [ids]
+      required:
+        - asset_type_name
       properties:
-        ids: {type: array, items: {type: integer}, example: [1, 2, 3]}
+        asset_type_name:
+          type: string
+          example: "Electronics"
+        description:
+          type: string
+          example: "Electronic devices"
 
-    # ==================== Branch Schemas ====================
+    AssetCreate:
+      type: object
+      required:
+        - asset_name
+        - asset_type
+        - serial_number
+        - asset_code
+        - purchase_date
+        - purchase_cost
+        - status
+        - condition
+        - depreciation_method
+        - useful_life
+      properties:
+        asset_name:
+          type: string
+          example: "Laptop Dell"
+        asset_type:
+          type: integer
+          example: 1
+        serial_number:
+          type: string
+          example: "SN123456"
+        asset_code:
+          type: string
+          example: "AST001"
+        purchase_date:
+          type: string
+          format: date
+          example: "2026-04-01"
+        purchase_cost:
+          type: number
+          format: decimal
+          example: 50000
+        status:
+          type: string
+          example: "ACTIVE"
+        condition:
+          type: string
+          example: "NEW"
+        description:
+          type: string
+        location:
+          type: string
+          example: "Delhi Office"
+        supplier:
+          type: string
+          example: "Dell India"
+        warranty_information:
+          type: string
+        warranty_expiry_date:
+          type: string
+          format: date
+        image:
+          type: string
+          format: binary
+        document:
+          type: string
+          format: binary
+        depreciation_method:
+          type: string
+          example: "STRAIGHT_LINE"
+        useful_life:
+          type: integer
+          example: 5
+        salvage_value:
+          type: number
+          format: decimal
+          example: 5000
+
+    AssetResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        asset_name:
+          type: string
+        asset_type:
+          type: object
+        serial_number:
+          type: string
+        asset_code:
+          type: string
+        purchase_date:
+          type: string
+          format: date
+        purchase_cost:
+          type: number
+        status:
+          type: string
+        condition:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        supplier:
+          type: string
+        warranty_information:
+          type: string
+        warranty_expiry_date:
+          type: string
+          format: date
+        image:
+          type: string
+        document:
+          type: string
+        depreciation_method:
+          type: string
+        useful_life:
+          type: integer
+        salvage_value:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    AwardCreate:
+      type: object
+      required:
+        - employee
+        - award_type
+        - date_awarded
+      properties:
+        employee:
+          type: integer
+          example: 1
+        award_type:
+          type: integer
+          example: 2
+        date_awarded:
+          type: string
+          format: date
+          example: "2026-04-10"
+        gift:
+          type: string
+          example: "Gold Medal"
+        description:
+          type: string
+          example: "Best Employee of the Month"
+        certificate:
+          type: string
+          format: binary
+        photo:
+          type: string
+          format: binary
+
+    AwardResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        employee:
+          type: integer
+        award_type:
+          type: object
+        date_awarded:
+          type: string
+          format: date
+        gift:
+          type: string
+        description:
+          type: string
+        certificate:
+          type: string
+        photo:
+          type: string
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    AwardTypeCreate:
+      type: object
+      required:
+        - award_type
+      properties:
+        award_type:
+          type: string
+          example: "Best Performer"
+        description:
+          type: string
+          example: "Award for best performing employee"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+          example: ACTIVE
+
+    AwardTypeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        award_type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    BranchCreate:
+      type: object
+      required:
+        - branch_name
+        - branch_code
+        - city
+        - state
+        - zip_code
+        - country_code_number
+        - phone_number
+      properties:
+        branch_name:
+          type: string
+          example: "Delhi Head Office"
+        branch_code:
+          type: string
+          example: "DEL001"
+        address:
+          type: string
+          example: "Connaught Place"
+        city:
+          type: string
+          example: "Delhi"
+        state:
+          type: string
+          example: "Delhi"
+        zip_code:
+          type: string
+          example: "110001"
+        country_code_number:
+          type: string
+          example: "+91"
+        phone_number:
+          type: string
+          example: "9876543210"
+        email:
+          type: string
+          example: "branch@example.com"
+        status:
+          type: string
+          enum: [active, inactive]
+          example: active
+        created_by:
+          type: integer
+          example: 1
+
+    BranchResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        branch_name:
+          type: string
+        branch_code:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip_code:
+          type: string
+        country_code_number:
+          type: string
+        phone_number:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+        created_by:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    ComplaintCreate:
+      type: object
+      required:
+        - complainant
+        - against_employee
+        - complaint_type
+        - subject
+        - complaint_date
+      properties:
+        complainant:
+          type: integer
+          example: 1
+        against_employee:
+          type: integer
+          example: 2
+        complaint_type:
+          type: string
+          example: "HARASSMENT"
+        subject:
+          type: string
+          example: "Workplace issue"
+        complaint_date:
+          type: string
+          format: date
+          example: "2026-04-15"
+        description:
+          type: string
+        document:
+          type: string
+          format: binary
+        status:
+          type: string
+          example: "OPEN"
+        resolution_details:
+          type: string
+        resolved_by:
+          type: integer
+          example: 3
+        is_submit_anonymously:
+          type: boolean
+          example: false
+
+    ComplaintResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        complainant:
+          type: integer
+        against_employee:
+          type: integer
+        complaint_type:
+          type: string
+        subject:
+          type: string
+        complaint_date:
+          type: string
+          format: date
+        description:
+          type: string
+        document:
+          type: string
+        status:
+          type: string
+        resolution_details:
+          type: string
+        resolved_by:
+          type: integer
+        is_submit_anonymously:
+          type: boolean
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    DepartmentCreate:
+      type: object
+      required:
+        - department
+        - branch
+        - unique_code
+      properties:
+        department:
+          type: string
+          example: "HR"
+        branch:
+          type: integer
+          example: 1
+        description:
+          type: string
+          example: "Human Resources Department"
+        unique_code:
+          type: string
+          example: "HR001"
+        parent:
+          type: integer
+          nullable: true
+          example: null
+        status:
+          type: string
+          enum: [active, inactive]
+          example: active
+        created_by:
+          type: integer
+          example: 1
+
+    DepartmentResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        branch:
+          type: integer
+        branch_name:
+          type: string
+        department:
+          type: string
+        description:
+          type: string
+        unique_code:
+          type: string
+        parent:
+          type: integer
+        status:
+          type: string
+        created_by:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    DesignationCreate:
+      type: object
+      required:
+        - name
+        - department
+      properties:
+        name:
+          type: string
+          example: Software Engineer
+        department:
+          type: integer
+          example: 1
+        status:
+          type: string
+          enum: [active, inactive]
+          example: active
+
+    DesignationUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        department:
+          type: integer
+        status:
+          type: string
+          enum: [active, inactive]
+
+    DesignationResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        department:
+          type: integer
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    DocumentTypeCreate:
+      type: object
+      required:
+        - document_type
+      properties:
+        document_type:
+          type: string
+          example: Aadhaar Card
+        description:
+          type: string
+          example: Government issued identity document
+        status:
+          type: string
+          enum: [required, optional]
+          example: required
+
+    DocumentTypeUpdate:
+      type: object
+      properties:
+        document_type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [required, optional]
+
+    DocumentTypeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        document_type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    EmployeeCreate:
+      type: object
+      required:
+        - full_name
+        - official_email_id
+        - gender
+      properties:
+        full_name:
+          type: string
+          example: John Doe
+
+        personal_email_id:
+          type: string
+          example: john@gmail.com
+
+        official_email_id:
+          type: string
+          example: john@company.com
+
+        password:
+          type: string
+          example: "123456"
+
+        gender:
+          type: string
+          enum: [male, female, other]
+
+        date_of_birth:
+          type: string
+          format: date
+
+        branch:
+          $ref: "#/components/schemas/Branch"
+
+        department:
+          $ref: "#/components/schemas/Department"
+
+        designation:
+          $ref: "#/components/schemas/Designation"
+
+        shift:
+          $ref: "#/components/schemas/Shift"
+
+        attendence_policy:
+          $ref: "#/components/schemas/AttendancePolicy"
+
+        manager:
+          type: integer
+          example: 2
+
+        phone_number:
+          type: string
+          example: "9876543210"
+
+        status:
+          type: string
+          enum: [active, inactive]
+
+        employee_documents:
+          type: array
+          items:
+            $ref: "#/components/schemas/EmployeeDocument"
+
+    EmployeeUpdate:
+      type: object
+      properties:
+        full_name:
+          type: string
+        official_email_id:
+          type: string
+        gender:
+          type: string
+        status:
+          type: string
+        phone_number:
+          type: string
+
+    EmployeeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        full_name:
+          type: string
+        employee_id:
+          type: string
+        employee_code:
+          type: string
+        official_email_id:
+          type: string
+        gender:
+          type: string
+        phone_number:
+          type: string
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    EmployeeDocument:
+      type: object
+      properties:
+        document_type:
+          type: integer
+          example: 1
+        document_file:
+          type: string
+          example: "base64/file/url"
+
     Branch:
       type: object
       properties:
-        id: {type: integer, readOnly: true}
-        branch_name: {type: string}
-        branch_code: {type: string}
-        address: {type: string, nullable: true}
-        status: {type: string, enum: [Active, Inactive]}
+        id:
+          type: integer
+          example: 1
 
-    BranchList:
-      allOf:
-        - $ref: '#/components/schemas/Branch'
-        - type: object
-          properties:
-            created_at: {type: string, format: date-time}
-
-    BranchCreateUpdate:
-      type: object
-      required: [branch_name]
-      properties:
-        branch_name: {type: string}
-        branch_code: {type: string}
-        status: {type: string, enum: [Active, Inactive], default: Active}
-
-    # ==================== Department Schemas ====================
     Department:
       type: object
       properties:
-        id: {type: integer, readOnly: true}
-        branch: {type: integer}
-        department: {type: string}
-        status: {type: string, enum: [Active, Inactive]}
+        id:
+          type: integer
+          example: 1
 
-    DepartmentList:
-      allOf:
-        - $ref: '#/components/schemas/Department'
-        - type: object
-          properties:
-            created_at: {type: string, format: date-time}
-
-    DepartmentCreateUpdate:
-      type: object
-      required: [branch, department]
-      properties:
-        branch: {type: integer}
-        department: {type: string}
-        status: {type: string, enum: [Active, Inactive], default: Active}
-
-    # ==================== Designation Schemas ====================
     Designation:
       type: object
       properties:
-        id: {type: integer, readOnly: true}
-        name: {type: string}
-        department: {type: integer}
-        status: {type: string, enum: [active, inactive]}
+        id:
+          type: integer
+        name:
+          type: string
 
-    DesignationList:
-      allOf:
-        - $ref: '#/components/schemas/Designation'
-        - type: object
-          properties:
-            created_at: {type: string, format: date-time}
-
-    DesignationCreateUpdate:
-      type: object
-      required: [name, department]
-      properties:
-        name: {type: string}
-        department: {type: integer}
-        status: {type: string, enum: [active, inactive], default: active}
-
-    # ==================== Document Type Schemas ====================
-    DocumentType:
+    Shift:
       type: object
       properties:
-        id: {type: integer, readOnly: true}
-        document_type: {type: string}
-        status: {type: string, enum: [Active, Inactive]}
+        id:
+          type: integer
+          example: 1
 
-    DocumentTypeList:
-      allOf:
-        - $ref: '#/components/schemas/DocumentType'
-        - type: object
-          properties:
-            created_at: {type: string, format: date-time}
-
-    DocumentTypeCreateUpdate:
+    AttendancePolicy:
       type: object
-      required: [document_type]
       properties:
-        document_type: {type: string}
-        status: {type: string, enum: [Active, Inactive], default: Active}
+        id:
+          type: integer
+          example: 1
 
-    # ==================== Employee Schemas ====================
+    HolidayCreate:
+      type: object
+      required:
+        - holiday_name
+        - start_date
+        - end_date
+      properties:
+        holiday_name:
+          type: string
+          example: Diwali
+
+        category:
+          type: string
+          enum: [national, optional, festival]
+          example: festival
+
+        start_date:
+          type: string
+          format: date
+          example: "2026-11-01"
+
+        end_date:
+          type: string
+          format: date
+          example: "2026-11-01"
+
+        description:
+          type: string
+          example: Festival of lights
+
+        is_paid_holiday:
+          type: boolean
+          example: true
+
+        is_half_day:
+          type: boolean
+          example: false
+
+        applicable_branches:
+          type: array
+          items:
+            type: integer
+          example: [1, 2]
+
+        status:
+          type: string
+          enum: [active, inactive]
+          example: active
+
+    HolidayUpdate:
+      type: object
+      properties:
+        holiday_name:
+          type: string
+        category:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        description:
+          type: string
+        is_paid_holiday:
+          type: boolean
+        is_half_day:
+          type: boolean
+        applicable_branches:
+          type: array
+          items:
+            type: integer
+        status:
+          type: string
+
+    HolidayResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        holiday_name:
+          type: string
+        category:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        description:
+          type: string
+        is_paid_holiday:
+          type: boolean
+        is_half_day:
+          type: boolean
+        applicable_branches:
+          type: array
+          items:
+            type: integer
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+
+    IndicatorCategoryCreate:
+      type: object
+      required: [category_name]
+      properties:
+        category_name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive]
+
+    IndicatorCreate:
+      type: object
+      required: [indicator_name, category]
+      properties:
+        indicator_name:
+          type: string
+        category:
+          type: integer
+        description:
+          type: string
+        measurement_unit:
+          type: string
+        target_value:
+          type: number
+        status:
+          type: string
+          enum: [active, inactive]
+
+    GoalTypeCreate:
+      type: object
+      required: [goal_name]
+      properties:
+        goal_name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive]
+
+    EmployeeGoalCreate:
+      type: object
+      required:
+        - employee
+        - goal_type
+        - start_date
+        - end_date
+      properties:
+        employee:
+          type: integer
+        goal_type:
+          type: integer
+        goal_title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        target:
+          type: string
+        progress_percentage:
+          type: number
+        status:
+          type: string
+          enum: [PENDING, IN_PROGRESS, COMPLETED]
+
+    ReviewCycleCreate:
+      type: object
+      required: [cycle_name, start_date, end_date]
+      properties:
+        cycle_name:
+          type: string
+        frequency:
+          type: string
+          enum: [DAILY, WEEKLY, MONTHLY, ANNUAL]
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [active, inactive]
+
+    EmployeeReviewCreate:
+      type: object
+      required:
+        - employee
+        - review_date
+      properties:
+        employee:
+          type: integer
+        reviewer:
+          type: integer
+        review_cycle:
+          type: integer
+        review_date:
+          type: string
+          format: date
+        feedback:
+          type: string
+        rating:
+          type: number
+          example: 4.5
+        status:
+          type: string
+          enum: [SCHEDULED, COMPLETED]
+
+    PromotionCreate:
+      type: object
+      required:
+        - employee
+        - promotion_title
+        - promotion_date
+        - old_designation
+        - new_designation
+      properties:
+        employee:
+          type: integer
+        promotion_title:
+          type: string
+        description:
+          type: string
+        promotion_date:
+          type: string
+          format: date
+        old_designation:
+          type: integer
+        new_designation:
+          type: integer
+        salary_adjustment:
+          type: number
+          format: decimal
+        reason_for_promotion:
+          type: string
+        document:
+          type: string
+          description: File or base64 string
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+
     Employee:
       type: object
       properties:
-        id: {type: integer, readOnly: true}
-        full_name: {type: string}
-        branch: {type: integer}
-        department: {type: integer}
-        designation: {type: integer}
-        status: {type: string, enum: [active, inactive]}
+        id:
+          type: integer
+        full_name:
+          type: string
 
-    EmployeeList:
-      allOf:
-        - $ref: '#/components/schemas/Employee'
-        - type: object
-          properties:
-            created_at: {type: string, format: date-time}
-
-    EmployeeCreateUpdate:
+    PromotionList:
       type: object
-      required: [full_name, branch, department, designation]
       properties:
-        full_name: {type: string}
-        branch: {type: integer}
-        department: {type: integer}
-        designation: {type: integer}
-        status: {type: string, enum: [active, inactive], default: active}
+        id:
+          type: integer
+        employee:
+          $ref: '#/components/schemas/Employee'
+        promotion_title:
+          type: string
+        description:
+          type: string
+        promotion_date:
+          type: string
+          format: date
+        old_designation:
+          $ref: '#/components/schemas/Designation'
+        new_designation:
+          $ref: '#/components/schemas/Designation'
+        salary_adjustment:
+          type: number
+        reason_for_promotion:
+          type: string
+        document:
+          type: string
+        status:
+          type: string
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    ResignationCreate:
+      type: object
+      required:
+        - employee
+        - resignation_date
+        - last_working_day
+        - resignation_reason
+      properties:
+        employee:
+          type: integer
+        resignation_date:
+          type: string
+          format: date
+        last_working_day:
+          type: string
+          format: date
+        notice_period:
+          type: string
+        resignation_reason:
+          type: string
+        description:
+          type: string
+        document:
+          type: string
+          description: File or base64 string
+        status:
+          type: string
+          enum: [active, inactive]
+
+    ResignationList:
+      type: object
+      properties:
+        id:
+          type: integer
+        employee:
+          $ref: '#/components/schemas/Employee'
+        resignation_date:
+          type: string
+          format: date
+        last_working_day:
+          type: string
+          format: date
+        notice_period:
+          type: string
+        resignation_reason:
+          type: string
+        description:
+          type: string
+        document:
+          type: string
+        status:
+          type: string
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    TerminationCreate:
+      type: object
+      required:
+        - employee
+        - termination_type
+        - termination_date
+        - last_working_day
+        - termination_reason
+      properties:
+        employee:
+          type: integer
+        termination_type:
+          type: string
+          enum: [voluntary, involuntary, retirement, contract_end]
+        termination_date:
+          type: string
+          format: date
+        last_working_day:
+          type: string
+          format: date
+        termination_reason:
+          type: string
+        description:
+          type: string
+        document:
+          type: string
+          description: File or base64 string
+        status:
+          type: string
+          enum: [active, inactive]
+        exit_interview_conducted:
+          type: boolean
+        exit_interview_date:
+          type: string
+          format: date
+          nullable: true
+        exit_feedback:
+          type: string
+
+    TerminationList:
+      type: object
+      properties:
+        id:
+          type: integer
+        employee:
+          $ref: '#/components/schemas/Employee'
+        termination_type:
+          type: string
+        termination_date:
+          type: string
+          format: date
+        last_working_day:
+          type: string
+          format: date
+        termination_reason:
+          type: string
+        description:
+          type: string
+        document:
+          type: string
+        status:
+          type: string
+        exit_interview_conducted:
+          type: boolean
+        exit_interview_date:
+          type: string
+          format: date
+          nullable: true
+        exit_feedback:
+          type: string
+        company:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    TrainingType:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        branch:
+          type: integer
+        departments:
+          type: array
+          items:
+            type: integer
+
+    TrainingProgram:
+      type: object
+      properties:
+        name:
+          type: string
+        training_type:
+          type: integer
+        description:
+          type: string
+        duration:
+          type: integer
+        cost:
+          type: number
+        capacity:
+          type: integer
+        status:
+          type: string
+        materials:
+          type: string
+        prequisties:
+          type: string
+        is_mandatory_training:
+          type: boolean
+        is_allow_self_enrollment:
+          type: boolean
+
+    TrainingSession:
+      type: object
+      properties:
+        training_program:
+          type: integer
+        session_name:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        session_type:
+          type: string
+        location:
+          type: string
+        meeting_link:
+          type: string
+        status:
+          type: string
+        notes:
+          type: string
+        trainer:
+          type: integer
+        is_recurring_session:
+          type: boolean
+        recurrence_pattern:
+          type: string
+        no_of_occurances:
+          type: integer
+
+    AssignTraining:
+      type: object
+      properties:
+        employee:
+          type: integer
+        training_program:
+          type: integer
+        status:
+          type: string
+        assigned_date:
+          type: string
+          format: date
+        completion_date:
+          type: string
+          format: date
+        certification:
+          type: string
+        score:
+          type: number
+        is_passed:
+          type: boolean
+        feedback:
+          type: string
+        notes:
+          type: string
+
+    Transfer:
+      type: object
+      required:
+        - employee
+        - transfer_title
+        - transfer_date
+        - old_department
+        - new_department
+        - old_branch
+        - new_branch
+      properties:
+        employee:
+          type: integer
+          example: 1
+
+        transfer_title:
+          type: string
+          example: Internal Department Transfer
+
+        description:
+          type: string
+          example: Transferred from Sales to Marketing
+
+        transfer_date:
+          type: string
+          format: date
+          example: 2025-01-10
+
+        old_department:
+          type: integer
+          example: 2
+
+        new_department:
+          type: integer
+          example: 3
+
+        old_branch:
+          type: integer
+          example: 1
+
+        new_branch:
+          type: integer
+          example: 2
+
+    TransferResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        employee:
+          type: object
+        transfer_title:
+          type: string
+        description:
+          type: string
+        transfer_date:
+          type: string
+          format: date
+        old_department:
+          type: object
+        new_department:
+          type: object
+        old_branch:
+          type: object
+        new_branch:
+          type: object
+        company:
+          type: integer
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        deleted_at:
+          type: string
+          nullable: true
+
+    TripCreate:
+      type: object
+      required:
+        - employee
+        - title
+        - start_date
+        - end_date
+        - purpose_of_trip
+        - place_of_visit
+      properties:
+        employee:
+          type: integer
+          example: 1
+
+        title:
+          type: string
+          example: Client Meeting Visit
+
+        description:
+          type: string
+          example: Visiting client for project discussion
+
+        start_date:
+          type: string
+          format: date
+          example: 2026-04-01
+
+        end_date:
+          type: string
+          format: date
+          example: 2026-04-05
+
+        purpose_of_trip:
+          type: string
+          example: Business Meeting
+
+        place_of_visit:
+          type: string
+          example: Mumbai
+
+        actual_cost:
+          type: number
+          format: decimal
+          example: 15000.50
+
+        advance_amount:
+          type: number
+          format: decimal
+          example: 5000.00
+
+        expected_outcomes:
+          type: string
+          example: Finalize project requirements
+
+        documents:
+          type: string
+          example: base64 or file path
+
+        status:
+          type: string
+          example: Planned
+
+    TripResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+
+        employee:
+          type: object
+
+        title:
+          type: string
+
+        description:
+          type: string
+
+        start_date:
+          type: string
+          format: date
+
+        end_date:
+          type: string
+          format: date
+
+        purpose_of_trip:
+          type: string
+
+        place_of_visit:
+          type: string
+
+        actual_cost:
+          type: number
+
+        advance_amount:
+          type: number
+
+        expected_outcomes:
+          type: string
+
+        documents:
+          type: string
+
+        status:
+          type: string
+
+        company:
+          type: integer
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time
+
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
+
+    WarningCreate:
+      type: object
+      required:
+        - warning_by
+        - warning_to
+        - warning_type
+        - subject
+        - severity
+        - warning_date
+      properties:
+        warning_by:
+          type: integer
+          example: 1
+
+        warning_to:
+          type: integer
+          example: 2
+
+        warning_type:
+          type: string
+          example: Behavioral
+
+        subject:
+          type: string
+          example: Late Attendance
+
+        severity:
+          type: string
+          example: High
+
+        warning_date:
+          type: string
+          format: date
+          example: 2026-04-10
+
+        description:
+          type: string
+          example: Employee was late multiple times
+
+        document:
+          type: string
+          example: base64 or file path
+
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+
+        has_improvement_plan:
+          type: boolean
+          example: true
+
+        improvement_plan_goal:
+          type: string
+          example: Improve punctuality
+
+        improvement_plan_start_date:
+          type: string
+          format: date
+
+        improvement_plan_end_date:
+          type: string
+          format: date
+
+    WarningResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+
+        warning_by:
+          type: object
+
+        warning_to:
+          type: object
+
+        warning_type:
+          type: string
+
+        subject:
+          type: string
+
+        severity:
+          type: string
+
+        warning_date:
+          type: string
+          format: date
+
+        description:
+          type: string
+
+        document:
+          type: string
+
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+
+        has_improvement_plan:
+          type: boolean
+
+        improvement_plan_goal:
+          type: string
+
+        improvement_plan_start_date:
+          type: string
+          format: date
+
+        improvement_plan_end_date:
+          type: string
+          format: date
+
+        company:
+          type: integer
+
+        created_at:
+          type: string
+          format: date-time
+
+        updated_at:
+          type: string
+          format: date-time
+
+        deleted_at:
+          type: string
+          format: date-time
+          nullable: true
 
 paths:
-  /branch:
-    get: {summary: List Branches, tags: [Branch], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
-    post: {summary: Create Branch, tags: [Branch], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/BranchCreateUpdate'}}}}, responses: {'201': {description: Created}}}
-    delete: {summary: Bulk Delete Branches, tags: [Branch], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+  /logins:
+    post:
+      summary: User Authentication
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, company_id, host]
+              properties:
+                email: {type: string, example: "admin@telepathy.com"}
+                password: {type: string, example: "secret123"}
+                company_id: {type: integer, example: 1}
+                host: {type: string, example: "telepathy.com"}
+      responses:
+        200:
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access: {type: string}
+                  refresh: {type: string}
 
-  /branch/{id}:
-    get: {summary: Get Branch, tags: [Branch], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
-    put: {summary: Update Branch, tags: [Branch], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/BranchCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+  /announcements:
+    get:
+      summary: List Announcements
+      tags:
+        - Announcement
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: priority
+          schema:
+            type: string
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: department
+          schema:
+            type: integer
+        - in: query
+          name: branch
+          schema:
+            type: integer
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: List of announcements
 
-  /branch/active:
-    get: {summary: List Active Branches, tags: [Branch], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    post:
+      summary: Create Announcement
+      tags:
+        - Announcement
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnnouncementCreate"
+      responses:
+        "201":
+          description: Announcement created successfully
 
-  /department:
-    get: {summary: List Departments, tags: [Department], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
-    post: {summary: Create Department, tags: [Department], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DepartmentCreateUpdate'}}}}, responses: {'201': {description: Created}}}
-    delete: {summary: Bulk Delete Departments, tags: [Department], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+    delete:
+      summary: Delete Announcements (Bulk Soft Delete)
+      tags:
+        - Announcement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
 
-  /department/{id}:
-    get: {summary: Get Department, tags: [Department], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
-    put: {summary: Update Department, tags: [Department], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DepartmentCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+  /announcements/{id}:
+    get:
+      summary: Get Announcement Detail
+      tags:
+        - Announcement
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Announcement detail
 
-  /department/active:
-    get: {summary: List Active Departments, tags: [Department], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    put:
+      summary: Update Announcement
+      tags:
+        - Announcement
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AnnouncementCreate"
+      responses:
+        "200":
+          description: Announcement updated successfully
+
+  /asset-types:
+    get:
+      summary: List Asset Types
+      tags: [Asset Type]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Asset type list
+
+    post:
+      summary: Create Asset Type
+      tags: [Asset Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetTypeCreate"
+      responses:
+        "201":
+          description: Asset type created
+
+    delete:
+      summary: Delete Asset Types (Bulk)
+      tags: [Asset Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /asset-types/{id}:
+    get:
+      summary: Get Asset Type Detail
+      tags: [Asset Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset type detail
+
+    put:
+      summary: Update Asset Type
+      tags: [Asset Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssetTypeCreate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /assets:
+    get:
+      summary: List Assets
+      tags: [Assets]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: asset_type
+          schema:
+            type: string
+        - in: query
+          name: condition
+          schema:
+            type: string
+        - in: query
+          name: purchase_date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: purchase_date_to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Asset list
+
+    post:
+      summary: Create Asset
+      tags: [Assets]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetCreate"
+      responses:
+        "201":
+          description: Asset created
+
+    delete:
+      summary: Delete Assets (Bulk)
+      tags: [Assets]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /assets/{id}:
+    get:
+      summary: Get Asset Detail
+      tags: [Assets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Asset detail
+
+    put:
+      summary: Update Asset
+      tags: [Assets]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AssetCreate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /awards:
+    get:
+      summary: List Awards
+      tags: [Awards]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: award_type
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Award list
+
+    post:
+      summary: Create Award
+      tags: [Awards]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AwardCreate"
+      responses:
+        "201":
+          description: Award created successfully
+
+    delete:
+      summary: Delete Awards (Bulk Soft Delete)
+      tags: [Awards]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /awards/{id}:
+    get:
+      summary: Get Award Detail
+      tags: [Awards]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Award detail
+
+    put:
+      summary: Update Award
+      tags: [Awards]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/AwardCreate"
+      responses:
+        "200":
+          description: Award updated successfully
+
+  /award-types:
+    get:
+      summary: List Award Types
+      tags: [Award Type]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: ACTIVE
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Award type list
+
+    post:
+      summary: Create Award Type
+      tags: [Award Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AwardTypeCreate"
+      responses:
+        "201":
+          description: Award type created successfully
+
+    delete:
+      summary: Delete Award Types (Bulk Soft Delete)
+      tags: [Award Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /award-types/{id}:
+    get:
+      summary: Get Award Type Detail
+      tags: [Award Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Award type detail
+
+    put:
+      summary: Update Award Type
+      tags: [Award Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AwardTypeCreate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /branches:
+    get:
+      summary: List Branches
+      tags: [Branch]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: active
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Branch list
+
+    post:
+      summary: Create Branch
+      tags: [Branch]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BranchCreate"
+      responses:
+        "201":
+          description: Branch created successfully
+
+    delete:
+      summary: Delete Branches (Bulk Soft Delete)
+      tags: [Branch]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /branches/{id}:
+    get:
+      summary: Get Branch Detail
+      tags: [Branch]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Branch detail
+
+    put:
+      summary: Update Branch
+      tags: [Branch]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BranchCreate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /branches/{id}/toggle-status:
+    patch:
+      summary: Toggle Branch Status (Active/Inactive)
+      tags: [Branch]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Status updated successfully
+
+  /branches/active:
+    get:
+      summary: List Active Branches
+      tags: [Branch]
+      responses:
+        "200":
+          description: Active branches list
+
+  /complaints:
+    get:
+      summary: List Complaints
+      tags: [Complaints]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: complainant
+          schema:
+            type: integer
+        - in: query
+          name: against
+          schema:
+            type: integer
+        - in: query
+          name: complaint_type
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Complaints list
+
+    post:
+      summary: Create Complaint
+      tags: [Complaints]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ComplaintCreate"
+      responses:
+        "201":
+          description: Complaint created successfully
+
+    delete:
+      summary: Delete Complaints (Bulk Soft Delete)
+      tags: [Complaints]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /complaints/{id}:
+    get:
+      summary: Get Complaint Detail
+      tags: [Complaints]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint detail
+
+    put:
+      summary: Update Complaint
+      tags: [Complaints]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ComplaintCreate"
+      responses:
+        "200":
+          description: Complaint updated successfully
+
+  /departments:
+    get:
+      summary: List Departments
+      tags: [Department]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+            example: active
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        "200":
+          description: Department list
+
+    post:
+      summary: Create Department
+      tags: [Department]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentCreate"
+      responses:
+        "201":
+          description: Department created successfully
+
+    delete:
+      summary: Delete Departments (Bulk Soft Delete)
+      tags: [Department]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        "200":
+          description: Deleted successfully
+
+  /departments/{id}:
+    get:
+      summary: Get Department Detail
+      tags: [Department]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Department detail
+
+    put:
+      summary: Update Department
+      tags: [Department]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepartmentCreate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /departments/{id}/toggle-status:
+    patch:
+      summary: Toggle Department Status (Active/Inactive)
+      tags: [Department]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Status updated successfully
+
+  /departments/active:
+    get:
+      summary: List Active Departments
+      tags: [Department]
+      responses:
+        "200":
+          description: Active department list
 
   /designation:
-    get: {summary: List Designations, tags: [Designation], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
-    post: {summary: Create Designation, tags: [Designation], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DesignationCreateUpdate'}}}}, responses: {'201': {description: Created}}}
-    delete: {summary: Bulk Delete Designations, tags: [Designation], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+    get:
+      summary: Get all designations
+      description: Fetch list of designations with optional search, status filter, and pagination
+      tags: [Designation]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by designation name
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            enum: ["true", "false"]
+      responses:
+        "200":
+          description: List fetched successfully
+
+    post:
+      summary: Create designation
+      tags: [Designation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DesignationCreate"
+      responses:
+        "201":
+          description: Designation created successfully
+
+    delete:
+      tags: [Designation]
+      summary: Delete multiple designations (soft delete)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200":
+          description: Deleted successfully
+        "400":
+          description: No IDs provided or protected records
 
   /designation/{id}:
-    get: {summary: Get Designation, tags: [Designation], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
-    put: {summary: Update Designation, tags: [Designation], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DesignationCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+    get:
+      summary: Get designation by ID
+      tags: [Designation]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Data fetched successfully
+
+    put:
+      summary: Update designation
+      tags: [Designation]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DesignationUpdate"
+      responses:
+        "200":
+          description: Updated successfully
+
+  /designation/status-toggle/{id}:
+    patch:
+      tags: [Designation]
+      summary: Toggle designation status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Status updated successfully
 
   /designation/active:
-    get: {summary: List Active Designations, tags: [Designation], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    get:
+      tags: [Designation]
+      summary: Get active designations
+      responses:
+        "200":
+          description: Active designation list
 
   /document-type:
-    get: {summary: List Document Types, tags: [Document Type], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
-    post: {summary: Create Document Type, tags: [Document Type], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DocumentTypeCreateUpdate'}}}}, responses: {'201': {description: Created}}}
-    delete: {summary: Bulk Delete Document Types, tags: [Document Type], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+    get:
+      tags: [DocumentType]
+      summary: Get all document types
+      description: Fetch list with optional search, status filter, and pagination
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by document type name
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [required, optional]
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            enum: ["true", "false"]
+      responses:
+        "200":
+          description: Document types fetched successfully
+
+    post:
+      summary: Create document type
+      tags: [DocumentType]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentTypeCreate"
+      responses:
+        "201":
+          description: Document type created successfully
+
+    delete:
+      summary: Delete multiple document types (soft delete)
+      tags: [DocumentType]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200":
+          description: Deleted successfully
+        "400":
+          description: No IDs provided or protected records
 
   /document-type/{id}:
-    get: {summary: Get Document Type, tags: [Document Type], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
-    put: {summary: Update Document Type, tags: [Document Type], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DocumentTypeCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+    get:
+      tags: [DocumentType]
+      summary: Get document type by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Data fetched successfully
+
+    put:
+      tags: [DocumentType]
+      summary: Update document type
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DocumentTypeUpdate"
+      responses:
+        "200":
+          description: Updated successfully
 
   /employee:
-    get: {summary: List Employees, tags: [Employee], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
-    post: {summary: Create Employee, tags: [Employee], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/EmployeeCreateUpdate'}}}}, responses: {'201': {description: Created}}}
-    delete: {summary: Bulk Delete Employees, tags: [Employee], security: [{BearerAuth: []}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/DeleteRequest'}}}}, responses: {'200': {description: Deleted}}}
+    get:
+      summary: Get all employees
+      tags: [Employee]
+      description: Fetch employees with filters and pagination
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string, enum: [active, inactive] }
+        - in: query
+          name: gender
+          schema: { type: string, enum: [male, female, other] }
+        - in: query
+          name: department_id
+          schema: { type: integer }
+        - in: query
+          name: designation_id
+          schema: { type: integer }
+        - in: query
+          name: branch_id
+          schema: { type: integer }
+        - in: query
+          name: employee_type_id
+          schema: { type: integer }
+        - in: query
+          name: employee_status_id
+          schema: { type: integer }
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            enum: ["true", "false"]
+
+      responses:
+        "200":
+          description: Employee list fetched successfully
+
+    post:
+      summary: Create employee
+      tags: [Employee]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeCreate"
+      responses:
+        "201":
+          description: Employee created successfully
+
+    delete:
+      summary: Delete multiple employees (soft delete)
+      tags: [Employee]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2]
+      responses:
+        "200":
+          description: Deleted successfully
+        "400":
+          description: No IDs provided / Protected records
 
   /employee/{id}:
-    get: {summary: Get Employee, tags: [Employee], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], responses: {'200': {description: Success}}}
-    put: {summary: Update Employee, tags: [Employee], security: [{BearerAuth: []}], parameters: [{name: id, in: path, required: true, schema: {type: integer}}], requestBody: {content: {application/json: {schema: {$ref: '#/components/schemas/EmployeeCreateUpdate'}}}}, responses: {'200': {description: Updated}}}
+    get:
+      summary: Get employee by ID
+      tags: [Employee]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Employee fetched successfully
+
+    put:
+      summary: Update employee
+      tags: [Employee]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeUpdate"
+      responses:
+        "200":
+          description: Updated successfully
 
   /employee/active:
-    get: {summary: List Active Employees, tags: [Employee], security: [{BearerAuth: []}], responses: {'200': {description: Success}}}
+    get:
+      summary: Get active employees
+      tags: [Employee]
+      responses:
+        "200":
+          description: Active employee list
+
+  /holiday:
+    get:
+      summary: Get all holidays
+      tags: [Holiday]
+      description: Fetch holidays with filters and pagination
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+          description: Search by holiday name
+
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+
+        - in: query
+          name: category
+          schema:
+            type: string
+            enum: [national, optional, festival]
+
+        - in: query
+          name: branch
+          schema:
+            type: string
+          description: Filter by branch name
+
+        - in: query
+          name: year
+          schema:
+            type: integer
+
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            enum: ["true", "false"]
+
+      responses:
+        "200":
+          description: Holiday list fetched successfully
+
+    post:
+      summary: Create holiday
+      tags: [Holiday]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HolidayCreate"
+      responses:
+        "201":
+          description: Holiday created successfully
+
+    delete:
+      summary: Delete multiple holidays (soft delete)
+      tags: [Holiday]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+
+      responses:
+        "200":
+          description: Deleted successfully
+        "400":
+          description: No IDs provided
+        "409":
+          description: Dependency exists (protected records)
+
+  /holiday/{id}:
+    get:
+      summary: Get holiday by ID
+      tags: [Holiday]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+
+      responses:
+        "200":
+          description: Holiday fetched successfully
+
+    put:
+      summary: Update holiday
+      tags: [Holiday]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HolidayUpdate"
+
+      responses:
+        "200":
+          description: Updated successfully
+
+  /indicator-categories:
+    get:
+      summary: List Indicator Categories
+      tags: [Indicator Category]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Indicator Category
+      tags: [Indicator Category]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndicatorCategoryCreate"
+      responses:
+        "201": { description: Created }
+
+    delete:
+      summary: Delete Indicator Category
+      tags: [Indicator Category]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /indicator-categories/{id}:
+    get:
+      summary: Get Indicator Category by ID
+      tags: [Indicator Category]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Indicator Category
+      tags: [Indicator Category]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndicatorCategoryUpdate"
+      responses:
+        "200": { description: Success }
+
+  /indicator:
+    get:
+      summary: List Indicators
+      tags: [Indicator]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Indicator
+      tags: [Indicator]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndicatorCreate"
+      responses:
+        "201": { description: Created }
+
+    delete:
+      summary: Delete Indicator
+      tags: [Indicator]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /indicator/{id}:
+    get:
+      summary: Get Indicator by ID
+      tags: [Indicator]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Indicator
+      tags: [Indicator]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IndicatorUpdate"
+      responses:
+        "200": { description: Success }
+
+  /goal-types:
+    get:
+      summary: List Goal Types
+      tags: [Goal Type]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Goal Type
+      tags: [Goal Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoalTypeCreate"
+      responses:
+        "201": { description: Created }
+
+    delete:
+      summary: Delete Goal Type
+      tags: [Goal Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /goal-types/{id}:
+    get:
+      summary: Get Goal Type by ID
+      tags: [Goal Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Goal Type
+      tags: [Goal Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoalTypeUpdate"
+      responses:
+        "200": { description: Success }
+
+  /employee-goals:
+    get:
+      summary: List Employee Goals
+      tags: [Employee Goal]
+      parameters:
+        - in: query
+          name: employee
+          schema: { type: string }
+        - in: query
+          name: goal_type
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Employee Goal
+      tags: [Employee Goal]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeGoalCreate"
+      responses:
+        "201": { description: Created }
+
+    delete:
+      summary: Delete Employee Goal
+      tags: [Employee Goal]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /employee-goals/{id}:
+    get:
+      summary: Get Employee Goal by ID
+      tags: [Employee Goal]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Employee Goal
+      tags: [Employee Goal]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeGoalUpdate"
+      responses:
+        "200": { description: Success }
+
+  /review-cycles:
+    get:
+      summary: List Review Cycles
+      tags: [Review Cycle]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: frequency
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Review Cycle
+      tags: [Review Cycle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewCycleCreate"
+      responses:
+        "201": { description: Created }
+
+    delete:
+      summary: Delete Review Cycle
+      tags: [Review Cycle]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /review-cycles/{id}:
+    get:
+      summary: Get Review Cycle by ID
+      tags: [Review Cycle]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Review Cycle
+      tags: [Review Cycle]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewCycleUpdate"
+      responses:
+        "200": { description: Success }
+
+  /employee-reviews:
+    get:
+      summary: List Employee Reviews
+      tags: [Employee Review]
+      parameters:
+        - in: query
+          name: employee
+          schema: { type: string }
+        - in: query
+          name: reviewer
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+      responses:
+        "200": { description: Success }
+
+    post:
+      summary: Create Employee Review
+      tags: [Employee Review]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeReviewCreate"
+      responses:
+        "201": { description: Created}
+
+    delete:
+      summary: Delete Employee Review
+      tags: [Employee Review]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                  example: [1, 2, 3]
+      responses:
+        "200": { description: Deleted successfully }
+        "400": { description: No IDs provided }
+        "409": { description: Dependency exists (protected records) }
+
+  /employee-reviews/{id}:
+    get:
+      summary: Get Employee Review by ID
+      tags: [Employee Review]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: Success }
+    put:
+      summary: Update Employee Review
+      tags: [Employee Review]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmployeeReviewUpdate"
+      responses:
+        "200": { description: Success }
+
+  /promotions:
+    get:
+      summary: List Promotions
+      tags: [Promotions]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: designation
+          schema:
+            type: string
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            default: "true"
+
+      responses:
+        200:
+          description: Promotions fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+
+    post:
+      summary: Create Promotion
+      tags: [Promotions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromotionCreate'
+      responses:
+        201:
+          description: Promotion created successfully
+        400:
+          description: Validation error
+
+    delete:
+      summary: Delete Promotions (Bulk)
+      tags: [Promotions]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Promotions deleted successfully
+        400:
+          description: Invalid request
+
+  /promotions/{id}:
+    get:
+      summary: Get Promotion Detail
+      tags: [Promotions]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Promotion detail fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionList'
+
+    put:
+      summary: Update Promotion
+      tags: [Promotions]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromotionCreate'
+      responses:
+        200:
+          description: Promotion updated successfully
+        400:
+          description: Validation error
+
+  /resignations:
+    get:
+      summary: List Resignations
+      tags: [Resignations]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            default: "true"
+
+      responses:
+        200:
+          description: Resignations fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+
+    post:
+      summary: Create Resignation
+      tags: [Resignations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResignationCreate'
+      responses:
+        201:
+          description: Resignation created successfully
+        400:
+          description: Validation error
+
+    delete:
+      summary: Delete Resignations (Bulk)
+      tags: [Resignations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Resignations deleted successfully
+        400:
+          description: Invalid request
+
+  /resignations/{id}:
+    get:
+      summary: Get Resignation Detail
+      tags: [Resignations]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Resignation detail fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResignationList'
+
+    put:
+      summary: Update Resignation
+      tags: [Resignations]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResignationCreate'
+      responses:
+        200:
+          description: Resignation updated successfully
+        400:
+          description: Validation error
+
+  /terminations:
+    get:
+      summary: List Terminations
+      tags: [Terminations]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: termination_type
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            default: "true"
+
+      responses:
+        200:
+          description: Terminations fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+
+    post:
+      summary: Create Termination
+      tags: [Terminations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TerminationCreate'
+      responses:
+        201:
+          description: Termination created successfully
+        400:
+          description: Validation error
+
+    delete:
+      summary: Delete Terminations (Bulk)
+      tags: [Terminations]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Terminations deleted successfully
+        400:
+          description: Invalid request
+
+  /terminations/{id}:
+    get:
+      summary: Get Termination Detail
+      tags: [Terminations]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Termination detail fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TerminationList'
+
+    put:
+      summary: Update Termination
+      tags: [Terminations]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TerminationCreate'
+      responses:
+        200:
+          description: Termination updated successfully
+        400:
+          description: Validation error
+
+  /training-type:
+    get:
+      summary: List Training Types
+      tags: [Training Type]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: branch
+          schema: { type: string }
+        - in: query
+          name: department
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: paginate
+          schema: { type: string, default: "true" }
+      responses:
+        200:
+          description: Training type list
+
+    post:
+      summary: Create Training Type
+      tags: [Training Type]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingType'
+      responses:
+        201:
+          description: Created successfully
+
+    delete:
+      summary: Delete Training Types
+      tags: [Training Type]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Deleted successfully
+
+  /training-type/{id}:
+    get:
+      summary: Get Training Type Detail
+      tags: [Training Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Success
+
+    put:
+      summary: Update Training Type
+      tags: [Training Type]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingType'
+      responses:
+        200:
+          description: Updated successfully
+
+  /training-program:
+    get:
+      summary: List Training Programs
+      tags: [Training Program]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: training_type
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: paginate
+          schema: { type: string }
+      responses:
+        200:
+          description: List
+
+    post:
+      summary: Create Training Program
+      tags: [Training Program]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+      responses:
+        201:
+          description: Created
+
+    delete:
+      summary: Delete Training Programs
+      tags: [Training Program]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+
+  /training-program/{id}:
+    get:
+      summary: Get Training Program
+      tags: [Training Program]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+
+    put:
+      summary: Update Training Program
+      tags: [Training Program]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingProgram'
+
+  /training-session:
+    get:
+      summary: List Training Sessions
+      tags: [Training Session]
+      parameters:
+        - in: query
+          name: trainer
+        - in: query
+          name: training_program
+        - in: query
+          name: location
+        - in: query
+          name: session_type
+        - in: query
+          name: start_date
+        - in: query
+          name: end_date
+      responses:
+        200:
+          description: List
+
+    post:
+      summary: Create Training Session
+      tags: [Training Session]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSession'
+
+    delete:
+      summary: Delete Training Sessions
+      tags: [Training Session]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+
+  /training-session/{id}:
+    get:
+      summary: Get Training Session
+      tags: [Training Session]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+
+    put:
+      summary: Update Training Session
+      tags: [Training Session]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingSession'
+
+  /assign-training:
+    get:
+      summary: List Assigned Trainings
+      tags: [Assign Training]
+      parameters:
+        - in: query
+          name: employee
+        - in: query
+          name: training_program
+        - in: query
+          name: status
+      responses:
+        200:
+          description: List
+
+    post:
+      summary: Assign Training
+      tags: [Assign Training]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignTraining'
+
+    delete:
+      summary: Delete Assigned Trainings
+      tags: [Assign Training]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+
+  /assign-training/{id}:
+    get:
+      summary: Get Assigned Training
+      tags: [Assign Training]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+
+    put:
+      summary: Update Assigned Training
+      tags: [Assign Training]
+      parameters:
+        - in: path
+          name: id
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignTraining'
+
+  /transfer:
+    get:
+      summary: List Transfers
+      tags: [Transfer]
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: employee
+          schema: { type: string }
+        - in: query
+          name: branch
+          schema: { type: string }
+        - in: query
+          name: department
+          schema: { type: string }
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: start_date
+          schema: { type: string, format: date }
+        - in: query
+          name: end_date
+          schema: { type: string, format: date }
+        - in: query
+          name: paginate
+          schema: { type: string, default: "true" }
+      responses:
+        200:
+          description: Transfer list fetched successfully
+
+    post:
+      summary: Create Transfer
+      tags: [Transfer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      responses:
+        201:
+          description: Transfer created successfully
+
+    delete:
+      summary: Delete Transfers (Bulk)
+      tags: [Transfer]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ids]
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Transfer deleted successfully
+
+  /transfer/{id}:
+    get:
+      summary: Get Transfer Detail
+      tags: [Transfer]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        200:
+          description: Transfer detail fetched successfully
+
+    put:
+      summary: Update Transfer
+      tags: [Transfer]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transfer'
+      responses:
+        200:
+          description: Transfer updated successfully
+
+  /trips:
+    get:
+      summary: List Trips
+      tags: [Trips]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        200:
+          description: Trips list fetched successfully
+
+    post:
+      summary: Create Trip
+      tags: [Trips]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripCreate'
+      responses:
+        201:
+          description: Trip created successfully
+
+    delete:
+      summary: Delete Trips (Bulk)
+      tags: [Trips]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Trips deleted successfully
+
+  /trips/{id}:
+    get:
+      summary: Get Trip by ID
+      tags: [Trips]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Trip details fetched successfully
+
+    put:
+      summary: Update Trip
+      tags: [Trips]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripCreate'
+      responses:
+        200:
+          description: Trip updated successfully
+
+  /warning:
+    get:
+      summary: List Warnings
+      tags: [Warning]
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: employee
+          schema:
+            type: string
+        - in: query
+          name: warning_type
+          schema:
+            type: string
+        - in: query
+          name: severity
+          schema:
+            type: string
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: date_from
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_to
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: paginate
+          schema:
+            type: string
+            example: "true"
+      responses:
+        200:
+          description: Warning list fetched successfully
+
+    post:
+      summary: Create Warning
+      tags: [Warning]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarningCreate'
+      responses:
+        201:
+          description: Warning created successfully
+
+    delete:
+      summary: Delete Warnings (Bulk)
+      tags: [Warning]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ids
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        200:
+          description: Warnings deleted successfully
+
+  /warning/{id}:
+    get:
+      summary: Get Warning by ID
+      tags: [Warning]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Warning details fetched successfully
+
+    put:
+      summary: Update Warning
+      tags: [Warning]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WarningCreate'
+      responses:
+        200:
+          description: Warning updated successfully

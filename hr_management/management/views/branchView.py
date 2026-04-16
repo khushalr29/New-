@@ -24,10 +24,10 @@ class BranchView(APIView):
         data = Branch.objects.filter(company=request.user.company).order_by("-id")
         search = request.query_params.get("search")
         if search:
-            data = data.filter(Q(branch_name__icontains=search) |
-                               Q(branch_code__icontains=search) |
-                               Q(address__icontains=search) |
-                               Q(phone_number__icontains=search) |
+            data = data.filter(Q(branch_name__icontains=search)|
+                               Q(branch_code__icontains=search)|
+                               Q(address__icontains=search)|
+                               Q(phone_number__icontains=search)|
                                Q(email__icontains=search))
         status = request.query_params.get("status")
         if status:

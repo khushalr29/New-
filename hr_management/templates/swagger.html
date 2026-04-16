@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@4.15.0/swagger-ui-bundle.js"></script>
     <script>
         const ui = SwaggerUIBundle({
-            url: "/static/docs/swagger.yml",
+            url: "{% static 'docs/swagger.yml' %}?" + new Date().getTime(),
             dom_id: '#swagger-ui',
             filter: true,
             syntaxHighlight: {

@@ -16,7 +16,6 @@ class DepartmentSerializer(serializers.ModelSerializer):
             'created_by',
         ]
 
-
 class DepartmentListSerializer(serializers.ModelSerializer):
     branch_name = serializers.CharField(source='branch.branch_name', read_only=True)
 

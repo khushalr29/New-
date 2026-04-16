@@ -1,20 +1,20 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.hr_masters import AwardType
 
-class AwardTypeSerializer(serializer.ModelSerializer):
+class AwardTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AwardType
-        field = [
+        fields = [
             'id',
             'award_type',
             'description',
             'status'
         ]
 
-class AwardTypeListSerializer(serializer.ModelSerializer):
+class AwardTypeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = AwardType
-        field  = [
+        fields = [
             'id',
             'award_type',
             'description',

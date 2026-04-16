@@ -25,7 +25,7 @@
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: "{% static 'docs/swagger.yml' %}",
+        url: "{% static 'docs/swagger.yml' %}?" + new Date().getTime(),
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

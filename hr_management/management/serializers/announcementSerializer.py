@@ -1,9 +1,9 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.announcement import Announcement
-from .departmentSerializer import DepartmentSerializer
+from .departmentsSerializer import DepartmentSerializer
 from .branchSerializer import BranchSerializer
 
-class AnnouncementSerializer(serializer.ModelSerializer):
+class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = [
@@ -22,7 +22,7 @@ class AnnouncementSerializer(serializer.ModelSerializer):
             'department'
         ]
 
-class AnnouncementListSerializer(serializer.ModelSerializer):
+class AnnouncementListSerializer(serializers.ModelSerializer):
     branch = BranchSerializer(read_only=True)
     department  = DepartmentSerializer(read_only=True)
     class Meta:
@@ -40,7 +40,7 @@ class AnnouncementListSerializer(serializer.ModelSerializer):
             'is_high_priority',
             'is_company_wide_announcement',
             'branch',
-            'department'
+            'department',
             'created_at',
             'updated_at',
             'deleted_at'

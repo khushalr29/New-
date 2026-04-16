@@ -1,7 +1,9 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management import IndicatorCategory,Indicator,GoalType,EmployeeGoal,ReviewCycle,EmployeeReview
+from management.serializers.employeeSerializer import EmployeeSerializer
+from decimal import Decimal
 
-class IndicatorCategorySerializer(serializer.ModelSerializer):
+class IndicatorCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = IndicatorCategory
         fields = [
@@ -11,7 +13,7 @@ class IndicatorCategorySerializer(serializer.ModelSerializer):
             'status'
         ]    
 
-class IndicatorCategoryListSerializer(serializer.ModelSerializer):
+class IndicatorCategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = IndicatorCategory
         fields = [
@@ -25,7 +27,7 @@ class IndicatorCategoryListSerializer(serializer.ModelSerializer):
             'deleted_at'
         ]
 
-class IndicatorSerializer(serializer.ModelSerializer):
+class IndicatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Indicator
         fields = [
@@ -38,7 +40,7 @@ class IndicatorSerializer(serializer.ModelSerializer):
             'status'
         ]
 
-class IndicatorListSerializer(serializer.ModelSerializer):
+class IndicatorListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Indicator
         fields = [
@@ -55,7 +57,7 @@ class IndicatorListSerializer(serializer.ModelSerializer):
             'deleted_at'
         ]
 
-class GoalTypeSerializer(serializer.ModelSerializer):
+class GoalTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalType
         fields = [
@@ -65,7 +67,7 @@ class GoalTypeSerializer(serializer.ModelSerializer):
             'status'
         ]
 
-class GoalTypeListSerializer(serializer.ModelSerializer):
+class GoalTypeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = GoalType
         fields = [
@@ -79,7 +81,7 @@ class GoalTypeListSerializer(serializer.ModelSerializer):
             'deleted_at'
         ]
 
-class EmployeeGoalSerializer(serializer.ModelSerializer):
+class EmployeeGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeGoal
         fields = [
@@ -95,7 +97,7 @@ class EmployeeGoalSerializer(serializer.ModelSerializer):
             'status'
         ]
 
-class EmployeeGoalListSerializer(serializer.ModelSerializer):
+class EmployeeGoalListSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer(read_only=True)
     goal_type = GoalTypeSerializer(read_only=True)
     class Meta:
@@ -117,7 +119,7 @@ class EmployeeGoalListSerializer(serializer.ModelSerializer):
             'deleted_at'
         ]
 
-class ReviewCycleSerializer(serializer.ModelSerializer):
+class ReviewCycleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewCycle
         fields = [
@@ -130,7 +132,7 @@ class ReviewCycleSerializer(serializer.ModelSerializer):
             'status'
         ]
 
-class ReviewCycleListSerializer(serializer.ModelSerializer):
+class ReviewCycleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewCycle
         fields = [
@@ -147,7 +149,7 @@ class ReviewCycleListSerializer(serializer.ModelSerializer):
             'deleted_at'
         ]
 
-class EmployeeReviewListSerializer(serializer.ModelSerializer):
+class EmployeeReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeReview
         fields = [
@@ -161,11 +163,11 @@ class EmployeeReviewListSerializer(serializer.ModelSerializer):
             'status'
         ]    
 
-class EmployeeReviewListSerializer(serializer.ModelSerializer):
+class EmployeeReviewListSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer(read_only=True)
     reviewer = EmployeeSerializer(read_only=True)
     review_cycle = ReviewCycleSerializer(read_only=True)
-    rating = serializer.DecimalField(max_value=5, decimal_places=1, null=True, blank=True)
+    rating = serializers.DecimalField(max_digits=2, decimal_places=1, max_value=Decimal('5.0'), allow_null=True, required=False)
     class Meta:
         model = EmployeeReview
         fields = [

@@ -1,11 +1,10 @@
 from rest_framework import serializers
-from shared.models.hr_management.hr_masters import Employee
+from shared.models import Employee, EmployeeDocument
+from django.db import transaction
 from .branchSerializer import BranchSerializer
-from .departmentSerializer import DepartmentSerializer
-from .designationSerializer import DesignationSerializer
-from shared.Serializer.commonSerializer import ShiftSerializer
-from .attendencePolicySerializer import AttendencePolicySerializer
-
+from .departmentsSerializer import DepartmentSerializer
+from .designationsSerializer import DesignationSerializer
+from shared.serializers.commonSerializer import ShiftListSerializer as ShiftSerializer, AttendancePolicyListSerializer as AttendencePolicySerializer
 class EmployeeDocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmployeeDocument
@@ -178,5 +177,3 @@ class EmployeeListSerializer(serializers.ModelSerializer):
             'deleted_at'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at', 'deleted_at']
-
-        

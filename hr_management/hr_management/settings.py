@@ -1,8 +1,13 @@
 import os
 import sys
 from pathlib import Path
+
+# Add shared and user_service_module to python path
+BASE_DIR = Path(__file__).resolve().parent.parent
+sys.path.append(str(BASE_DIR.parent / 'shared'))
+sys.path.append(str(BASE_DIR.parent / 'user_service_module'))
+
 from decouple import config
-from datetime import timedelta
 
 
 """
@@ -33,9 +38,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -49,6 +51,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'shared',
     'management',
+    'auth',
+    'company_employee',
     ]
 
 MIDDLEWARE = [
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', #imp for I18N
+    'shared.middleware.CustomHeaderMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -77,6 +82,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.i18n",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -145,7 +151,7 @@ LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
 LANGUAGE = [

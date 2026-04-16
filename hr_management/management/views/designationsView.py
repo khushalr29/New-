@@ -1,3 +1,4 @@
+from rest_framework.views import APIView
 from shared.models.hr_management.hr_masters import Designation
 from shared.models.core.useractivity import UserActivityLog
 from ..serializers.designationsSerializer import DesignationSerializer, DesignationListSerializer

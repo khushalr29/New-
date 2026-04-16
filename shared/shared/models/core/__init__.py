@@ -1,6 +1,6 @@
 from .user import User
 from .company import Company, Plan, Subscription
-from .employee import Employee, EmployeeDesignation
+from .employee import Employee, EmployeeDocument
 from .role import Role
 from .enums import *
 from .static import Country, State, City

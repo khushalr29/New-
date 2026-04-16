@@ -89,10 +89,10 @@ class Designation(TenantModel):
  
     class Meta:
         db_table = 'designation'
-        unique_together = ('title', 'company')
+        unique_together = ('name', 'company')
  
     def __str__(self):
-        return f"{self.title}"
+        return f"{self.name}"
 
 class IndicatorCategory(TenantModel):
     category_name = models.CharField(max_length=255, validators=[validate_char_field])
@@ -174,6 +174,10 @@ class Termination(TenantModel):
     description = models.TextField(blank=True, null=True)
     document = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=BranchStatus.choices, default=BranchStatus.ACTIVE)
+    exit_interview_conducted = models.BooleanField(default=False)
+    exit_interview_date = models.DateField(blank=True, null=True)
+    exit_feedback = models.TextField(blank=True, null=True)
+
 
     class Meta:
         db_table = 'termination_reason'

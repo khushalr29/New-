@@ -1,7 +1,7 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.asset_manage import AssetType, Assets
 
-class AssetTypeSerializer(serializer.ModelSerializer):
+class AssetTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssetType
         fields = [
@@ -10,7 +10,7 @@ class AssetTypeSerializer(serializer.ModelSerializer):
             'description'
         ]
 
-class AssetSerializer(serializer.ModelSerializer):
+class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assets
         fields = [
@@ -35,7 +35,7 @@ class AssetSerializer(serializer.ModelSerializer):
             'salvage_value'
         ]
 
-class AssetListSerializer(serializer.ModelSerializer):
+class AssetListSerializer(serializers.ModelSerializer):
     asset_type = AssetTypeSerializer(read_only=True)
 
     class Meta:

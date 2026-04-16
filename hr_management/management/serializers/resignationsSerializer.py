@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from shared.models.hr_management import Resignation
+from shared.models.hr_management import Resignations
+from management.serializers.employeeSerializer import EmployeeSerializer
 
-class ResignationSerializer(serializers.ModelSerializer):
+class ResignationsSerializer(serializers.ModelSerializer):
     class Meta:
-        model= Resignation
+        model = Resignations
         fields = [
             'id',
             'employee',
@@ -16,10 +17,10 @@ class ResignationSerializer(serializers.ModelSerializer):
             'status'
         ]
 
-class ResignationListSerializer(serializers.ModelSerializer):
+class ResignationsListSerializer(serializers.ModelSerializer):
     employee = EmployeeSerializer(read_only=True)
     class Meta:
-        model = Resignation
+        model = Resignations
         fields = [
             'id',
             'employee',

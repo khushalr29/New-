@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from shared.models.hr_management import Promotion
+from .employeeSerializer import EmployeeSerializer
+from .designationsSerializer import DesignationSerializer
 
 class PromotionSerializer(serializers.ModelSerializer):
     class Meta:

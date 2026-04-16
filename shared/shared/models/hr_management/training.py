@@ -7,6 +7,7 @@ class TrainingType(TenantModel):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='training_types')
+    departments = models.ManyToManyField('shared.Department', related_name='training_types', blank=True)
 
     class Meta:
         db_table = 'training_type'

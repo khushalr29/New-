@@ -1,7 +1,7 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.hr_masters import Holiday
 
-class HolidaySerializer(serializer.ModelSerializer):
+class HolidaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Holiday
         fields= [
@@ -17,7 +17,7 @@ class HolidaySerializer(serializer.ModelSerializer):
             'status'
         ]
 
-class HolidayListSerializer(serializer.ModelSerializer):
+class HolidayListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Holiday
         fields= [

@@ -1,4 +1,5 @@
-from shared.models.hr_management.hr_masters import Employee
+from rest_framework.views import APIView
+from shared.models import Employee
 from shared.models.core.useractivity import UserActivityLog
 from ..serializers.employeeSerializer import EmployeeSerializer, EmployeeListSerializer
 from shared.utils.response.handlers import ResponseHandler
@@ -71,7 +72,7 @@ class EmployeeView(APIView):
             return ResponseHandler.delete_success("employee")
         return ResponseHandler.delete_failed(ResponseMessages.PROTECTED_RECORD)
 
-class ActiveEmployee(APIView):
+class ActiveEmployeeView(APIView):
     def get(self, request):
         check_permissions(request, ['list_employee'])
         data = Employee.objects.filter(company=request.user.company, status='active').order_by("-id")

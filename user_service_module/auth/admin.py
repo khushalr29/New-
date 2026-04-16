@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Permission
 from shared.models import (
     User, Role, UserActivityLog, Company, Plan, Subscription, 
-    Employee, EmployeeDesignation, Department, Designation, Branch, CompanyType, 
+    Employee, Department, Designation, Branch, CompanyType, 
     Holiday, DocumentType, AwardType, IndicatorCategory, Indicator, GoalType, 
     ReviewCycle, Resignations, Termination, Announcement, Assets, AssetType, 
     Award, Complaint, EmployeeGoal, EmployeeReview, Promotion, 
@@ -47,6 +47,7 @@ class HRMSModelAdmin(admin.ModelAdmin):
 class UserModelAdmin(BaseUserAdmin):
     list_display = ('id', 'email', 'full_name', 'company', 'account_type', 'is_staff')
     list_filter = ('company', 'account_type', 'status')
+    readonly_fields = ('is_staff',)
     fieldsets = (
         ('User Credentials', {'fields': ('email', 'password')}),
         ('Personal Info', {'fields': ('full_name', 'gender', 'phone_number', 'company', 'account_type', 'status')}),
@@ -79,9 +80,9 @@ class DepartmentAdmin(HRMSModelAdmin):
 
 @admin.register(Designation)
 class DesignationAdmin(HRMSModelAdmin):
-    list_display = ('title', 'department', 'company', 'level', 'status')
+    list_display = ('name', 'department', 'company', 'status')
     list_filter = ('company', 'department', 'status')
-    search_fields = ('title',)
+    search_fields = ('name',)
 
 @admin.register(Branch)
 class BranchAdmin(HRMSModelAdmin):
@@ -137,7 +138,7 @@ class UserActivityLogAdmin(admin.ModelAdmin):
 # --- Generic Registration for Remaining Models ---
 
 remaining_models = [
-    Role, Permission, Plan, Subscription, EmployeeDesignation, CompanyType, 
+    Role, Permission, Plan, Subscription, CompanyType, 
     Holiday, DocumentType, AwardType, IndicatorCategory, Indicator, GoalType, 
     ReviewCycle, Resignations, Termination, Announcement, Assets, AssetType, 
     Award, Complaint, EmployeeGoal, EmployeeReview, Promotion, 

@@ -1,7 +1,7 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.complaints import Complaint
 
-class ComplaintSerializer(serializer.ModelSerializer):
+class ComplaintsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = [
@@ -19,7 +19,7 @@ class ComplaintSerializer(serializer.ModelSerializer):
             'is_submit_anonymously'
         ]
 
-class ComplaintListSerializer(serializer.ModelSerializer):
+class ComplaintsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = [
@@ -34,7 +34,7 @@ class ComplaintListSerializer(serializer.ModelSerializer):
             'status',
             'resolution_details',
             'resolved_by',
-            'is_submit_anonymously'
+            'is_submit_anonymously',
             'company',
             'created_at',
             'updated_at',

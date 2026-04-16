@@ -10,7 +10,6 @@ from shared.utils.errors.protectedErrors import check_references_and_get_deletab
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
-
 class DepartmentView(APIView):
     def get(self, request, id=None):
         if id:
@@ -28,7 +27,6 @@ class DepartmentView(APIView):
         status = request.query_params.get("status")
         if status:
             data = data.filter(status=status)
-
         if paginate == "false":
             serializer = DepartmentListSerializer(data, many=True)
             return ResponseHandler.list_success(serializer.data)

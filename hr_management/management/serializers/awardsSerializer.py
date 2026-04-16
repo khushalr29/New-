@@ -1,8 +1,9 @@
-from rest_framework import serializer
+from rest_framework import serializers
 from shared.models.hr_management.award import Award
-from .awardTypeListSerializer import AwardTypeSerializer
+from .awardTypeSerializer import AwardTypeSerializer
+from .employeeSerializer import EmployeeSerializer
 
-class AwardSerializer(serializer.ModelSerializer):
+class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
         fields = [
@@ -16,8 +17,9 @@ class AwardSerializer(serializer.ModelSerializer):
             'photo'
         ]
 
-class AwardListSerializer(serializer.ModelSerializer):
+class AwardListSerializer(serializers.ModelSerializer):
     award_type = AwardTypeSerializer(read_only=True)
+    employee = EmployeeSerializer(read_only=True)
     class Meta:
         model = Award
         fields = [
